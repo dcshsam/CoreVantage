@@ -48,9 +48,9 @@ class MigrationResult:
     def total_violations(self): return len(self.s4_violations)
 
     def score_color(self) -> str:
-        if self.readiness_score >= 80: return "#30D158"
-        if self.readiness_score >= 50: return "#FF9F0A"
-        return "#FF453A"
+        if self.readiness_score >= 80: return "#188918"
+        if self.readiness_score >= 50: return "#C87400"
+        return "#BB0000"
 
     def score_label(self) -> str:
         if self.readiness_score >= 80: return "Migration Ready"

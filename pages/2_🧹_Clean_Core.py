@@ -116,7 +116,7 @@ with tab_system:
     st.markdown("""
     <div class="cv-card">
       <h3>Connect to SAP ECC / S/4HANA System</h3>
-      <p style="color:rgba(255,255,255,0.55);font-size:.9rem">
+      <p style="color:#706E6B;font-size:.9rem">
         Connect via SAP ADT REST API. Fetches ABAP source directly from your system.
         Requires SAP ADT (ABAP Development Tools) services activated on the backend.
       </p>
@@ -335,7 +335,7 @@ if result:
             st.markdown("""
             <div class="cv-card">
               <h3>🔧 AI-Powered Auto-Remediation</h3>
-              <p style="color:rgba(255,255,255,0.55);font-size:.9rem">
+              <p style="color:#706E6B;font-size:.9rem">
                 CodeVantage will generate a Clean Core-compliant version of your code.
                 All business logic is preserved — only the implementation pattern changes.
                 Review the diff carefully before deploying to production.

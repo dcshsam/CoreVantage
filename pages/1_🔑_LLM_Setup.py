@@ -32,20 +32,19 @@ st.markdown("""
 .cv-proceed-btn [data-testid="stPageLink"] a,
 .cv-proceed-btn [data-testid="stPageLink"] a:visited {
     display: block !important; width: 100% !important; text-align: center !important;
-    background: #0A84FF !important; color: #FFFFFF !important;
-    padding: 12px 20px !important; border-radius: 100px !important;
+    background: #0176D3 !important; color: #FFFFFF !important;
+    padding: 12px 20px !important; border-radius: 6px !important;
     font-weight: 700 !important; font-size: 1rem !important;
     text-decoration: none !important; text-transform: none !important;
-    border: none !important; box-shadow: 0 2px 16px rgba(10,132,255,.45) !important;
+    border: none !important; box-shadow: 0 2px 8px rgba(1,118,211,.35) !important;
     letter-spacing: 0.1px !important;
 }
-.cv-proceed-btn [data-testid="stPageLink"] a:hover { opacity: 0.88 !important; }
-/* Disabled state */
+.cv-proceed-btn [data-testid="stPageLink"] a:hover { background: #0265B8 !important; }
+/* Disabled state — grayed out, not clickable */
 [data-testid="stButton"] button:disabled {
-    background: rgba(255,255,255,0.08) !important; color: rgba(255,255,255,0.3) !important;
-    border-color: rgba(255,255,255,0.1) !important; cursor: not-allowed !important;
+    background: #E8E8E8 !important; color: #AAAAAA !important;
+    border-color: #DDDBDA !important; cursor: not-allowed !important;
     box-shadow: none !important; opacity: 1 !important;
-    border-radius: 100px !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -55,19 +54,19 @@ llm_connected = bool(st.session_state.get("cv_llm_client"))
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(f"""
 <div style="display:flex;justify-content:space-between;align-items:center;
-            padding:16px 4px 14px;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:28px">
+            padding:16px 4px 14px;border-bottom:1px solid #DDDBDA;margin-bottom:28px">
   <div style="display:flex;align-items:center;gap:12px">
-    <div style="background:#0A84FF;border-radius:12px;width:40px;height:40px;
+    <div style="background:#0176D3;border-radius:10px;width:38px;height:38px;
                 display:flex;align-items:center;justify-content:center;
-                font-size:1.2rem;box-shadow:0 2px 14px rgba(10,132,255,0.45)">⚡</div>
+                font-size:1.2rem;box-shadow:0 2px 8px rgba(1,118,211,0.35)">⚡</div>
     <div>
-      <div style="font-size:1.1rem;font-weight:700;color:#FFFFFF">CodeVantage</div>
-      <div style="font-size:0.68rem;color:rgba(255,255,255,0.45);font-weight:600;
+      <div style="font-size:1.1rem;font-weight:700;color:#032D60">CodeVantage</div>
+      <div style="font-size:0.68rem;color:#706E6B;font-weight:600;
                   text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
     </div>
   </div>
-  <div style="font-size:0.82rem;color:rgba(255,255,255,0.55)">
-    Signed in as <strong style="color:#FFFFFF">{user.full_name or user.username}</strong>
+  <div style="font-size:0.82rem;color:#706E6B">
+    Signed in as <strong style="color:#032D60">{user.full_name or user.username}</strong>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -75,10 +74,10 @@ st.markdown(f"""
 # ── Page title ────────────────────────────────────────────────────────────────
 st.markdown("""
 <div style="text-align:center;margin-bottom:24px">
-  <h2 style="color:#FFFFFF;font-size:1.35rem;font-weight:700;margin-bottom:4px">
+  <h2 style="color:#032D60;font-size:1.35rem;font-weight:700;margin-bottom:4px">
     🔑 Connect an LLM Provider
   </h2>
-  <p style="color:rgba(255,255,255,0.55);font-size:.88rem;margin:0">
+  <p style="color:#706E6B;font-size:.88rem;margin:0">
     Select a provider below, enter your credentials, and click Test Connection.
     Once connected the <strong>Go to Dashboard</strong> button will activate.
   </p>
@@ -113,7 +112,7 @@ with tab_sap:
     st.markdown("""
     <div class="cv-card">
       <h3>SAP AI Core — Enterprise-Grade AI on SAP BTP</h3>
-      <p style="color:rgba(255,255,255,0.55);font-size:.875rem">
+      <p style="color:#706E6B;font-size:.875rem">
         Recommended for enterprise use. Credentials are read from your <code>.env</code> file.
         Data processed through SAP AI Core stays within your BTP landscape.
       </p>
@@ -152,12 +151,12 @@ with tab_sap:
     )
 
     st.markdown(f"""
-    <table style="width:100%;border-collapse:collapse;background:rgba(28,28,30,0.85);
-                  border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:12px">
-      <thead><tr style="background:rgba(10,132,255,0.25);border-bottom:1px solid rgba(10,132,255,0.3)">
-        <th style="padding:10px 12px;text-align:left;color:#FFFFFF;font-weight:600">Field</th>
-        <th style="padding:10px 12px;text-align:left;color:#FFFFFF;font-weight:600">Status</th>
-        <th style="padding:10px 12px;text-align:left;color:#FFFFFF;font-weight:600">Value</th>
+    <table style="width:100%;border-collapse:collapse;background:white;border-radius:8px;
+                  overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:12px">
+      <thead><tr style="background:#032D60;color:white">
+        <th style="padding:8px 12px;text-align:left">Field</th>
+        <th style="padding:8px 12px;text-align:left">Status</th>
+        <th style="padding:8px 12px;text-align:left">Value</th>
       </tr></thead>
       <tbody>{rows_html}</tbody>
     </table>
@@ -195,7 +194,7 @@ with tab_groq:
     st.markdown("""
     <div class="cv-card">
       <h3>GROQ — Free High-Speed Inference</h3>
-      <p style="color:rgba(255,255,255,0.55);font-size:.875rem">
+      <p style="color:#706E6B;font-size:.875rem">
         Free tier available at <b>console.groq.com</b>. Excellent for development and testing.
         Llama 3.3 70B is recommended for ABAP analysis quality.
       </p>
@@ -231,7 +230,7 @@ with tab_anthropic:
     st.markdown("""
     <div class="cv-card">
       <h3>Anthropic Claude</h3>
-      <p style="color:rgba(255,255,255,0.55);font-size:.875rem">
+      <p style="color:#706E6B;font-size:.875rem">
         Excellent ABAP analysis quality. <b>Claude Sonnet 4.6</b> is the recommended model —
         deep SAP domain reasoning with fast response times.
       </p>
@@ -313,7 +312,7 @@ with so_col:
         st.rerun()
 
 st.markdown(
-    "<div style='text-align:center;margin-top:16px;color:rgba(255,255,255,0.25);font-size:.75rem'>"
+    "<div style='text-align:center;margin-top:16px;color:#706E6B;font-size:.75rem'>"
     "v1.1.0 · Powered by SPRAC · 2025</div>",
     unsafe_allow_html=True,
 )

@@ -1,6 +1,6 @@
 """
 CodeVantage Shared UI Components
-Apple TV-inspired dark design system for Streamlit.
+Salesforce Lightning-inspired enterprise design system for Streamlit.
 """
 
 from __future__ import annotations
@@ -13,51 +13,52 @@ CV_CSS = """
 <style>
 /* ── Base & typography ───────────────────────────────────────── */
 html, body, [class*="css"] {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-                 "Helvetica Neue", Arial, sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+                 Arial, sans-serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-transform: none !important;
 }
-[data-testid="stAppViewContainer"] { background: #000000 !important; }
+[data-testid="stAppViewContainer"] { background: #F3F2EF; }
 [data-testid="stMain"] > div { padding-top: 1.75rem; }
-[data-testid="stMain"] { background: transparent !important; }
-[data-testid="stHeader"] {
-    background: rgba(0,0,0,0.72) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-}
 
 /* ── Sidebar ─────────────────────────────────────────────────── */
+/* Hide Streamlit's auto-generated page list */
 [data-testid="stSidebarNav"] { display: none !important; }
+
 [data-testid="stSidebar"] {
-    background: #1c1c1e !important;
-    border-right: 1px solid rgba(255,255,255,0.08) !important;
+    background: #032D60 !important;
+    border-right: none !important;
     min-width: 230px !important;
 }
 [data-testid="stSidebar"] > div:first-child { padding-top: 0 !important; }
+
+/* Force all sidebar text to white */
 [data-testid="stSidebar"],
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span,
 [data-testid="stSidebar"] div,
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] a {
-    color: rgba(255,255,255,0.9) !important;
+    color: #FFFFFF !important;
     text-transform: none !important;
 }
 section[data-testid="stSidebar"] hr {
-    border-color: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.12) !important;
 }
+
+/* Sign Out button — force override all global button styles */
 [data-testid="stSidebar"] .stButton > button,
 [data-testid="stSidebar"] .stButton > button[kind="secondary"],
 [data-testid="stSidebar"] .stButton > button[kind="primary"],
 [data-testid="stSidebar"] button {
-    background: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.15) !important;
-    border-radius: 100px !important;
-    color: rgba(255,255,255,0.9) !important;
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(255,255,255,0.28) !important;
+    border-radius: 6px !important;
+    color: #FFFFFF !important;
     font-size: 0.85rem !important;
     font-weight: 600 !important;
+    letter-spacing: 0.1px !important;
     text-transform: none !important;
     box-shadow: none !important;
     transition: all 0.15s ease !important;
@@ -65,95 +66,95 @@ section[data-testid="stSidebar"] hr {
 [data-testid="stSidebar"] .stButton > button:hover,
 [data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover,
 [data-testid="stSidebar"] button:hover {
-    background: rgba(255,59,48,0.3) !important;
-    border-color: rgba(255,59,48,0.5) !important;
+    background: rgba(186,5,23,0.65) !important;
+    border-color: rgba(255,140,140,0.45) !important;
     color: #FFFFFF !important;
 }
+
+/* Page-link nav items — full override */
 [data-testid="stSidebar"] [data-testid="stPageLink"],
 [data-testid="stSidebar"] [data-testid="stPageLink"] * {
-    color: rgba(255,255,255,0.65) !important;
+    color: #C9D9EF !important;
     text-decoration: none !important;
     text-transform: none !important;
 }
 [data-testid="stSidebar"] [data-testid="stPageLink"] a {
     display: flex !important;
     align-items: center !important;
-    border-radius: 10px !important;
+    border-radius: 6px !important;
     padding: 9px 12px !important;
     font-size: 0.875rem !important;
     font-weight: 500 !important;
-    color: rgba(255,255,255,0.65) !important;
+    color: #C9D9EF !important;
     text-decoration: none !important;
     transition: background 0.15s ease, color 0.15s ease !important;
     margin: 1px 0 !important;
     line-height: 1.3 !important;
 }
 [data-testid="stSidebar"] [data-testid="stPageLink"] a:hover {
-    background: rgba(255,255,255,0.08) !important;
+    background: rgba(255,255,255,0.10) !important;
     color: #FFFFFF !important;
 }
 [data-testid="stSidebar"] [data-testid="stPageLink"] a[aria-current="page"] {
-    background: #0A84FF !important;
+    background: #0176D3 !important;
     color: #FFFFFF !important;
     font-weight: 600 !important;
 }
 
 /* ── Page header ─────────────────────────────────────────────── */
 .cv-header {
-    background: rgba(28,28,30,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #FFFFFF;
     padding: 28px 36px 24px;
-    border-radius: 16px;
+    border-radius: 10px;
     margin-bottom: 24px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid #DDDBDA;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
 }
 .cv-header h1 {
     margin: 0 0 6px 0;
     font-size: 1.6rem;
     font-weight: 700;
     letter-spacing: -0.4px;
-    color: #FFFFFF !important;
+    color: #181818;
     line-height: 1.2;
     text-transform: none !important;
 }
 .cv-header p {
     margin: 0;
     font-size: 0.90rem;
-    color: rgba(255,255,255,0.55);
+    color: #706E6B;
     line-height: 1.55;
 }
 .cv-header .cv-badge {
     display: inline-block;
-    background: rgba(10,132,255,0.2);
-    color: #0A84FF;
-    padding: 3px 14px;
-    border-radius: 100px;
+    background: #E8F4FF;
+    color: #0176D3;
+    padding: 3px 12px;
+    border-radius: 4px;
     font-size: 0.74rem;
     font-weight: 600;
     margin-top: 12px;
-    border: 1px solid rgba(10,132,255,0.35);
+    letter-spacing: 0.2px;
+    border: 1px solid #B0D4F5;
 }
 
 /* ── Cards ───────────────────────────────────────────────────── */
 .cv-card {
-    background: rgba(28,28,30,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 16px;
+    background: #FFFFFF;
+    border-radius: 8px;
     padding: 22px 24px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid #DDDBDA;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     margin-bottom: 16px;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s ease;
 }
 .cv-card:hover {
-    border-color: rgba(10,132,255,0.4);
-    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
 }
 .cv-card h3 {
     margin: 0 0 10px 0;
     font-size: 1.0rem;
-    color: #FFFFFF !important;
+    color: #181818;
     font-weight: 600;
     letter-spacing: -0.1px;
     text-transform: none !important;
@@ -161,21 +162,22 @@ section[data-testid="stSidebar"] hr {
 
 /* ── Metric tiles ────────────────────────────────────────────── */
 .cv-metric {
-    background: rgba(28,28,30,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 16px;
+    background: #FFFFFF;
+    border-radius: 8px;
     padding: 20px 18px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid #DDDBDA;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     text-align: center;
-    border-top: 3px solid var(--mc, #0A84FF);
-    transition: border-color 0.18s ease;
+    border-top: 3px solid var(--mc, #0176D3);
+    transition: box-shadow 0.18s ease;
 }
-.cv-metric:hover { border-color: rgba(255,255,255,0.2); }
+.cv-metric:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
 .cv-metric .cv-metric-val {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--mc, #0A84FF) !important;
+    color: var(--mc, #0176D3);
     line-height: 1.1;
     margin-bottom: 7px;
     letter-spacing: -1px;
@@ -187,7 +189,7 @@ section[data-testid="stSidebar"] hr {
 }
 .cv-metric .cv-metric-lbl {
     font-size: 0.74rem;
-    color: rgba(255,255,255,0.45);
+    color: #706E6B;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.6px;
@@ -197,17 +199,17 @@ section[data-testid="stSidebar"] hr {
 .badge {
     display: inline-block;
     padding: 2px 10px;
-    border-radius: 100px;
+    border-radius: 4px;
     font-size: 0.71rem;
     font-weight: 700;
     letter-spacing: 0.3px;
     text-transform: uppercase;
 }
-.badge-CRITICAL { background: rgba(255,69,58,0.2);   color: #FF453A; border: 1px solid rgba(255,69,58,0.4); }
-.badge-HIGH     { background: rgba(255,159,10,0.2);  color: #FF9F0A; border: 1px solid rgba(255,159,10,0.4); }
-.badge-MEDIUM   { background: rgba(255,214,10,0.2);  color: #FFD60A; border: 1px solid rgba(255,214,10,0.4); }
-.badge-LOW      { background: rgba(10,132,255,0.2);  color: #0A84FF; border: 1px solid rgba(10,132,255,0.4); }
-.badge-INFO     { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.15); }
+.badge-CRITICAL { background: #FFDEDE; color: #BA0517; border: 1px solid #F5BCBC; }
+.badge-HIGH     { background: #FEE3D2; color: #A33700; border: 1px solid #F5C4A8; }
+.badge-MEDIUM   { background: #FEF7E2; color: #7A5600; border: 1px solid #F5E08A; }
+.badge-LOW      { background: #E8F4FF; color: #0176D3; border: 1px solid #B0D4F5; }
+.badge-INFO     { background: #F3F2EF; color: #706E6B; border: 1px solid #DDDBDA; }
 
 /* ── Clean Core level badges ─────────────────────────────────── */
 .cc-level {
@@ -215,89 +217,96 @@ section[data-testid="stSidebar"] hr {
     align-items: center;
     gap: 5px;
     padding: 3px 12px;
-    border-radius: 100px;
+    border-radius: 4px;
     font-weight: 600;
     font-size: 0.80rem;
 }
-.cc-A { background: rgba(48,209,88,0.2);  color: #30D158; border: 1px solid rgba(48,209,88,0.35); }
-.cc-B { background: rgba(10,132,255,0.2); color: #0A84FF; border: 1px solid rgba(10,132,255,0.35); }
-.cc-C { background: rgba(255,159,10,0.2); color: #FF9F0A; border: 1px solid rgba(255,159,10,0.35); }
-.cc-D { background: rgba(255,69,58,0.2);  color: #FF453A; border: 1px solid rgba(255,69,58,0.35); }
+.cc-A { background: #EAF5EA; color: #2E7D32; border: 1px solid #A5D6A7; }
+.cc-B { background: #E8F4FF; color: #0064C8; border: 1px solid #B0D4F5; }
+.cc-C { background: #FFF9E6; color: #7A5600; border: 1px solid #F5DFA0; }
+.cc-D { background: #FFDEDE; color: #BA0517; border: 1px solid #F5BCBC; }
 
 /* ── Violation row ───────────────────────────────────────────── */
 .vrow {
-    background: rgba(28,28,30,0.85);
-    border-radius: 12px;
+    background: #FFFFFF;
+    border-radius: 8px;
     padding: 14px 18px;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-left: 4px solid var(--vc, rgba(255,255,255,0.25));
+    border: 1px solid #DDDBDA;
+    border-left: 4px solid var(--vc, #706E6B);
     margin-bottom: 10px;
-    transition: border-color 0.15s ease;
+    transition: box-shadow 0.15s ease;
 }
-.vrow:hover { border-color: rgba(255,255,255,0.2); }
-.vrow h4 { margin: 0 0 5px 0; font-size: 0.88rem; color: #FFFFFF !important; font-weight: 600; text-transform: none !important; }
-.vrow p  { margin: 0; font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.55; }
-.vrow-CRITICAL { --vc: #FF453A; }
-.vrow-HIGH     { --vc: #FF9F0A; }
-.vrow-MEDIUM   { --vc: #FFD60A; }
-.vrow-LOW      { --vc: #0A84FF; }
-.vrow-INFO     { --vc: rgba(255,255,255,0.25); }
+.vrow:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.vrow h4 { margin: 0 0 5px 0; font-size: 0.88rem; color: #181818; font-weight: 600; text-transform: none !important; }
+.vrow p  { margin: 0; font-size: 0.82rem; color: #706E6B; line-height: 1.55; }
+.vrow-CRITICAL { --vc: #BA0517; }
+.vrow-HIGH     { --vc: #A33700; }
+.vrow-MEDIUM   { --vc: #7A5600; }
+.vrow-LOW      { --vc: #0176D3; }
+.vrow-INFO     { --vc: #706E6B; }
 
 /* ── Code & diff ─────────────────────────────────────────────── */
 .diff-container {
-    background: rgba(12,12,14,0.95);
-    border-radius: 12px;
+    background: #1B1F23;
+    border-radius: 8px;
     padding: 16px 20px;
     font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
     font-size: 0.80rem;
     max-height: 520px;
     overflow-y: auto;
     line-height: 1.65;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid #30363D;
 }
-.diff-add    { color: #30D158; background: rgba(48,209,88,0.1);  padding: 1px 4px; border-radius: 3px; }
-.diff-del    { color: #FF453A; background: rgba(255,69,58,0.1);  padding: 1px 4px; border-radius: 3px; }
-.diff-ctx    { color: rgba(255,255,255,0.45); }
-.diff-header { color: #0A84FF; font-weight: 600; margin: 10px 0 4px; }
-.diff-hunk   { color: #5AC8FA; margin: 4px 0; }
+.diff-add    { color: #7EE787; background: rgba(126,231,135,0.08); padding: 1px 4px; border-radius: 3px; }
+.diff-del    { color: #FF7B72; background: rgba(255,123,114,0.08); padding: 1px 4px; border-radius: 3px; }
+.diff-ctx    { color: #8B949E; }
+.diff-header { color: #58A6FF; font-weight: 600; margin: 10px 0 4px; }
+.diff-hunk   { color: #40C0C0; margin: 4px 0; }
 
 /* ── Score ring ──────────────────────────────────────────────── */
 .score-ring {
     width: 110px; height: 110px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 1.6rem; font-weight: 700;
-    border: 8px solid var(--sc, #0A84FF);
-    color: var(--sc, #0A84FF) !important;
-    background: rgba(28,28,30,0.9);
+    border: 8px solid var(--sc, #0176D3);
+    color: var(--sc, #0176D3);
+    background: white;
     margin: 0 auto;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
 /* ── Streamlit widget overrides ──────────────────────────────── */
-div[data-testid="stMetricValue"] { font-size: 1.7rem !important; font-weight: 700 !important; color: #FFFFFF !important; }
+div[data-testid="stMetricValue"] { font-size: 1.7rem !important; font-weight: 700 !important; }
 
-/* Primary button — Apple iOS pill */
+/* Primary button — Salesforce style */
 .stButton > button[kind="primary"] {
-    background: #0A84FF !important;
-    border: none !important;
-    border-radius: 100px !important;
+    background: #0176D3 !important;
+    border: 1px solid #0176D3 !important;
+    border-radius: 6px !important;
     font-weight: 600 !important;
     font-size: 0.875rem !important;
     color: #FFFFFF !important;
-    padding: 10px 24px !important;
+    padding: 8px 20px !important;
     text-transform: none !important;
     letter-spacing: 0 !important;
-    transition: opacity 0.15s ease !important;
-    box-shadow: 0 2px 12px rgba(10,132,255,0.4) !important;
+    transition: background 0.15s ease, box-shadow 0.15s ease !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12) !important;
 }
-.stButton > button[kind="primary"]:hover { opacity: 0.88 !important; }
-.stButton > button[kind="primary"]:active { opacity: 0.75 !important; }
+.stButton > button[kind="primary"]:hover {
+    background: #0A5FA6 !important;
+    border-color: #0A5FA6 !important;
+    box-shadow: 0 2px 6px rgba(1,118,211,0.35) !important;
+}
+.stButton > button[kind="primary"]:active {
+    background: #014486 !important;
+}
 
 /* Secondary button */
 .stButton > button[kind="secondary"] {
-    border-radius: 100px !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    background: rgba(255,255,255,0.1) !important;
-    color: rgba(255,255,255,0.9) !important;
+    border-radius: 6px !important;
+    border: 1px solid #DDDBDA !important;
+    background: #FFFFFF !important;
+    color: #0176D3 !important;
     font-weight: 600 !important;
     font-size: 0.875rem !important;
     text-transform: none !important;
@@ -305,14 +314,14 @@ div[data-testid="stMetricValue"] { font-size: 1.7rem !important; font-weight: 70
     transition: all 0.15s ease !important;
 }
 .stButton > button[kind="secondary"]:hover {
-    background: rgba(255,255,255,0.18) !important;
-    border-color: rgba(255,255,255,0.35) !important;
+    background: #F3F2EF !important;
+    border-color: #0176D3 !important;
 }
 
-/* Tabs — dark Apple style */
+/* Tabs — Salesforce underline style */
 .stTabs [data-baseweb="tab-list"] {
     gap: 0;
-    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    border-bottom: 2px solid #DDDBDA !important;
     background: transparent !important;
     padding: 0 !important;
 }
@@ -321,92 +330,76 @@ div[data-testid="stMetricValue"] { font-size: 1.7rem !important; font-weight: 70
     font-size: 0.875rem;
     border-radius: 0 !important;
     padding: 10px 18px !important;
-    color: rgba(255,255,255,0.45) !important;
+    color: #706E6B !important;
     background: transparent !important;
     border: none !important;
-    border-bottom: 2px solid transparent !important;
+    border-bottom: 3px solid transparent !important;
     text-transform: none !important;
     transition: color 0.15s ease !important;
 }
 .stTabs [aria-selected="true"] {
-    color: #0A84FF !important;
+    color: #0176D3 !important;
     font-weight: 600 !important;
-    border-bottom: 2px solid #0A84FF !important;
+    border-bottom: 3px solid #0176D3 !important;
     background: transparent !important;
 }
 .stTabs [data-baseweb="tab"]:hover {
-    color: rgba(255,255,255,0.8) !important;
-    background: rgba(255,255,255,0.05) !important;
+    color: #0176D3 !important;
+    background: rgba(1,118,211,0.04) !important;
 }
 
 /* Expanders */
 .stExpander {
-    border-radius: 12px !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
-    background: rgba(28,28,30,0.85) !important;
+    border-radius: 8px !important;
+    border: 1px solid #DDDBDA !important;
+    background: #FFFFFF !important;
     overflow: hidden;
 }
-.stExpander:hover { border-color: rgba(255,255,255,0.2) !important; }
-.stExpander summary { font-weight: 600 !important; color: rgba(255,255,255,0.9) !important; font-size: 0.875rem !important; }
+.stExpander:hover { border-color: #B0B0B0 !important; }
+.stExpander summary { font-weight: 600 !important; color: #181818 !important; font-size: 0.875rem !important; }
 
 /* Forms */
 [data-testid="stForm"] {
-    border-radius: 16px !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 8px !important;
+    border: 1px solid #DDDBDA !important;
     padding: 20px !important;
-    background: rgba(28,28,30,0.85) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
 }
 
 /* Inputs */
 div[data-baseweb="select"] > div {
-    border-radius: 10px !important;
-    border-color: rgba(255,255,255,0.15) !important;
-    background: rgba(255,255,255,0.08) !important;
-    color: rgba(255,255,255,0.9) !important;
+    border-radius: 6px !important;
+    border-color: #DDDBDA !important;
+    background: #FFFFFF !important;
 }
 input[type="text"], input[type="password"], textarea {
-    border-radius: 10px !important;
-    border-color: rgba(255,255,255,0.15) !important;
-    background: rgba(255,255,255,0.08) !important;
-    color: rgba(255,255,255,0.9) !important;
+    border-radius: 6px !important;
+    border-color: #DDDBDA !important;
     font-size: 0.875rem !important;
 }
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    border-color: #0A84FF !important;
-    box-shadow: 0 0 0 3px rgba(10,132,255,0.25) !important;
+    border-color: #0176D3 !important;
+    box-shadow: 0 0 0 3px rgba(1,118,211,0.18) !important;
     outline: none !important;
 }
 
-/* Hide Streamlit's submit tooltip */
+/* Hide Streamlit's "Press Enter to submit form" instruction tooltip */
 [data-testid="InputInstructions"],
 small[data-testid="InputInstructions"] { display: none !important; }
 
 /* Divider */
-hr { border-color: rgba(255,255,255,0.1) !important; margin: 20px 0 !important; }
+hr { border-color: #DDDBDA !important; margin: 20px 0 !important; }
 
 /* Alerts */
-[data-testid="stAlert"] { border-radius: 12px !important; }
+[data-testid="stAlert"] { border-radius: 8px !important; }
 
 /* Dataframe */
-[data-testid="stDataFrame"] { border-radius: 12px !important; overflow: hidden; }
+[data-testid="stDataFrame"] { border-radius: 8px !important; overflow: hidden; }
 
 /* Fix any lingering text-transform issues */
 button, a, span, p, div, h1, h2, h3, h4, h5, label {
     text-transform: none !important;
-}
-
-/* Markdown text color */
-[data-testid="stMarkdownContainer"] p,
-[data-testid="stMarkdownContainer"] li,
-[data-testid="stMarkdownContainer"] span {
-    color: rgba(255,255,255,0.85) !important;
-}
-[data-testid="stMarkdownContainer"] h1,
-[data-testid="stMarkdownContainer"] h2,
-[data-testid="stMarkdownContainer"] h3 {
-    color: #FFFFFF !important;
 }
 </style>
 """
@@ -414,10 +407,10 @@ button, a, span, p, div, h1, h2, h3, h4, h5, label {
 DIFF_CSS = """
 <style>
 .diff-container {
-    background: rgba(12,12,14,0.95); border-radius: 12px; padding: 16px 20px;
+    background: #1B1F23; border-radius: 8px; padding: 16px 20px;
     font-family: "SFMono-Regular", "Consolas", monospace;
     font-size: 0.80rem; max-height: 550px; overflow-y: auto; line-height: 1.65;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid #30363D;
 }
 </style>
 """
@@ -440,7 +433,7 @@ def page_header(title: str, subtitle: str, badge: str = "") -> None:
 def metric_row(metrics: list[dict]) -> None:
     cols = st.columns(len(metrics))
     for col, m in zip(cols, metrics):
-        color = m.get("color", "#0A84FF")
+        color = m.get("color", "#0176D3")
         delta = m.get("delta", "")
         delta_html = (
             f'<div style="font-size:.73rem;color:#706E6B;margin-top:5px">{delta}</div>'
@@ -471,9 +464,8 @@ def cc_level_badge(level: str) -> str:
 def violation_card(v, idx: int) -> None:
     sev = v.severity
     cc_badge = (
-        f'<span style="font-size:.71rem;background:rgba(255,255,255,0.1);'
-        f'border:1px solid rgba(255,255,255,0.18);'
-        f'border-radius:100px;padding:1px 8px;color:rgba(255,255,255,0.7);margin-left:6px;font-weight:500">'
+        f'<span style="font-size:.71rem;background:#F3F2EF;border:1px solid #DDDBDA;'
+        f'border-radius:4px;padding:1px 7px;color:#3E3E3C;margin-left:6px;font-weight:500">'
         f'Level {v.cc_level}</span>'
         if v.cc_level else ""
     )
@@ -481,11 +473,11 @@ def violation_card(v, idx: int) -> None:
         f'<div class="vrow vrow-{sev}">'
         f'<h4>{severity_badge(sev)}{cc_badge}'
         f' &nbsp;<b>[{v.rule_id}]</b> {v.rule.name}'
-        f'&nbsp;<span style="color:rgba(255,255,255,0.45);font-size:.78rem;font-weight:400">Line {v.line_number}</span></h4>'
-        f'<p style="color:rgba(255,255,255,0.8);font-size:.82rem;margin:4px 0">'
-        f'<b>Code:</b> <code style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:6px;'
-        f'font-size:.80rem;color:rgba(255,255,255,0.9)">{_html_esc(v.line_content[:120])}</code></p>'
-        f'<p style="color:rgba(255,255,255,0.55);font-size:.82rem;margin:4px 0">'
+        f'&nbsp;<span style="color:#706E6B;font-size:.78rem;font-weight:400">Line {v.line_number}</span></h4>'
+        f'<p style="color:#3E3E3C;font-size:.82rem;margin:4px 0">'
+        f'<b>Code:</b> <code style="background:#F3F2EF;padding:1px 5px;border-radius:3px;'
+        f'font-size:.80rem">{_html_esc(v.line_content[:120])}</code></p>'
+        f'<p style="color:#706E6B;font-size:.82rem;margin:4px 0">'
         f'<b>Fix:</b> {_html_esc(v.remediation[:250])}</p>'
         f'</div>',
         unsafe_allow_html=True,
@@ -508,17 +500,17 @@ def violation_card(v, idx: int) -> None:
                     st.code(v.rule.example_good, language="abap")
             if v.rule.tags:
                 tags_html = " ".join(
-                    f'<span style="background:rgba(10,132,255,0.2);color:#0A84FF;border-radius:100px;'
-                    f'padding:1px 8px;font-size:.74rem;border:1px solid rgba(10,132,255,0.35)">{t}</span>'
+                    f'<span style="background:#E8F4FF;color:#0176D3;border-radius:4px;'
+                    f'padding:1px 8px;font-size:.74rem;border:1px solid #B0D4F5">{t}</span>'
                     for t in v.rule.tags
                 )
                 st.markdown(f"**Tags:** {tags_html}", unsafe_allow_html=True)
 
 
 def score_ring(score: int) -> None:
-    if score >= 80:   color = "#30D158"
-    elif score >= 50: color = "#FF9F0A"
-    else:             color = "#FF453A"
+    if score >= 80:   color = "#2E7D32"
+    elif score >= 50: color = "#7A5600"
+    else:             color = "#BA0517"
     st.markdown(
         f'<div class="score-ring" style="--sc:{color}">{score}</div>',
         unsafe_allow_html=True,
@@ -529,19 +521,19 @@ def sidebar_nav(current_user) -> None:
     with st.sidebar:
         # ── 1. Logo / brand block ────────────────────────────────────
         st.markdown("""
-        <div style="padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.08)">
+        <div style="padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.09)">
           <div style="display:flex;align-items:center;gap:11px">
             <div style="
-                background:#0A84FF;border-radius:10px;
+                background:#0176D3;border-radius:10px;
                 width:38px;height:38px;flex-shrink:0;
                 display:flex;align-items:center;justify-content:center;
                 font-size:1.25rem;
-                box-shadow:0 2px 12px rgba(10,132,255,0.45);
+                box-shadow:0 2px 8px rgba(1,118,211,0.40);
             ">⚡</div>
             <div>
               <div style="font-size:1.05rem;font-weight:700;color:#FFFFFF;
                           letter-spacing:-0.3px;line-height:1.15">CodeVantage</div>
-              <div style="font-size:0.67rem;color:rgba(255,255,255,0.45);letter-spacing:0.4px;
+              <div style="font-size:0.67rem;color:#6FA8D4;letter-spacing:0.4px;
                           text-transform:uppercase;margin-top:1px">ABAP Intelligence</div>
             </div>
           </div>
@@ -551,7 +543,7 @@ def sidebar_nav(current_user) -> None:
         # ── 2. App Chain nav block ────────────────────────────────────
         st.markdown("""
         <div style="padding:14px 18px 4px">
-          <div style="font-size:0.67rem;color:rgba(255,255,255,0.4);font-weight:700;
+          <div style="font-size:0.67rem;color:#6FA8D4;font-weight:700;
                       text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">
             App Chain
           </div>
@@ -583,17 +575,17 @@ def sidebar_nav(current_user) -> None:
         # ── 4. User info + Sign Out pinned at bottom ──────────────────
         st.markdown(
             f'<div style="padding:10px 16px 4px">'
-            f'<div style="font-size:0.67rem;color:rgba(255,255,255,0.4);font-weight:700;'
+            f'<div style="font-size:0.67rem;color:#6FA8D4;font-weight:700;'
             f'text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px">Account</div>'
             f'<div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">'
-            f'<div style="background:#0A84FF;border-radius:50%;width:28px;height:28px;'
+            f'<div style="background:#0176D3;border-radius:50%;width:28px;height:28px;'
             f'display:flex;align-items:center;justify-content:center;'
             f'font-size:0.78rem;font-weight:700;color:#fff;flex-shrink:0">'
             f'{current_user.full_name[0].upper()}</div>'
             f'<div>'
             f'<div style="font-size:0.85rem;font-weight:600;color:#FFFFFF;'
             f'line-height:1.2">{current_user.full_name}</div>'
-            f'<div style="font-size:0.72rem;color:rgba(255,255,255,0.45);margin-top:1px">'
+            f'<div style="font-size:0.72rem;color:#6FA8D4;margin-top:1px">'
             f'{current_user.role_label()}</div>'
             f'</div></div></div>',
             unsafe_allow_html=True,
@@ -605,7 +597,7 @@ def sidebar_nav(current_user) -> None:
 
         st.markdown(
             '<div style="text-align:center;padding:8px 0 10px">'
-            '<span style="font-size:0.67rem;color:rgba(255,255,255,0.25)">'
+            '<span style="font-size:0.67rem;color:#3D6E96">'
             'v1.1.0 &nbsp;·&nbsp; Powered by SPRAC &nbsp;·&nbsp; 2025</span></div>',
             unsafe_allow_html=True,
         )
