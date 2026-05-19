@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 st.set_page_config(
-    page_title="CoreShift — ABAP Intelligence Platform",
+    page_title="CoreShift — Intelligence SAP Enterprise Platform",
     page_icon="🔀",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -30,7 +30,7 @@ sidebar_nav(user)
 # ── Dashboard header ──────────────────────────────────────────────────────────
 page_header(
     "CoreShift",
-    "Enterprise ABAP Intelligence Platform — Clean Core & S/4HANA Migration",
+    "Intelligence SAP Enterprise Platform — Clean Core & S/4HANA Migration",
     badge="AI Connected" if st.session_state.get("cv_llm_client") else "Configure LLM to enable AI",
 )
 

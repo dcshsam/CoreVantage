@@ -414,7 +414,7 @@ def render_login_page() -> None:
                   letter-spacing: -0.4px; line-height: 1.2; margin-bottom: 6px;
               ">CoreShift</div>
               <div style="font-size: 0.84rem; color: #706E6B; letter-spacing: 0.1px;">
-                  Enterprise ABAP Intelligence Platform
+                  Intelligence SAP Enterprise Platform
               </div>
             </div>
             <hr style="border:none;border-top:1px solid #EAEAEA;margin:0 0 20px">

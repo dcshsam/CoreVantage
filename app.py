@@ -80,7 +80,7 @@ st.markdown(f"""
     <div>
       <div style="font-size:1.1rem;font-weight:700;color:#032D60">CoreShift</div>
       <div style="font-size:0.68rem;color:#706E6B;font-weight:600;
-                  text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
+                  text-transform:uppercase;letter-spacing:.5px">Intelligence SAP Enterprise Platform</div>
     </div>
   </div>
   <div style="font-size:0.82rem;color:#706E6B">
@@ -124,7 +124,7 @@ with col1:
         <div>
           <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">CoreShift</h3>
           <div style="font-size:0.7rem;color:#0176D3;font-weight:600;
-               text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
+               text-transform:uppercase;letter-spacing:.5px">Intelligence SAP Enterprise Platform</div>
         </div>
       </div>
       <p style="{CARD_DESC}">

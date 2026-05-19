@@ -62,7 +62,7 @@ st.markdown(f"""
     <div>
       <div style="font-size:1.1rem;font-weight:700;color:#032D60">CoreShift</div>
       <div style="font-size:0.68rem;color:#706E6B;font-weight:600;
-                  text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
+                  text-transform:uppercase;letter-spacing:.5px">Intelligence SAP Enterprise Platform</div>
     </div>
   </div>
   <div style="font-size:0.82rem;color:#706E6B">
