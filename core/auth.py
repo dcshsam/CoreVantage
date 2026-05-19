@@ -283,25 +283,71 @@ def render_login_page() -> None:
         -webkit-font-smoothing: antialiased;
         text-transform: none !important;
     }
-    [data-testid="stAppViewContainer"] { background: #F3F2EF !important; }
-    [data-testid="stMain"]             { background: transparent !important; }
-    [data-testid="stSidebar"]          { display: none !important; }
-    [data-testid="stHeader"]           { background: transparent !important; }
 
-    /* Form IS the card */
+    /* ── Animated gradient background ── */
+    [data-testid="stAppViewContainer"] {
+        background:
+            radial-gradient(ellipse at 20% 50%, rgba(1,118,211,0.18) 0%, transparent 55%),
+            radial-gradient(ellipse at 80% 20%, rgba(3,45,96,0.22) 0%, transparent 50%),
+            radial-gradient(ellipse at 60% 85%, rgba(46,132,74,0.12) 0%, transparent 45%),
+            linear-gradient(135deg, #0C1D36 0%, #0A3060 35%, #0176D3 75%, #0EA5E9 100%) !important;
+        background-attachment: fixed !important;
+    }
+
+    /* Floating orb decorations */
+    [data-testid="stAppViewContainer"]::before {
+        content: "";
+        position: fixed;
+        top: -120px; left: -120px;
+        width: 500px; height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(1,118,211,0.25) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+        animation: float1 12s ease-in-out infinite;
+    }
+    [data-testid="stAppViewContainer"]::after {
+        content: "";
+        position: fixed;
+        bottom: -100px; right: -100px;
+        width: 420px; height: 420px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(14,165,233,0.20) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+        animation: float2 15s ease-in-out infinite;
+    }
+    @keyframes float1 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50%       { transform: translate(40px, 30px) scale(1.08); }
+    }
+    @keyframes float2 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50%       { transform: translate(-30px, -40px) scale(1.06); }
+    }
+
+    [data-testid="stMain"]   { background: transparent !important; position: relative; z-index: 1; }
+    [data-testid="stSidebar"]{ display: none !important; }
+    [data-testid="stHeader"] { background: transparent !important; }
+
+    /* ── Login card — frosted glass on the gradient ── */
     [data-testid="stForm"] {
-        background: #FFFFFF !important;
-        border-radius: 10px !important;
-        border: 1px solid #DDDBDA !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04) !important;
+        background: rgba(255,255,255,0.92) !important;
+        backdrop-filter: blur(24px) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        border-radius: 16px !important;
+        border: 1px solid rgba(255,255,255,0.7) !important;
+        box-shadow:
+            0 8px 40px rgba(3,45,96,0.35),
+            0 1px 0 rgba(255,255,255,0.6) inset !important;
         padding: 40px 40px 32px !important;
     }
 
     /* Inputs */
     input[type="text"], input[type="password"] {
-        border-radius: 6px !important;
-        border: 1px solid #DDDBDA !important;
-        background: #FFFFFF !important;
+        border-radius: 8px !important;
+        border: 1.5px solid #DDDBDA !important;
+        background: #FAFAFA !important;
         font-size: 0.875rem !important;
         padding: 10px 14px !important;
         color: #181818 !important;
@@ -312,29 +358,29 @@ def render_login_page() -> None:
         border-color: #0176D3 !important;
         box-shadow: 0 0 0 3px rgba(1,118,211,0.18) !important;
         outline: none !important;
+        background: #FFFFFF !important;
     }
 
-    /* Sign In button — Salesforce primary */
+    /* Sign In button */
     button[data-testid="baseButton-primaryFormSubmit"] {
-        background: #0176D3 !important;
-        border: 1px solid #0176D3 !important;
-        border-radius: 6px !important;
-        font-weight: 600 !important;
+        background: linear-gradient(135deg, #0176D3 0%, #014486 100%) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
         font-size: 0.9rem !important;
         color: #FFFFFF !important;
-        height: 44px !important;
+        height: 46px !important;
         text-transform: none !important;
-        letter-spacing: 0 !important;
-        transition: background 0.15s ease, box-shadow 0.15s ease !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.14) !important;
+        letter-spacing: 0.2px !important;
+        transition: opacity 0.15s ease, box-shadow 0.15s ease !important;
+        box-shadow: 0 4px 14px rgba(1,118,211,0.45) !important;
     }
     button[data-testid="baseButton-primaryFormSubmit"]:hover {
-        background: #0A5FA6 !important;
-        border-color: #0A5FA6 !important;
-        box-shadow: 0 2px 8px rgba(1,118,211,0.35) !important;
+        opacity: 0.90 !important;
+        box-shadow: 0 6px 20px rgba(1,118,211,0.55) !important;
     }
 
-    /* Style native Streamlit input labels — no custom HTML needed */
+    /* Input labels */
     [data-testid="stForm"] [data-testid="stWidgetLabel"] p,
     [data-testid="stForm"] label p,
     [data-testid="stForm"] .stTextInput label {
@@ -358,20 +404,20 @@ def render_login_page() -> None:
             <div style="text-align:center; margin-bottom:24px; padding-top:4px">
               <div style="
                   display:inline-flex; align-items:center; justify-content:center;
-                  background: #0176D3;
-                  border-radius: 12px; width: 52px; height: 52px;
-                  font-size: 1.6rem; margin-bottom: 16px;
-                  box-shadow: 0 3px 10px rgba(1,118,211,0.30);
+                  background: linear-gradient(135deg, #0176D3 0%, #014486 100%);
+                  border-radius: 14px; width: 56px; height: 56px;
+                  font-size: 1.7rem; margin-bottom: 16px;
+                  box-shadow: 0 4px 16px rgba(1,118,211,0.45);
               ">⚡</div>
               <div style="
-                  font-size: 1.5rem; font-weight: 700; color: #181818;
-                  letter-spacing: -0.4px; line-height: 1.2; margin-bottom: 5px;
+                  font-size: 1.55rem; font-weight: 700; color: #032D60;
+                  letter-spacing: -0.4px; line-height: 1.2; margin-bottom: 6px;
               ">CodeVantage</div>
-              <div style="font-size: 0.84rem; color: #706E6B;">
+              <div style="font-size: 0.84rem; color: #706E6B; letter-spacing: 0.1px;">
                   Enterprise ABAP Intelligence Platform
               </div>
             </div>
-            <hr style="border:none;border-top:1px solid #DDDBDA;margin:0 0 20px">
+            <hr style="border:none;border-top:1px solid #EAEAEA;margin:0 0 20px">
             """, unsafe_allow_html=True)
 
             username = st.text_input("Username", placeholder="Enter your username")
