@@ -42,25 +42,25 @@ total_analyses = sum(u.analyses_run for u in all_users)
 llm_connected  = bool(st.session_state.get("cv_llm_client"))
 
 metric_row([
-    {"label": "Analyses Run",   "value": f"{total_analyses:,}",                       "color": "#0176D3"},
-    {"label": "Platform Users", "value": str(len(all_users)),                         "color": "#2E844A"},
-    {"label": "LLM Provider",   "value": st.session_state.get("cv_llm_display", "—"), "color": "#7B2D8B"},
-    {"label": "ABAP Rules",     "value": str(len(ALL_RULES)),                         "color": "#A33700"},
-    {"label": "Your Role",      "value": user.role.title(),                           "color": "#0A5FA6"},
+    {"label": "Analyses Run",   "value": f"{total_analyses:,}",                       "color": "#0A84FF"},
+    {"label": "Platform Users", "value": str(len(all_users)),                         "color": "#30D158"},
+    {"label": "LLM Provider",   "value": st.session_state.get("cv_llm_display", "—"), "color": "#BF5AF2"},
+    {"label": "ABAP Rules",     "value": str(len(ALL_RULES)),                         "color": "#FF9F0A"},
+    {"label": "Your Role",      "value": user.role.title(),                           "color": "#5AC8FA"},
 ])
 
 st.markdown("---")
 
 # ── Feature cards — 2×2 grid ──────────────────────────────────────────────────
-CHIP        = "background:#E8F4FF;color:#0176D3;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #B0D4F5"
-CHIP_ORANGE = "background:#FEE3D2;color:#A33700;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #F5C4A8"
-CARD_DESC   = "color:#706E6B;font-size:.875rem;margin-bottom:14px;line-height:1.6;min-height:72px"
+CHIP        = "background:rgba(10,132,255,0.2);color:#0A84FF;border-radius:100px;padding:2px 12px;font-size:.74rem;font-weight:600;border:1px solid rgba(10,132,255,0.4)"
+CHIP_ORANGE = "background:rgba(255,159,10,0.2);color:#FF9F0A;border-radius:100px;padding:2px 12px;font-size:.74rem;font-weight:600;border:1px solid rgba(255,159,10,0.4)"
+CARD_DESC   = "color:rgba(255,255,255,0.55);font-size:.875rem;margin-bottom:14px;line-height:1.6;min-height:72px"
 
 col1, col2 = st.columns(2, gap="medium")
 
 with col1:
     st.markdown(f"""
-    <div class="cv-card" style="min-height:200px;display:flex;flex-direction:column">
+    <div class="cv-card" style="min-height:200px;display:flex;flex-direction:column;border-top:3px solid #0A84FF">
       <h3>🧹 Clean Core Analysis</h3>
       <p style="{CARD_DESC}">
         Analyse ABAP code against SAP Clean Core standards (Levels A–D, August 2025 model).
@@ -80,7 +80,7 @@ with col1:
 
 with col2:
     st.markdown(f"""
-    <div class="cv-card" style="min-height:200px;display:flex;flex-direction:column">
+    <div class="cv-card" style="min-height:200px;display:flex;flex-direction:column;border-top:3px solid #FF9F0A">
       <h3>🚀 ECC → S/4HANA Migration</h3>
       <p style="{CARD_DESC}">
         Identify ECC-specific constructs incompatible with S/4HANA (incl. MATNR 40-char,
@@ -104,7 +104,7 @@ with col3:
     st.markdown("""
     <div class="cv-card" style="min-height:140px">
       <h3>📚 Rule Reference Catalog</h3>
-      <p style="color:#706E6B;font-size:.875rem;line-height:1.6;min-height:60px">
+      <p style="color:rgba(255,255,255,0.55);font-size:.875rem;line-height:1.6;min-height:60px">
         Browse, search, and filter all 38+ built-in ABAP rules with descriptions,
         non-compliant/compliant examples, and Clean Core level classification.
         Includes the August 2025 A–D extensibility guide.
@@ -118,7 +118,7 @@ with col4:
     st.markdown("""
     <div class="cv-card" style="min-height:140px">
       <h3>📊 Analytics & Reports</h3>
-      <p style="color:#706E6B;font-size:.875rem;line-height:1.6;min-height:60px">
+      <p style="color:rgba(255,255,255,0.55);font-size:.875rem;line-height:1.6;min-height:60px">
         Visualise compliance trends, violation distributions, and migration readiness
         across your custom code landscape. Track session history and generate
         executive-level compliance reports.

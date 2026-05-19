@@ -278,69 +278,74 @@ def render_login_page() -> None:
     st.markdown("""
     <style>
     html, body, [class*="css"] {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
-                     Arial, sans-serif !important;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+                     "Helvetica Neue", Arial, sans-serif !important;
         -webkit-font-smoothing: antialiased;
         text-transform: none !important;
     }
-    [data-testid="stAppViewContainer"] { background: #F3F2EF !important; }
+    [data-testid="stAppViewContainer"] { background: #000000 !important; }
     [data-testid="stMain"]             { background: transparent !important; }
     [data-testid="stSidebar"]          { display: none !important; }
-    [data-testid="stHeader"]           { background: transparent !important; }
+    [data-testid="stHeader"]           {
+        background: rgba(0,0,0,0.7) !important;
+        backdrop-filter: blur(20px) !important;
+    }
 
-    /* Form IS the card */
+    /* Form IS the card — glassmorphic */
     [data-testid="stForm"] {
-        background: #FFFFFF !important;
-        border-radius: 10px !important;
-        border: 1px solid #DDDBDA !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04) !important;
+        background: rgba(28,28,30,0.9) !important;
+        backdrop-filter: blur(24px) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(255,255,255,0.12) !important;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.6) !important;
         padding: 40px 40px 32px !important;
     }
 
     /* Inputs */
     input[type="text"], input[type="password"] {
-        border-radius: 6px !important;
-        border: 1px solid #DDDBDA !important;
-        background: #FFFFFF !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(255,255,255,0.15) !important;
+        background: rgba(255,255,255,0.08) !important;
         font-size: 0.875rem !important;
         padding: 10px 14px !important;
-        color: #181818 !important;
+        color: rgba(255,255,255,0.9) !important;
         transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
         text-transform: none !important;
     }
     input[type="text"]:focus, input[type="password"]:focus {
-        border-color: #0176D3 !important;
-        box-shadow: 0 0 0 3px rgba(1,118,211,0.18) !important;
+        border-color: #0A84FF !important;
+        box-shadow: 0 0 0 3px rgba(10,132,255,0.25) !important;
         outline: none !important;
+        background: rgba(10,132,255,0.08) !important;
     }
+    input::placeholder { color: rgba(255,255,255,0.3) !important; }
 
-    /* Sign In button — Salesforce primary */
+    /* Sign In button — Apple iOS pill */
     button[data-testid="baseButton-primaryFormSubmit"] {
-        background: #0176D3 !important;
-        border: 1px solid #0176D3 !important;
-        border-radius: 6px !important;
+        background: #0A84FF !important;
+        border: none !important;
+        border-radius: 100px !important;
         font-weight: 600 !important;
         font-size: 0.9rem !important;
         color: #FFFFFF !important;
-        height: 44px !important;
+        height: 46px !important;
         text-transform: none !important;
         letter-spacing: 0 !important;
-        transition: background 0.15s ease, box-shadow 0.15s ease !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.14) !important;
+        transition: opacity 0.15s ease !important;
+        box-shadow: 0 2px 16px rgba(10,132,255,0.45) !important;
     }
     button[data-testid="baseButton-primaryFormSubmit"]:hover {
-        background: #0A5FA6 !important;
-        border-color: #0A5FA6 !important;
-        box-shadow: 0 2px 8px rgba(1,118,211,0.35) !important;
+        opacity: 0.88 !important;
     }
 
-    /* Style native Streamlit input labels — no custom HTML needed */
+    /* Input labels */
     [data-testid="stForm"] [data-testid="stWidgetLabel"] p,
     [data-testid="stForm"] label p,
     [data-testid="stForm"] .stTextInput label {
         font-size: 0.80rem !important;
         font-weight: 600 !important;
-        color: #3E3E3C !important;
+        color: rgba(255,255,255,0.65) !important;
         margin-bottom: 4px !important;
         text-transform: none !important;
     }
@@ -358,20 +363,20 @@ def render_login_page() -> None:
             <div style="text-align:center; margin-bottom:24px; padding-top:4px">
               <div style="
                   display:inline-flex; align-items:center; justify-content:center;
-                  background: #0176D3;
-                  border-radius: 12px; width: 52px; height: 52px;
-                  font-size: 1.6rem; margin-bottom: 16px;
-                  box-shadow: 0 3px 10px rgba(1,118,211,0.30);
+                  background: #0A84FF;
+                  border-radius: 16px; width: 56px; height: 56px;
+                  font-size: 1.7rem; margin-bottom: 16px;
+                  box-shadow: 0 4px 20px rgba(10,132,255,0.45);
               ">⚡</div>
               <div style="
-                  font-size: 1.5rem; font-weight: 700; color: #181818;
+                  font-size: 1.5rem; font-weight: 700; color: #FFFFFF;
                   letter-spacing: -0.4px; line-height: 1.2; margin-bottom: 5px;
               ">CodeVantage</div>
-              <div style="font-size: 0.84rem; color: #706E6B;">
+              <div style="font-size: 0.84rem; color: rgba(255,255,255,0.5);">
                   Enterprise ABAP Intelligence Platform
               </div>
             </div>
-            <hr style="border:none;border-top:1px solid #DDDBDA;margin:0 0 20px">
+            <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0 0 20px">
             """, unsafe_allow_html=True)
 
             username = st.text_input("Username", placeholder="Enter your username")

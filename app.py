@@ -43,28 +43,35 @@ st.markdown("""
 /* Each card column becomes a positioned container */
 [data-testid="column"] { position: relative !important; }
 
-/* The page_link becomes an invisible full-column overlay.
-   This uses Streamlit's SPA routing so session state is preserved. */
+/* Invisible full-column overlay — uses Streamlit SPA routing (session preserved) */
 [data-testid="column"] [data-testid="stPageLink"] {
     position: absolute !important;
     inset: 0 !important;
     z-index: 20 !important;
     height: 100% !important;
+    width: 100% !important;
 }
-[data-testid="column"] [data-testid="stPageLink"] > div,
+/* Hide every child element of the page link */
+[data-testid="column"] [data-testid="stPageLink"],
+[data-testid="column"] [data-testid="stPageLink"] * {
+    opacity: 0 !important;
+    font-size: 0 !important;
+    color: transparent !important;
+}
+/* But keep the anchor itself clickable and full-size */
 [data-testid="column"] [data-testid="stPageLink"] a {
     display: block !important;
-    height: 100% !important;
-    width: 100% !important;
-    opacity: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
     cursor: pointer !important;
+    pointer-events: auto !important;
 }
 
-/* Card hover effect — triggered by column hover since overlay intercepts events */
-.cv-card { transition: box-shadow .15s, transform .15s; }
+/* Card hover effect — Apple dark */
+.cv-card { transition: border-color .2s, transform .2s; }
 [data-testid="column"]:hover .cv-card {
-    box-shadow: 0 8px 24px rgba(0,0,0,.13) !important;
-    transform: translateY(-2px);
+    border-color: rgba(10,132,255,0.45) !important;
+    transform: translateY(-3px);
 }
 </style>
 """, unsafe_allow_html=True)
@@ -72,22 +79,22 @@ st.markdown("""
 # ── Top bar ───────────────────────────────────────────────────────────────────
 st.markdown(f"""
 <div style="display:flex;justify-content:space-between;align-items:center;
-            padding:16px 4px 14px;border-bottom:1px solid #DDDBDA;margin-bottom:40px">
+            padding:16px 4px 14px;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:40px">
   <div style="display:flex;align-items:center;gap:12px">
-    <div style="background:#0176D3;border-radius:10px;width:38px;height:38px;
+    <div style="background:#0A84FF;border-radius:12px;width:40px;height:40px;
                 display:flex;align-items:center;justify-content:center;
-                font-size:1.2rem;box-shadow:0 2px 8px rgba(1,118,211,0.35)">⚡</div>
+                font-size:1.2rem;box-shadow:0 2px 14px rgba(10,132,255,0.45)">⚡</div>
     <div>
-      <div style="font-size:1.1rem;font-weight:700;color:#032D60">CodeVantage</div>
-      <div style="font-size:0.68rem;color:#706E6B;font-weight:600;
+      <div style="font-size:1.1rem;font-weight:700;color:#FFFFFF">CodeVantage</div>
+      <div style="font-size:0.68rem;color:rgba(255,255,255,0.45);font-weight:600;
                   text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
     </div>
   </div>
-  <div style="font-size:0.82rem;color:#706E6B">
-    Signed in as <strong style="color:#032D60">{user.full_name or user.username}</strong>
+  <div style="font-size:0.82rem;color:rgba(255,255,255,0.55)">
+    Signed in as <strong style="color:#FFFFFF">{user.full_name or user.username}</strong>
     &nbsp;·&nbsp;
-    <span style="background:#EEF6EC;color:#2E844A;font-size:.72rem;font-weight:600;
-                 padding:2px 8px;border-radius:4px;border:1px solid #91C98C">
+    <span style="background:rgba(48,209,88,0.2);color:#30D158;font-size:.72rem;font-weight:600;
+                 padding:2px 10px;border-radius:100px;border:1px solid rgba(48,209,88,0.4)">
       ✅ {st.session_state.get('cv_llm_display','LLM Connected')}
     </span>
   </div>
@@ -97,33 +104,33 @@ st.markdown(f"""
 # ── Welcome ───────────────────────────────────────────────────────────────────
 st.markdown("""
 <div style="text-align:center;margin-bottom:36px">
-  <h2 style="color:#032D60;font-size:1.4rem;font-weight:700;margin-bottom:6px">
+  <h2 style="color:#FFFFFF;font-size:1.4rem;font-weight:700;margin-bottom:6px">
     Select an Application
   </h2>
-  <p style="color:#706E6B;font-size:.9rem;margin:0">
+  <p style="color:rgba(255,255,255,0.5);font-size:.9rem;margin:0">
     Choose a platform to get started
   </p>
 </div>
 """, unsafe_allow_html=True)
 
 # ── Two product cards ─────────────────────────────────────────────────────────
-CHIP_BLUE  = "background:#E8F4FF;color:#0176D3;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #B0D4F5"
-CHIP_GREEN = "background:#EEF6EC;color:#2E844A;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #B8DDB0"
-CARD_DESC  = "color:#706E6B;font-size:.875rem;margin-bottom:18px;line-height:1.6;min-height:80px"
+CHIP_BLUE  = "background:rgba(10,132,255,0.2);color:#0A84FF;border-radius:100px;padding:2px 12px;font-size:.74rem;font-weight:600;border:1px solid rgba(10,132,255,0.4)"
+CHIP_GREEN = "background:rgba(48,209,88,0.2);color:#30D158;border-radius:100px;padding:2px 12px;font-size:.74rem;font-weight:600;border:1px solid rgba(48,209,88,0.4)"
+CARD_DESC  = "color:rgba(255,255,255,0.55);font-size:.875rem;margin-bottom:18px;line-height:1.6;min-height:80px"
 
 _, col1, col2, _ = st.columns([0.5, 3, 3, 0.5], gap="large")
 
 with col1:
     st.markdown(f"""
     <div class="cv-card" style="min-height:260px;display:flex;flex-direction:column;
-         border-top:4px solid #0176D3;padding:24px 24px 20px;cursor:pointer">
+         border-top:4px solid #0A84FF;padding:24px 24px 20px;cursor:pointer">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-        <div style="background:#E8F4FF;border-radius:10px;width:48px;height:48px;flex-shrink:0;
+        <div style="background:rgba(10,132,255,0.2);border-radius:12px;width:50px;height:50px;flex-shrink:0;
                     display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-                    border:1px solid #B0D4F5">⚡</div>
+                    border:1px solid rgba(10,132,255,0.35)">⚡</div>
         <div>
-          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">CodeVantage</h3>
-          <div style="font-size:0.7rem;color:#0176D3;font-weight:600;
+          <h3 style="margin:0;font-size:1.15rem;color:#FFFFFF;font-weight:700">CodeVantage</h3>
+          <div style="font-size:0.7rem;color:#0A84FF;font-weight:600;
                text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
         </div>
       </div>
@@ -145,14 +152,14 @@ with col1:
 with col2:
     st.markdown(f"""
     <div class="cv-card" style="min-height:260px;display:flex;flex-direction:column;
-         border-top:4px solid #2E844A;padding:24px 24px 20px;cursor:pointer">
+         border-top:4px solid #30D158;padding:24px 24px 20px;cursor:pointer">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-        <div style="background:#EEF6EC;border-radius:10px;width:48px;height:48px;flex-shrink:0;
+        <div style="background:rgba(48,209,88,0.2);border-radius:12px;width:50px;height:50px;flex-shrink:0;
                     display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-                    border:1px solid #B8DDB0">🔄</div>
+                    border:1px solid rgba(48,209,88,0.35)">🔄</div>
         <div>
-          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">E2E Support</h3>
-          <div style="font-size:0.7rem;color:#2E844A;font-weight:600;
+          <h3 style="margin:0;font-size:1.15rem;color:#FFFFFF;font-weight:700">E2E Support</h3>
+          <div style="font-size:0.7rem;color:#30D158;font-weight:600;
                text-transform:uppercase;letter-spacing:.5px">End to End SAP Support</div>
         </div>
       </div>
@@ -162,7 +169,9 @@ with col2:
         and solution documentation across the full SAP delivery lifecycle.
       </p>
       <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
-        <span style="{CHIP_GREEN}">Coming Soon</span>
+        <span style="{CHIP_GREEN}">BRD → Spec → Code</span>
+        <span style="{CHIP_GREEN}">ABAP / UI5 / CAP</span>
+        <span style="{CHIP_GREEN}">Word / PDF Export</span>
       </div>
     </div>
     """, unsafe_allow_html=True)
@@ -177,7 +186,7 @@ with btn_col:
         st.rerun()
 
 st.markdown(
-    "<div style='text-align:center;margin-top:20px;color:#706E6B;font-size:.75rem'>"
+    "<div style='text-align:center;margin-top:20px;color:rgba(255,255,255,0.25);font-size:.75rem'>"
     "v1.1.0 · Powered by SPRAC · 2025</div>",
     unsafe_allow_html=True,
 )

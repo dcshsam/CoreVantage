@@ -104,7 +104,7 @@ with tab_system:
     st.markdown("""
     <div class="cv-card">
       <h3>Connect to ECC / S/4HANA Backend</h3>
-      <p style="color:#706E6B;font-size:.9rem">
+      <p style="color:rgba(255,255,255,0.55);font-size:.9rem">
         Retrieve and analyse programs directly from your SAP system.
         Supports bulk analysis of multiple objects.
       </p>
@@ -138,7 +138,7 @@ with tab_readiness:
     st.markdown("""
     <div class="cv-card">
       <h3>SAP Readiness Check 2 — Report Upload</h3>
-      <p style="color:#706E6B;font-size:.9rem">
+      <p style="color:rgba(255,255,255,0.55);font-size:.9rem">
         Upload the Excel report exported from SAP Readiness Check 2
         (<b>Transaction: /SDF/RC_START_CHECK</b> or SAP Readiness Check portal).
         CodeVantage will parse all custom code findings and generate a migration plan.
@@ -254,19 +254,19 @@ if result:
 
     score_color = result.score_color()
     approach_colors = {
-        "BROWNFIELD": "#2E844A",
-        "SELECTIVE_DATA": "#7A5600",
-        "GREENFIELD": "#BA0517",
+        "BROWNFIELD": "#30D158",
+        "SELECTIVE_DATA": "#FF9F0A",
+        "GREENFIELD": "#FF453A",
     }
 
     metric_row([
         {"label": "Readiness Score",    "value": f"{result.readiness_score}/100",
          "color": score_color},
-        {"label": "S/4 Issues Found",   "value": str(result.total_violations), "color": "#A33700"},
-        {"label": "Estimated Effort",   "value": f"{result.effort_days}d",      "color": "#0176D3"},
+        {"label": "S/4 Issues Found",   "value": str(result.total_violations), "color": "#FF9F0A"},
+        {"label": "Estimated Effort",   "value": f"{result.effort_days}d",      "color": "#0A84FF"},
         {"label": "Risk Level",         "value": result.risk_level,            "color": score_color},
         {"label": "Recommended Path",   "value": result.approach.replace("_", " "),
-         "color": approach_colors.get(result.approach, "#0176D3")},
+         "color": approach_colors.get(result.approach, "#0A84FF")},
     ])
 
     _approach_desc = {
@@ -277,7 +277,7 @@ if result:
     st.markdown(f"""
     <div class="cv-card" style="border-left:5px solid {score_color}">
       <h3 style="color:{score_color}">{result.score_label()}</h3>
-      <p style="color:#706E6B;font-size:.9rem">
+      <p style="color:rgba(255,255,255,0.55);font-size:.9rem">
         Approach recommendation: <b>{result.approach.replace("_"," ")}</b> — {_approach_desc}
       </p>
     </div>
@@ -315,7 +315,7 @@ if result:
             st.markdown("""
             <div class="cv-card">
               <h3>🔧 AI-Powered ECC → S/4HANA Code Migration</h3>
-              <p style="color:#706E6B;font-size:.9rem">
+              <p style="color:rgba(255,255,255,0.55);font-size:.9rem">
                 CodeVantage will generate S/4HANA-compatible code, replacing deprecated APIs,
                 removing obsolete constructs, and modernising the ABAP syntax.
               </p>
