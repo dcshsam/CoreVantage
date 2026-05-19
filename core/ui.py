@@ -19,52 +19,15 @@ html, body, [class*="css"] {
     -moz-osx-font-smoothing: grayscale;
     text-transform: none !important;
 }
-/* ── Animated universe background ───────────────────────────── */
-[data-testid="stAppViewContainer"] {
-    position: relative !important;
-    overflow: hidden !important;
-    background: #08101e !important;
-}
-[data-testid="stAppViewContainer"]::before {
-    content: "";
-    position: absolute;
-    top: -30%; left: -30%;
-    width: 160%; height: 160%;
-    background: url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1920&q=90") center/cover no-repeat;
-    animation: cv-bgdrift 80s linear infinite;
-    z-index: 0;
-    pointer-events: none;
-    will-change: transform;
-}
-[data-testid="stAppViewContainer"]::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(5,10,25,0.60);
-    z-index: 1;
-    pointer-events: none;
-}
-[data-testid="stMain"] {
-    position: relative !important;
-    z-index: 2 !important;
-    background: transparent !important;
-}
-[data-testid="stMain"] > div,
-[data-testid="stMainBlockContainer"] { padding-top: 1.75rem; background: transparent !important; }
-[data-testid="stHeader"] { background: transparent !important; }
-@keyframes cv-bgdrift {
-    from { transform: scale(1.18) translate(0%,  0%); }
-    to   { transform: scale(1.18) translate(-14%, -7%); }
-}
+[data-testid="stAppViewContainer"] { background: #F3F2EF; }
+[data-testid="stMain"] > div { padding-top: 1.75rem; }
 
 /* ── Sidebar ─────────────────────────────────────────────────── */
 /* Hide Streamlit's auto-generated page list */
 [data-testid="stSidebarNav"] { display: none !important; }
 
 [data-testid="stSidebar"] {
-    position: relative !important;
-    z-index: 10 !important;
-    background: rgba(3,45,96,0.94) !important;
+    background: #032D60 !important;
     border-right: none !important;
     min-width: 230px !important;
 }
@@ -140,14 +103,12 @@ section[data-testid="stSidebar"] hr {
 
 /* ── Page header ─────────────────────────────────────────────── */
 .cv-header {
-    background: rgba(255,255,255,0.90);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: #FFFFFF;
     padding: 28px 36px 24px;
     border-radius: 10px;
     margin-bottom: 24px;
-    border: 1px solid rgba(255,255,255,0.60);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    border: 1px solid #DDDBDA;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
 }
 .cv-header h1 {
     margin: 0 0 6px 0;
@@ -179,19 +140,16 @@ section[data-testid="stSidebar"] hr {
 
 /* ── Cards ───────────────────────────────────────────────────── */
 .cv-card {
-    background: rgba(255,255,255,0.90);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: #FFFFFF;
     border-radius: 8px;
     padding: 22px 24px;
-    border: 1px solid rgba(255,255,255,0.60);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    border: 1px solid #DDDBDA;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     margin-bottom: 16px;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s ease;
 }
 .cv-card:hover {
-    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
-    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
 }
 .cv-card h3 {
     margin: 0 0 10px 0;
@@ -204,19 +162,17 @@ section[data-testid="stSidebar"] hr {
 
 /* ── Metric tiles ────────────────────────────────────────────── */
 .cv-metric {
-    background: rgba(255,255,255,0.90);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: #FFFFFF;
     border-radius: 8px;
     padding: 20px 18px;
-    border: 1px solid rgba(255,255,255,0.60);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    border: 1px solid #DDDBDA;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     text-align: center;
     border-top: 3px solid var(--mc, #0176D3);
     transition: box-shadow 0.18s ease;
 }
 .cv-metric:hover {
-    box-shadow: 0 6px 20px rgba(0,0,0,0.26);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
 }
 .cv-metric .cv-metric-val {
     font-size: 2rem;
@@ -272,17 +228,15 @@ section[data-testid="stSidebar"] hr {
 
 /* ── Violation row ───────────────────────────────────────────── */
 .vrow {
-    background: rgba(255,255,255,0.90);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: #FFFFFF;
     border-radius: 8px;
     padding: 14px 18px;
-    border: 1px solid rgba(255,255,255,0.50);
+    border: 1px solid #DDDBDA;
     border-left: 4px solid var(--vc, #706E6B);
     margin-bottom: 10px;
     transition: box-shadow 0.15s ease;
 }
-.vrow:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.20); }
+.vrow:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .vrow h4 { margin: 0 0 5px 0; font-size: 0.88rem; color: #181818; font-weight: 600; text-transform: none !important; }
 .vrow p  { margin: 0; font-size: 0.82rem; color: #706E6B; line-height: 1.55; }
 .vrow-CRITICAL { --vc: #BA0517; }
@@ -397,24 +351,20 @@ div[data-testid="stMetricValue"] { font-size: 1.7rem !important; font-weight: 70
 /* Expanders */
 .stExpander {
     border-radius: 8px !important;
-    border: 1px solid rgba(255,255,255,0.50) !important;
-    background: rgba(255,255,255,0.90) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid #DDDBDA !important;
+    background: #FFFFFF !important;
     overflow: hidden;
 }
-.stExpander:hover { border-color: rgba(255,255,255,0.70) !important; }
+.stExpander:hover { border-color: #B0B0B0 !important; }
 .stExpander summary { font-weight: 600 !important; color: #181818 !important; font-size: 0.875rem !important; }
 
 /* Forms */
 [data-testid="stForm"] {
     border-radius: 8px !important;
-    border: 1px solid rgba(255,255,255,0.50) !important;
+    border: 1px solid #DDDBDA !important;
     padding: 20px !important;
-    background: rgba(255,255,255,0.90) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.18) !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
 }
 
 /* Inputs */
