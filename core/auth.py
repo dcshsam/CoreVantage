@@ -298,7 +298,7 @@ def render_login_page() -> None:
         top: -30%; left: -30%;
         width: 160%; height: 160%;
         background: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
-        animation: bgdrift 14s ease-in-out infinite;
+        animation: bgdrift 80s linear infinite;
         z-index: 0;
         pointer-events: none;
         will-change: transform;
@@ -324,13 +324,8 @@ def render_login_page() -> None:
     }
 
     @keyframes bgdrift {
-        0%   { transform: scale(1.00) translate(0%,    0%); }
-        16%  { transform: scale(1.15) translate(-8%,  -6%); }
-        33%  { transform: scale(1.10) translate( 9%,  -9%); }
-        50%  { transform: scale(1.20) translate(-6%,   9%); }
-        66%  { transform: scale(1.12) translate(11%,   5%); }
-        83%  { transform: scale(1.08) translate(-4%,  -7%); }
-        100% { transform: scale(1.00) translate(0%,    0%); }
+        from { transform: scale(1.18) translate(0%,   0%); }
+        to   { transform: scale(1.18) translate(-14%, -7%); }
     }
     [data-testid="stSidebar"]{ display: none !important; }
     [data-testid="stHeader"] { background: transparent !important; }
