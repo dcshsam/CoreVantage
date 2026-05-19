@@ -29,17 +29,6 @@ st.markdown("""
 <style>
 [data-testid="stSidebar"]        { display: none !important; }
 [data-testid="collapsedControl"] { display: none !important; }
-.cv-proceed-btn [data-testid="stPageLink"] a,
-.cv-proceed-btn [data-testid="stPageLink"] a:visited {
-    display: block !important; width: 100% !important; text-align: center !important;
-    background: #0176D3 !important; color: #FFFFFF !important;
-    padding: 12px 20px !important; border-radius: 6px !important;
-    font-weight: 700 !important; font-size: 1rem !important;
-    text-decoration: none !important; text-transform: none !important;
-    border: none !important; box-shadow: 0 2px 8px rgba(1,118,211,.35) !important;
-    letter-spacing: 0.1px !important;
-}
-.cv-proceed-btn [data-testid="stPageLink"] a:hover { background: #0265B8 !important; }
 /* Disabled state — grayed out, not clickable */
 [data-testid="stButton"] button:disabled {
     background: #E8E8E8 !important; color: #AAAAAA !important;
@@ -294,9 +283,8 @@ st.markdown("---")
 _, btn_col, _ = st.columns([1, 2, 1])
 with btn_col:
     if llm_connected:
-        st.markdown('<div class="cv-proceed-btn">', unsafe_allow_html=True)
-        st.page_link("app.py", label="Go to Dashboard →", use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        if st.button("Go to Dashboard →", type="primary", use_container_width=True, key="btn_proceed"):
+            st.switch_page("app.py")
     else:
         st.button("Go to Dashboard →", use_container_width=True,
                   disabled=True, key="btn_proceed_disabled")
