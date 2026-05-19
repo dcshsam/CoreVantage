@@ -1,0 +1,26 @@
+---
+applications:
+  - name: coreshift
+    memory: 1G
+    disk_quota: 2G
+    instances: 1
+    buildpacks:
+      - python_buildpack
+    command: streamlit run app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true --server.enableCORS false --server.enableXsrfProtection false
+    health-check-type: http
+    health-check-http-endpoint: /_stcore/health
+    timeout: 180
+    env:
+      PYTHONUNBUFFERED: "true"
+      STREAMLIT_SERVER_HEADLESS: "true"
+      STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+      # LLM keys — set via: cf set-env coreshift AICORE_CLIENT_ID <value>
+      # AICORE_CLIENT_ID:
+      # AICORE_CLIENT_SECRET:
+      # AICORE_AUTH_URL:
+      # AICORE_BASE_URL:
+      # AICORE_RESOURCE_GROUP: default
+      # AICORE_MODEL: gpt-4o
+      # GROQ_API_KEY:
+      # ANTHROPIC_API_KEY:
+      # OPENAI_API_KEY:
