@@ -292,15 +292,16 @@ def render_login_page() -> None:
         background-size: cover, 140% auto !important;
         background-repeat: no-repeat, no-repeat !important;
         background-position: center center, 0% 30% !important;
-        animation: bgdrift 40s ease-in-out infinite alternate !important;
+        animation: bgdrift 18s ease-in-out infinite !important;
     }
 
     @keyframes bgdrift {
-        0%   { background-position: center center, 0%   30%; background-size: cover, 130% auto; }
-        25%  { background-position: center center, 40%  55%; background-size: cover, 140% auto; }
-        50%  { background-position: center center, 80%  70%; background-size: cover, 145% auto; }
-        75%  { background-position: center center, 55%  25%; background-size: cover, 138% auto; }
-        100% { background-position: center center, 10%  50%; background-size: cover, 132% auto; }
+        0%   { background-position: center center, 0%   0%;   background-size: cover, 160% auto; }
+        20%  { background-position: center center, 80%  20%;  background-size: cover, 180% auto; }
+        40%  { background-position: center center, 100% 80%;  background-size: cover, 170% auto; }
+        60%  { background-position: center center, 20%  100%; background-size: cover, 185% auto; }
+        80%  { background-position: center center, 60%  40%;  background-size: cover, 165% auto; }
+        100% { background-position: center center, 0%   60%;  background-size: cover, 175% auto; }
     }
 
     /* Vignette overlay */
