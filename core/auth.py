@@ -284,22 +284,31 @@ def render_login_page() -> None:
         text-transform: none !important;
     }
 
-    /* ── Full-screen background image with dark overlay ── */
+    /* ── Full-screen background image — slow Ken Burns drift ── */
     [data-testid="stAppViewContainer"] {
         background-image:
-            linear-gradient(135deg, rgba(10,15,30,0.72) 0%, rgba(3,45,96,0.55) 100%),
+            linear-gradient(135deg, rgba(10,15,30,0.68) 0%, rgba(3,45,96,0.50) 100%),
             url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80") !important;
-        background-size: cover !important;
-        background-position: center center !important;
-        background-attachment: fixed !important;
+        background-size: cover, 140% auto !important;
+        background-repeat: no-repeat, no-repeat !important;
+        background-position: center center, 0% 30% !important;
+        animation: bgdrift 40s ease-in-out infinite alternate !important;
     }
 
-    /* Subtle vignette overlay */
+    @keyframes bgdrift {
+        0%   { background-position: center center, 0%   30%; background-size: cover, 130% auto; }
+        25%  { background-position: center center, 40%  55%; background-size: cover, 140% auto; }
+        50%  { background-position: center center, 80%  70%; background-size: cover, 145% auto; }
+        75%  { background-position: center center, 55%  25%; background-size: cover, 138% auto; }
+        100% { background-position: center center, 10%  50%; background-size: cover, 132% auto; }
+    }
+
+    /* Vignette overlay */
     [data-testid="stAppViewContainer"]::before {
         content: "";
         position: fixed;
         inset: 0;
-        background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.45) 100%);
+        background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.50) 100%);
         pointer-events: none;
         z-index: 0;
     }
