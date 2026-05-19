@@ -1,0 +1,1 @@
+"""CodeVantage AI prompts."""

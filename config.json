@@ -1,0 +1,36 @@
+{
+  "app": {
+    "name": "CodeVantage",
+    "version": "1.1.0",
+    "tagline": "Enterprise ABAP Intelligence Platform",
+    "company": "CodeVantage Technologies",
+    "clean_core_model": "August 2025 A-D Extensibility Model"
+  },
+  "features": {
+    "clean_core": true,
+    "s4_migration": true,
+    "sap_connector": true,
+    "readiness_check": true,
+    "batch_analysis": true,
+    "audit_trail": true
+  },
+  "llm": {
+    "default_provider": "sap_ai_core",
+    "fallback_provider": "groq",
+    "preferred_model": "gpt-4o",
+    "max_tokens": 4096,
+    "temperature": 0.1
+  },
+  "analysis": {
+    "max_code_size_kb": 512,
+    "enable_security_scan": true,
+    "enable_performance_scan": true,
+    "enable_clean_core_scan": true,
+    "enable_s4_scan": true
+  },
+  "export": {
+    "formats": ["pdf", "docx", "xlsx"],
+    "include_remediated_code": true,
+    "include_diff": true
+  }
+}
