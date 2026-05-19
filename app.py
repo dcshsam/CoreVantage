@@ -1,6 +1,6 @@
 """
 CodeVantage — Enterprise ABAP Intelligence Platform
-Main entry point: login gate + executive dashboard.
+Main entry point: login gate → LLM gate → executive dashboard.
 """
 
 import sys
@@ -30,6 +30,10 @@ if not is_authenticated():
 
 user = current_user()
 
+# ── LLM gate — redirect to setup page if not configured ──────────────────────
+if not st.session_state.get("cv_llm_client"):
+    st.switch_page("pages/1_🔑_LLM_Setup.py")
+
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 sidebar_nav(user)
 
@@ -37,7 +41,7 @@ sidebar_nav(user)
 page_header(
     "CodeVantage",
     "Enterprise ABAP Intelligence Platform — Clean Core & S/4HANA Migration",
-    badge="AI Connected" if st.session_state.get("cv_llm_client") else "Configure LLM to enable AI",
+    badge=f"AI Connected · {st.session_state.get('cv_llm_display', '')}",
 )
 
 # ── KPI row ───────────────────────────────────────────────────────────────────
@@ -45,7 +49,6 @@ from core.auth import load_users
 from core.abap_rules import ALL_RULES
 all_users = load_users()
 total_analyses = sum(u.analyses_run for u in all_users)
-llm_connected  = bool(st.session_state.get("cv_llm_client"))
 
 metric_row([
     {"label": "Analyses Run",    "value": f"{total_analyses:,}",                       "color": "#0176D3"},
@@ -57,13 +60,12 @@ metric_row([
 
 st.markdown("---")
 
-# ── Feature cards — 2×2 grid ──────────────────────────────────────────────────
-col1, col2 = st.columns(2, gap="medium")
-
-CHIP = "background:#E8F4FF;color:#0176D3;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #B0D4F5"
+# ── Feature cards ─────────────────────────────────────────────────────────────
+CHIP        = "background:#E8F4FF;color:#0176D3;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #B0D4F5"
 CHIP_ORANGE = "background:#FEE3D2;color:#A33700;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #F5C4A8"
+CARD_DESC   = "color:#706E6B;font-size:.875rem;margin-bottom:14px;line-height:1.6;min-height:72px"
 
-CARD_DESC = "color:#706E6B;font-size:.875rem;margin-bottom:14px;line-height:1.6;min-height:72px"
+col1, col2 = st.columns(2, gap="medium")
 
 with col1:
     st.markdown(f"""
@@ -82,7 +84,7 @@ with col1:
       </div>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("Open Clean Core Analyser", type="primary", use_container_width=True):
+    if st.button("Open Clean Core Analyser", type="primary", use_container_width=True, key="btn_cc"):
         st.switch_page("pages/2_🧹_Clean_Core.py")
 
 with col2:
@@ -102,7 +104,7 @@ with col2:
       </div>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("Open Migration Analyser", type="primary", use_container_width=True):
+    if st.button("Open Migration Analyser", type="primary", use_container_width=True, key="btn_s4"):
         st.switch_page("pages/3_🚀_S4_Migration.py")
 
 col3, col4 = st.columns(2, gap="medium")
@@ -118,7 +120,7 @@ with col3:
       </p>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("Browse Rule Catalog", use_container_width=True):
+    if st.button("Browse Rule Catalog", use_container_width=True, key="btn_rules"):
         st.switch_page("pages/6_📚_Rule_Reference.py")
 
 with col4:
@@ -132,38 +134,16 @@ with col4:
       </p>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("View Analytics", use_container_width=True):
+    if st.button("View Analytics", use_container_width=True, key="btn_analytics"):
         st.switch_page("pages/4_📊_Analytics.py")
-
-# ── LLM status banner ─────────────────────────────────────────────────────────
-if not llm_connected:
-    st.markdown("""
-    <div style="background:#FEF7E2;border:1px solid #F5DFA0;border-radius:8px;
-                padding:14px 18px;margin-top:8px;display:flex;align-items:flex-start;gap:14px">
-      <div style="font-size:1.1rem;flex-shrink:0;margin-top:1px">⚠️</div>
-      <div>
-        <div style="font-weight:600;color:#3E3E3C;font-size:.875rem">LLM Not Configured</div>
-        <div style="color:#706E6B;font-size:.82rem;margin-top:3px;line-height:1.5">
-          Rule-based analysis works without LLM. For AI insights, auto-remediation, and
-          migration plans, connect SAP AI Core, GROQ (free), Anthropic Claude 4, or OpenAI.
-        </div>
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
-    st.markdown("")
-    if st.button("Configure LLM Provider", type="primary"):
-        st.switch_page("pages/1_🔑_LLM_Setup.py")
 
 st.markdown("---")
 
-# ── Quick-start guide ─────────────────────────────────────────────────────────
 with st.expander("📖 Quick Start Guide", expanded=total_analyses == 0):
     st.markdown("""
     ### Getting Started with CodeVantage
 
-    **Step 1 — Configure your LLM** *(optional but recommended)*
-    Go to **🔑 LLM Setup** and connect SAP AI Core (uses your existing `.env` credentials)
-    or a free provider (GROQ is free — get a key at console.groq.com).
+    **Step 1 — Configure your LLM** *(done ✅)*
 
     **Step 2 — Analyse your ABAP code**
     Choose your input method on the Clean Core or S/4 Migration page:
@@ -172,37 +152,10 @@ with st.expander("📖 Quick Start Guide", expanded=total_analyses == 0):
     - 📁 **Upload SAP Readiness Check 2** Excel report
 
     **Step 3 — Review & Remediate**
-    CodeVantage shows:
     - Clean Core maturity level (A–D per August 2025 SAP model)
     - Violations with rule details, context snippets, and compliant code examples
-    - AI-powered deep analysis and hidden risk detection (if LLM configured)
-    - Auto-generated remediated code with diff view
+    - AI-powered deep analysis and auto-generated remediated code with diff view
 
     **Step 4 — Export & Deploy**
     Download remediated code, Word/PDF reports, or Excel violation lists.
-
-    **Step 5 — Browse Rules**
-    Use the **📚 Rule Reference** page to understand all 38+ detection rules and study
-    compliant code examples before writing new ABAP.
-
-    ---
-    **Default credentials:** `admin` / `Admin@123` — change after first login via **👥 User Admin**.
-    """)
-
-# ── Competitor comparison (collapsible) ───────────────────────────────────────
-with st.expander("🏆 Why CodeVantage — Competitive Advantage"):
-    st.markdown("""
-    | Feature | **CodeVantage** | Panaya | smartShift | KTern.AI | RedRays |
-    |---|---|---|---|---|---|
-    | Clean Core + S/4 Migration | ✅ **Both** | ✅ Clean Core | ✅ Migration | ✅ Migration | ❌ Security only |
-    | Aug 2025 A–D Level Model | ✅ **Native** | ❌ | ❌ | ❌ | ❌ |
-    | Data stays on-premise | ✅ **BTP-native** | ❌ SaaS | ❌ SaaS | ❌ SaaS | ❌ SaaS |
-    | SAP-native AI (AI Core) | ✅ **Default** | ❌ | ❌ | ❌ | ❌ |
-    | Claude 4 / GPT-4o support | ✅ **All** | Partial | ❌ | Partial | ❌ |
-    | Readiness Check 2 Upload | ✅ | ❌ | ❌ | ✅ | ❌ |
-    | Rule Reference Catalog | ✅ **38+ rules** | ❌ | ❌ | ❌ | ❌ |
-    | Open Source / Extensible | ✅ | ❌ | ❌ | ❌ | ❌ |
-    | ADT + Web dual mode | ✅ | ❌ | ❌ | Web only | ADT only |
-    | Security scanning | ✅ **OWASP ABAP** | ❌ | ❌ | ❌ | ✅ |
-    | Free / No licence cost | ✅ | ❌ Licence | ❌ Fixed price | ❌ Licence | ❌ Licence |
     """)

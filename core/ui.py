@@ -552,7 +552,6 @@ def sidebar_nav(current_user) -> None:
 
         nav_items = [
             ("app.py",                      "🏠  Dashboard"),
-            ("pages/1_🔑_LLM_Setup.py",     "🔑  LLM Setup"),
             ("pages/2_🧹_Clean_Core.py",     "🧹  Clean Core"),
             ("pages/3_🚀_S4_Migration.py",   "🚀  S/4 Migration"),
             ("pages/4_📊_Analytics.py",      "📊  Analytics"),
