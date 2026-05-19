@@ -1,5 +1,5 @@
 """
-CodeVantage LLM Client
+CoreShift LLM Client
 Supports SAP AI Core (default), GROQ, Anthropic, OpenAI.
 
 SAP AI Core fix: creates AICoreV2Client directly to avoid the
@@ -52,7 +52,7 @@ PROVIDER_LABELS = {
 
 class LLMClient:
     """
-    Unified LLM wrapper for CodeVantage.
+    Unified LLM wrapper for CoreShift.
 
     Usage
     ─────

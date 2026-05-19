@@ -1,5 +1,5 @@
 """
-CodeVantage — Custom Rule Engine
+CoreShift — Custom Rule Engine
 Admin-managed ABAP rules stored in data/custom_rules.json.
 Merged automatically into scan_code() alongside built-in rules.
 """

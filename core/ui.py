@@ -1,5 +1,5 @@
 """
-CodeVantage Shared UI Components
+CoreShift Shared UI Components
 Salesforce Lightning-inspired enterprise design system for Streamlit.
 """
 
@@ -529,10 +529,10 @@ def sidebar_nav(current_user) -> None:
                 display:flex;align-items:center;justify-content:center;
                 font-size:1.25rem;
                 box-shadow:0 2px 8px rgba(1,118,211,0.40);
-            ">⚡</div>
+            "><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 9L12 12L4 15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9L20 12L12 15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
             <div>
               <div style="font-size:1.05rem;font-weight:700;color:#FFFFFF;
-                          letter-spacing:-0.3px;line-height:1.15">CodeVantage</div>
+                          letter-spacing:-0.3px;line-height:1.15">CoreShift</div>
               <div style="font-size:0.67rem;color:#6FA8D4;letter-spacing:0.4px;
                           text-transform:uppercase;margin-top:1px">ABAP Intelligence</div>
             </div>

@@ -1,5 +1,5 @@
 """
-CodeVantage — Dedicated LLM Setup Page
+CoreShift — Dedicated LLM Setup Page
 First stop after login. Must connect an LLM to proceed to the dashboard.
 """
 
@@ -15,7 +15,7 @@ from core.auth import require_auth
 from core.ui import inject_css
 
 st.set_page_config(
-    page_title="LLM Setup — CodeVantage",
+    page_title="LLM Setup — CoreShift",
     page_icon="🔑",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -58,9 +58,9 @@ st.markdown(f"""
   <div style="display:flex;align-items:center;gap:12px">
     <div style="background:#0176D3;border-radius:10px;width:38px;height:38px;
                 display:flex;align-items:center;justify-content:center;
-                font-size:1.2rem;box-shadow:0 2px 8px rgba(1,118,211,0.35)">⚡</div>
+                font-size:1.2rem;box-shadow:0 2px 8px rgba(1,118,211,0.35)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 9L12 12L4 15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9L20 12L12 15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div>
-      <div style="font-size:1.1rem;font-weight:700;color:#032D60">CodeVantage</div>
+      <div style="font-size:1.1rem;font-weight:700;color:#032D60">CoreShift</div>
       <div style="font-size:0.68rem;color:#706E6B;font-weight:600;
                   text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
     </div>

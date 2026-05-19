@@ -1,5 +1,5 @@
 """
-CoreVantage — E2E Support
+CoreShift — E2E Support
 Placeholder page for the End-to-End SAP Support product.
 """
 
@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 st.set_page_config(
-    page_title="E2E Support — CoreVantage",
+    page_title="E2E Support — CoreShift",
     page_icon="🔄",
     layout="wide",
     initial_sidebar_state="expanded",

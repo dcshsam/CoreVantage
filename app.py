@@ -1,5 +1,5 @@
 """
-CodeVantage — Product Launcher
+CoreShift — Product Launcher
 Entry point after login + LLM gate. Shows 2 product cards.
 """
 
@@ -12,8 +12,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 st.set_page_config(
-    page_title="CodeVantage — Home",
-    page_icon="⚡",
+    page_title="CoreShift — Home",
+    page_icon="🔀",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -76,9 +76,9 @@ st.markdown(f"""
   <div style="display:flex;align-items:center;gap:12px">
     <div style="background:#0176D3;border-radius:10px;width:38px;height:38px;
                 display:flex;align-items:center;justify-content:center;
-                font-size:1.2rem;box-shadow:0 2px 8px rgba(1,118,211,0.35)">⚡</div>
+                font-size:1.2rem;box-shadow:0 2px 8px rgba(1,118,211,0.35)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 9L12 12L4 15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9L20 12L12 15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div>
-      <div style="font-size:1.1rem;font-weight:700;color:#032D60">CodeVantage</div>
+      <div style="font-size:1.1rem;font-weight:700;color:#032D60">CoreShift</div>
       <div style="font-size:0.68rem;color:#706E6B;font-weight:600;
                   text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
     </div>
@@ -120,9 +120,9 @@ with col1:
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
         <div style="background:#E8F4FF;border-radius:10px;width:48px;height:48px;flex-shrink:0;
                     display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-                    border:1px solid #B0D4F5">⚡</div>
+                    border:1px solid #B0D4F5"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 9L12 12L4 15" stroke="#0176D3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9L20 12L12 15" stroke="#0176D3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div>
-          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">CodeVantage</h3>
+          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">CoreShift</h3>
           <div style="font-size:0.7rem;color:#0176D3;font-weight:600;
                text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
         </div>
@@ -140,7 +140,7 @@ with col1:
       </div>
     </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/cv_dashboard.py", label="Open CodeVantage", use_container_width=True)
+    st.page_link("pages/cv_dashboard.py", label="Open CoreShift", use_container_width=True)
 
 with col2:
     st.markdown(f"""

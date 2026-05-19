@@ -1,1 +1,1 @@
-"""CodeVantage core modules."""
+"""CoreShift core modules."""

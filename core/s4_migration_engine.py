@@ -1,5 +1,5 @@
 """
-CodeVantage S/4HANA Migration Analysis Engine
+CoreShift S/4HANA Migration Analysis Engine
 Analyses ECC ABAP code for S/4HANA compatibility and generates migration plans.
 """
 

@@ -1,5 +1,5 @@
 """
-CodeVantage — Clean Core Analysis & Auto-Remediation Page
+CoreShift — Clean Core Analysis & Auto-Remediation Page
 Three input modes: paste code | SAP system connect | upload file
 """
 
@@ -16,7 +16,7 @@ from core.ui import (inject_css, page_header, sidebar_nav, metric_row,
                      severity_badge, cc_level_badge, violation_card, score_ring)
 from core.abap_rules import SEVERITY_COLORS, LEVEL_META, ALL_RULES
 
-st.set_page_config(page_title="Clean Core — CodeVantage", page_icon="🧹", layout="wide")
+st.set_page_config(page_title="Clean Core — CoreShift", page_icon="🧹", layout="wide")
 inject_css()
 user = require_auth()
 sidebar_nav(user)
@@ -336,7 +336,7 @@ if result:
             <div class="cv-card">
               <h3>🔧 AI-Powered Auto-Remediation</h3>
               <p style="color:#706E6B;font-size:.9rem">
-                CodeVantage will generate a Clean Core-compliant version of your code.
+                CoreShift will generate a Clean Core-compliant version of your code.
                 All business logic is preserved — only the implementation pattern changes.
                 Review the diff carefully before deploying to production.
               </p>

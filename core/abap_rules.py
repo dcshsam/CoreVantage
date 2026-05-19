@@ -1,5 +1,5 @@
 """
-CodeVantage ABAP Rules Engine
+CoreShift ABAP Rules Engine
 35+ rules covering Clean Core compliance, ECC→S/4 migration,
 security vulnerabilities, and performance anti-patterns.
 """

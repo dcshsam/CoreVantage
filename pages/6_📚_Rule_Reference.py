@@ -1,5 +1,5 @@
 """
-CodeVantage — ABAP Rule Reference Catalog
+CoreShift — ABAP Rule Reference Catalog
 Searchable, filterable guide to all 38+ built-in ABAP rules.
 """
 
@@ -15,7 +15,7 @@ from core.auth import require_auth
 from core.ui import inject_css, page_header, sidebar_nav, severity_badge
 from core.abap_rules import ALL_RULES, SEVERITY_ORDER, SEVERITY_COLORS
 
-st.set_page_config(page_title="Rule Reference — CodeVantage", page_icon="📚", layout="wide")
+st.set_page_config(page_title="Rule Reference — CoreShift", page_icon="📚", layout="wide")
 inject_css()
 user = require_auth()
 sidebar_nav(user)

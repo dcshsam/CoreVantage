@@ -1,5 +1,5 @@
 """
-CodeVantage Clean Core Analysis & Remediation Engine
+CoreShift Clean Core Analysis & Remediation Engine
 Combines rule-based scanning with LLM-powered insights and auto-remediation.
 """
 

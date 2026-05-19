@@ -1,5 +1,5 @@
 """
-CodeVantage SAP System Connector
+CoreShift SAP System Connector
 Connects to ECC / S/4HANA backend via REST OData or pyrfc (optional).
 Fetches ABAP source code for analysis.
 """

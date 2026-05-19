@@ -1,5 +1,5 @@
 """
-CodeVantage — User, Role & Custom Rule Administration (Admin only)
+CoreShift — User, Role & Custom Rule Administration (Admin only)
 """
 
 import sys
@@ -18,7 +18,7 @@ from core.custom_rules import (
     delete_custom_rule, toggle_custom_rule, CATEGORIES, SEVERITIES, CC_LEVELS,
 )
 
-st.set_page_config(page_title="Admin — CodeVantage", page_icon="👥", layout="wide")
+st.set_page_config(page_title="Admin — CoreShift", page_icon="👥", layout="wide")
 inject_css()
 user = require_auth()
 require_permission("admin")

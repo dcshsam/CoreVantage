@@ -1,5 +1,5 @@
 """
-CodeVantage — ABAP Intelligence Dashboard
+CoreShift — ABAP Intelligence Dashboard
 Reached from the launcher (app.py) after LLM is connected.
 """
 
@@ -12,8 +12,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 st.set_page_config(
-    page_title="CodeVantage — ABAP Intelligence Platform",
-    page_icon="⚡",
+    page_title="CoreShift — ABAP Intelligence Platform",
+    page_icon="🔀",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -29,7 +29,7 @@ sidebar_nav(user)
 
 # ── Dashboard header ──────────────────────────────────────────────────────────
 page_header(
-    "CodeVantage",
+    "CoreShift",
     "Enterprise ABAP Intelligence Platform — Clean Core & S/4HANA Migration",
     badge="AI Connected" if st.session_state.get("cv_llm_client") else "Configure LLM to enable AI",
 )
@@ -133,7 +133,7 @@ st.markdown("---")
 # ── Quick-start guide ─────────────────────────────────────────────────────────
 with st.expander("📖 Quick Start Guide", expanded=total_analyses == 0):
     st.markdown("""
-    ### Getting Started with CodeVantage
+    ### Getting Started with CoreShift
 
     **Step 1 — Analyse your ABAP code**
     Choose your input method on the Clean Core or S/4 Migration page:
@@ -142,7 +142,7 @@ with st.expander("📖 Quick Start Guide", expanded=total_analyses == 0):
     - 📁 **Upload SAP Readiness Check 2** Excel report
 
     **Step 2 — Review & Remediate**
-    CodeVantage shows:
+    CoreShift shows:
     - Clean Core maturity level (A–D per August 2025 SAP model)
     - Violations with rule details, context snippets, and compliant code examples
     - AI-powered deep analysis and hidden risk detection (if LLM configured)
@@ -160,9 +160,9 @@ with st.expander("📖 Quick Start Guide", expanded=total_analyses == 0):
     """)
 
 # ── Competitor comparison (collapsible) ───────────────────────────────────────
-with st.expander("🏆 Why CodeVantage — Competitive Advantage"):
+with st.expander("🏆 Why CoreShift — Competitive Advantage"):
     st.markdown("""
-    | Feature | **CodeVantage** | Panaya | smartShift | KTern.AI | RedRays |
+    | Feature | **CoreShift** | Panaya | smartShift | KTern.AI | RedRays |
     |---|---|---|---|---|---|
     | Clean Core + S/4 Migration | ✅ **Both** | ✅ Clean Core | ✅ Migration | ✅ Migration | ❌ Security only |
     | Aug 2025 A–D Level Model | ✅ **Native** | ❌ | ❌ | ❌ | ❌ |

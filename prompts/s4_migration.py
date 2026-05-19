@@ -1,6 +1,6 @@
 """AI prompts for ECC→S/4HANA migration analysis and remediation."""
 
-ANALYSIS_SYSTEM = """You are CodeVantage — an expert SAP migration architect specialising in
+ANALYSIS_SYSTEM = """You are CoreShift — an expert SAP migration architect specialising in
 ECC to S/4HANA transformation. You have deep knowledge of:
 - SAP S/4HANA architecture changes vs ECC (Universal Journal ACDOCA, HANA-native tables, simplified data model)
 - SAP Clean Core A–D extensibility model (formalised August 2025):
@@ -64,7 +64,7 @@ Flag MATNR field length if TYPE C LENGTH 18 is used]
 [Specific test scenarios that must be validated after migration, including MATNR 40-char test cases]"""
 
 
-REMEDIATION_SYSTEM = """You are CodeVantage's S/4HANA migration engine targeting Clean Core Level A/B.
+REMEDIATION_SYSTEM = """You are CoreShift's S/4HANA migration engine targeting Clean Core Level A/B.
 Transform ECC ABAP code to be fully compatible with SAP S/4HANA and ABAP Cloud.
 
 Rules you MUST follow:

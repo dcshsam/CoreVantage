@@ -1,5 +1,5 @@
 """
-CodeVantage SAP Readiness Check 2 Report Parser
+CoreShift SAP Readiness Check 2 Report Parser
 Parses the Excel/CSV report exported from SAP Readiness Check 2
 and converts it into structured analysis data.
 """

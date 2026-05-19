@@ -1,5 +1,5 @@
 """
-CodeVantage — ECC to S/4HANA Migration Analysis Page
+CoreShift — ECC to S/4HANA Migration Analysis Page
 Three input modes: paste code | SAP system | SAP Readiness Check 2 upload
 """
 
@@ -15,7 +15,7 @@ from core.auth import require_auth, increment_analyses
 from core.ui import (inject_css, page_header, sidebar_nav, metric_row,
                      severity_badge, violation_card, score_ring)
 
-st.set_page_config(page_title="S/4 Migration — CodeVantage", page_icon="🚀", layout="wide")
+st.set_page_config(page_title="S/4 Migration — CoreShift", page_icon="🚀", layout="wide")
 inject_css()
 user = require_auth()
 sidebar_nav(user)
@@ -141,7 +141,7 @@ with tab_readiness:
       <p style="color:#706E6B;font-size:.9rem">
         Upload the Excel report exported from SAP Readiness Check 2
         (<b>Transaction: /SDF/RC_START_CHECK</b> or SAP Readiness Check portal).
-        CodeVantage will parse all custom code findings and generate a migration plan.
+        CoreShift will parse all custom code findings and generate a migration plan.
       </p>
       <p style="color:#888;font-size:.82rem">
         Supported formats: <b>.xlsx</b>, <b>.xls</b>, <b>.csv</b>
@@ -316,7 +316,7 @@ if result:
             <div class="cv-card">
               <h3>🔧 AI-Powered ECC → S/4HANA Code Migration</h3>
               <p style="color:#706E6B;font-size:.9rem">
-                CodeVantage will generate S/4HANA-compatible code, replacing deprecated APIs,
+                CoreShift will generate S/4HANA-compatible code, replacing deprecated APIs,
                 removing obsolete constructs, and modernising the ABAP syntax.
               </p>
             </div>

@@ -1,5 +1,5 @@
 """
-CodeVantage — Analytics & Executive Dashboard
+CoreShift — Analytics & Executive Dashboard
 Visualises compliance trends, violation distributions, and migration readiness.
 """
 
@@ -14,7 +14,7 @@ load_dotenv()
 from core.auth import require_auth
 from core.ui import inject_css, page_header, sidebar_nav, metric_row
 
-st.set_page_config(page_title="Analytics — CodeVantage", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Analytics — CoreShift", page_icon="📊", layout="wide")
 inject_css()
 user = require_auth()
 sidebar_nav(user)

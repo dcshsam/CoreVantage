@@ -1,5 +1,5 @@
 """
-CodeVantage — Authentication & Role-Based Access Control
+CoreShift — Authentication & Role-Based Access Control
 Aligned with SAP role model: Admin, Analyst, Developer, Viewer
 """
 
@@ -408,11 +408,11 @@ def render_login_page() -> None:
                   border-radius: 14px; width: 56px; height: 56px;
                   font-size: 1.7rem; margin-bottom: 16px;
                   box-shadow: 0 4px 16px rgba(1,118,211,0.45);
-              ">⚡</div>
+              "><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M4 9L12 12L4 15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9L20 12L12 15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               <div style="
                   font-size: 1.55rem; font-weight: 700; color: #032D60;
                   letter-spacing: -0.4px; line-height: 1.2; margin-bottom: 6px;
-              ">CodeVantage</div>
+              ">CoreShift</div>
               <div style="font-size: 0.84rem; color: #706E6B; letter-spacing: 0.1px;">
                   Enterprise ABAP Intelligence Platform
               </div>
