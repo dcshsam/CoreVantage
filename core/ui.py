@@ -551,7 +551,7 @@ def sidebar_nav(current_user) -> None:
         """, unsafe_allow_html=True)
 
         nav_items = [
-            ("app.py",                      "🏠  Dashboard"),
+            ("pages/cv_dashboard.py",        "🏠  Dashboard"),
             ("pages/2_🧹_Clean_Core.py",     "🧹  Clean Core"),
             ("pages/3_🚀_S4_Migration.py",   "🚀  S/4 Migration"),
             ("pages/4_📊_Analytics.py",      "📊  Analytics"),

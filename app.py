@@ -1,6 +1,6 @@
 """
-CodeVantage — Enterprise ABAP Intelligence Platform
-Main entry point: login gate → LLM gate → executive dashboard.
+CodeVantage — Product Launcher
+Entry point after login + LLM gate. Shows 2 product cards.
 """
 
 import sys
@@ -12,14 +12,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 st.set_page_config(
-    page_title="CodeVantage — ABAP Intelligence Platform",
+    page_title="CodeVantage — Home",
     page_icon="⚡",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 from core.auth import is_authenticated, render_login_page, current_user, logout
-from core.ui import inject_css, page_header, metric_row, sidebar_nav
+from core.ui import inject_css
 
 inject_css()
 
@@ -30,132 +30,154 @@ if not is_authenticated():
 
 user = current_user()
 
-# ── LLM gate — redirect to setup page if not configured ──────────────────────
+# ── LLM gate ──────────────────────────────────────────────────────────────────
 if not st.session_state.get("cv_llm_client"):
     st.switch_page("pages/1_🔑_LLM_Setup.py")
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
-sidebar_nav(user)
+# ── Hide sidebar on launcher ──────────────────────────────────────────────────
+st.markdown("""
+<style>
+[data-testid="stSidebar"]        { display: none !important; }
+[data-testid="collapsedControl"] { display: none !important; }
 
-# ── Dashboard ─────────────────────────────────────────────────────────────────
-page_header(
-    "CodeVantage",
-    "Enterprise ABAP Intelligence Platform — Clean Core & S/4HANA Migration",
-    badge=f"AI Connected · {st.session_state.get('cv_llm_display', '')}",
-)
+/* Each card column becomes a positioned container */
+[data-testid="column"] { position: relative !important; }
 
-# ── KPI row ───────────────────────────────────────────────────────────────────
-from core.auth import load_users
-from core.abap_rules import ALL_RULES
-all_users = load_users()
-total_analyses = sum(u.analyses_run for u in all_users)
+/* The page_link becomes an invisible full-column overlay.
+   This uses Streamlit's SPA routing so session state is preserved. */
+[data-testid="column"] [data-testid="stPageLink"] {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 20 !important;
+    height: 100% !important;
+}
+[data-testid="column"] [data-testid="stPageLink"] > div,
+[data-testid="column"] [data-testid="stPageLink"] a {
+    display: block !important;
+    height: 100% !important;
+    width: 100% !important;
+    opacity: 0 !important;
+    cursor: pointer !important;
+}
 
-metric_row([
-    {"label": "Analyses Run",    "value": f"{total_analyses:,}",                       "color": "#0176D3"},
-    {"label": "Platform Users",  "value": str(len(all_users)),                         "color": "#2E844A"},
-    {"label": "LLM Provider",    "value": st.session_state.get("cv_llm_display", "—"), "color": "#7B2D8B"},
-    {"label": "ABAP Rules",      "value": str(len(ALL_RULES)),                         "color": "#A33700"},
-    {"label": "Your Role",       "value": user.role.title(),                           "color": "#0A5FA6"},
-])
+/* Card hover effect — triggered by column hover since overlay intercepts events */
+.cv-card { transition: box-shadow .15s, transform .15s; }
+[data-testid="column"]:hover .cv-card {
+    box-shadow: 0 8px 24px rgba(0,0,0,.13) !important;
+    transform: translateY(-2px);
+}
+</style>
+""", unsafe_allow_html=True)
 
-st.markdown("---")
+# ── Top bar ───────────────────────────────────────────────────────────────────
+st.markdown(f"""
+<div style="display:flex;justify-content:space-between;align-items:center;
+            padding:16px 4px 14px;border-bottom:1px solid #DDDBDA;margin-bottom:40px">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="background:#0176D3;border-radius:10px;width:38px;height:38px;
+                display:flex;align-items:center;justify-content:center;
+                font-size:1.2rem;box-shadow:0 2px 8px rgba(1,118,211,0.35)">⚡</div>
+    <div>
+      <div style="font-size:1.1rem;font-weight:700;color:#032D60">CodeVantage</div>
+      <div style="font-size:0.68rem;color:#706E6B;font-weight:600;
+                  text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
+    </div>
+  </div>
+  <div style="font-size:0.82rem;color:#706E6B">
+    Signed in as <strong style="color:#032D60">{user.full_name or user.username}</strong>
+    &nbsp;·&nbsp;
+    <span style="background:#EEF6EC;color:#2E844A;font-size:.72rem;font-weight:600;
+                 padding:2px 8px;border-radius:4px;border:1px solid #91C98C">
+      ✅ {st.session_state.get('cv_llm_display','LLM Connected')}
+    </span>
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
-# ── Feature cards ─────────────────────────────────────────────────────────────
-CHIP        = "background:#E8F4FF;color:#0176D3;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #B0D4F5"
-CHIP_ORANGE = "background:#FEE3D2;color:#A33700;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #F5C4A8"
-CARD_DESC   = "color:#706E6B;font-size:.875rem;margin-bottom:14px;line-height:1.6;min-height:72px"
+# ── Welcome ───────────────────────────────────────────────────────────────────
+st.markdown("""
+<div style="text-align:center;margin-bottom:36px">
+  <h2 style="color:#032D60;font-size:1.4rem;font-weight:700;margin-bottom:6px">
+    Select an Application
+  </h2>
+  <p style="color:#706E6B;font-size:.9rem;margin:0">
+    Choose a platform to get started
+  </p>
+</div>
+""", unsafe_allow_html=True)
 
-col1, col2 = st.columns(2, gap="medium")
+# ── Two product cards ─────────────────────────────────────────────────────────
+CHIP_BLUE  = "background:#E8F4FF;color:#0176D3;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #B0D4F5"
+CHIP_GREEN = "background:#EEF6EC;color:#2E844A;border-radius:4px;padding:2px 10px;font-size:.74rem;font-weight:600;border:1px solid #B8DDB0"
+CARD_DESC  = "color:#706E6B;font-size:.875rem;margin-bottom:18px;line-height:1.6;min-height:80px"
+
+_, col1, col2, _ = st.columns([0.5, 3, 3, 0.5], gap="large")
 
 with col1:
     st.markdown(f"""
-    <div class="cv-card" style="min-height:200px;display:flex;flex-direction:column">
-      <h3>🧹 Clean Core Analysis</h3>
+    <div class="cv-card" style="min-height:260px;display:flex;flex-direction:column;
+         border-top:4px solid #0176D3;padding:24px 24px 20px;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="background:#E8F4FF;border-radius:10px;width:48px;height:48px;flex-shrink:0;
+                    display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+                    border:1px solid #B0D4F5">⚡</div>
+        <div>
+          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">CodeVantage</h3>
+          <div style="font-size:0.7rem;color:#0176D3;font-weight:600;
+               text-transform:uppercase;letter-spacing:.5px">ABAP Intelligence Platform</div>
+        </div>
+      </div>
       <p style="{CARD_DESC}">
         Analyse ABAP code against SAP Clean Core standards (Levels A–D, August 2025 model).
-        Detect API violations, deprecated constructs, and security issues —
-        then auto-remediate to production-ready, ABAP Cloud-compliant code.
+        Detect violations, deprecated constructs, and security issues — then auto-remediate
+        to production-ready, ABAP Cloud-compliant code with AI.
       </p>
       <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
-        <span style="{CHIP}">38+ Rules</span>
-        <span style="{CHIP}">AI Analysis</span>
-        <span style="{CHIP}">Auto-Remediation</span>
-        <span style="{CHIP}">Export</span>
+        <span style="{CHIP_BLUE}">38+ Rules</span>
+        <span style="{CHIP_BLUE}">Clean Core A–D</span>
+        <span style="{CHIP_BLUE}">S/4HANA Migration</span>
+        <span style="{CHIP_BLUE}">Auto-Remediation</span>
       </div>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("Open Clean Core Analyser", type="primary", use_container_width=True, key="btn_cc"):
-        st.switch_page("pages/2_🧹_Clean_Core.py")
+    st.page_link("pages/cv_dashboard.py", label="Open CodeVantage", use_container_width=True)
 
 with col2:
     st.markdown(f"""
-    <div class="cv-card" style="min-height:200px;display:flex;flex-direction:column">
-      <h3>🚀 ECC → S/4HANA Migration</h3>
+    <div class="cv-card" style="min-height:260px;display:flex;flex-direction:column;
+         border-top:4px solid #2E844A;padding:24px 24px 20px;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="background:#EEF6EC;border-radius:10px;width:48px;height:48px;flex-shrink:0;
+                    display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+                    border:1px solid #B8DDB0">🔄</div>
+        <div>
+          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">E2E Support</h3>
+          <div style="font-size:0.7rem;color:#2E844A;font-weight:600;
+               text-transform:uppercase;letter-spacing:.5px">End to End SAP Support</div>
+        </div>
+      </div>
       <p style="{CARD_DESC}">
-        Identify ECC-specific constructs incompatible with S/4HANA (incl. MATNR 40-char,
-        RAP BAdI replacements, ATC CLOUD_READINESS checks). Get migration readiness scores,
-        effort estimates, and sprint plans with AI.
+        End-to-end SAP support tooling — from requirement to deployment.
+        AI-assisted workflows for functional specifications, ABAP code review,
+        and solution documentation across the full SAP delivery lifecycle.
       </p>
       <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
-        <span style="{CHIP_ORANGE}">Readiness Score</span>
-        <span style="{CHIP_ORANGE}">Simplification List</span>
-        <span style="{CHIP_ORANGE}">Sprint Roadmap</span>
-        <span style="{CHIP_ORANGE}">RC2 Upload</span>
+        <span style="{CHIP_GREEN}">Coming Soon</span>
       </div>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("Open Migration Analyser", type="primary", use_container_width=True, key="btn_s4"):
-        st.switch_page("pages/3_🚀_S4_Migration.py")
+    st.page_link("pages/e2e_support.py", label="Open E2E Support", use_container_width=True)
 
-col3, col4 = st.columns(2, gap="medium")
+# ── Sign out + footer ─────────────────────────────────────────────────────────
+st.markdown("<div style='margin-top:44px'></div>", unsafe_allow_html=True)
+_, btn_col, _ = st.columns([4, 1, 4])
+with btn_col:
+    if st.button("Sign Out", use_container_width=True, key="btn_signout"):
+        logout()
+        st.rerun()
 
-with col3:
-    st.markdown("""
-    <div class="cv-card" style="min-height:140px">
-      <h3>📚 Rule Reference Catalog</h3>
-      <p style="color:#706E6B;font-size:.875rem;line-height:1.6;min-height:60px">
-        Browse, search, and filter all 38+ built-in ABAP rules with descriptions,
-        non-compliant/compliant examples, and Clean Core level classification.
-        Includes the August 2025 A–D extensibility guide.
-      </p>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("Browse Rule Catalog", use_container_width=True, key="btn_rules"):
-        st.switch_page("pages/6_📚_Rule_Reference.py")
-
-with col4:
-    st.markdown("""
-    <div class="cv-card" style="min-height:140px">
-      <h3>📊 Analytics & Reports</h3>
-      <p style="color:#706E6B;font-size:.875rem;line-height:1.6;min-height:60px">
-        Visualise compliance trends, violation distributions, and migration readiness
-        across your custom code landscape. Track session history and generate
-        executive-level compliance reports.
-      </p>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("View Analytics", use_container_width=True, key="btn_analytics"):
-        st.switch_page("pages/4_📊_Analytics.py")
-
-st.markdown("---")
-
-with st.expander("📖 Quick Start Guide", expanded=total_analyses == 0):
-    st.markdown("""
-    ### Getting Started with CodeVantage
-
-    **Step 1 — Configure your LLM** *(done ✅)*
-
-    **Step 2 — Analyse your ABAP code**
-    Choose your input method on the Clean Core or S/4 Migration page:
-    - 📋 **Paste code** directly into the editor
-    - 🔗 **Connect SAP system** (ECC/S4) via REST/ADT API
-    - 📁 **Upload SAP Readiness Check 2** Excel report
-
-    **Step 3 — Review & Remediate**
-    - Clean Core maturity level (A–D per August 2025 SAP model)
-    - Violations with rule details, context snippets, and compliant code examples
-    - AI-powered deep analysis and auto-generated remediated code with diff view
-
-    **Step 4 — Export & Deploy**
-    Download remediated code, Word/PDF reports, or Excel violation lists.
-    """)
+st.markdown(
+    "<div style='text-align:center;margin-top:20px;color:#706E6B;font-size:.75rem'>"
+    "v1.1.0 · Powered by SPRAC · 2025</div>",
+    unsafe_allow_html=True,
+)
