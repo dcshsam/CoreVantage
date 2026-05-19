@@ -284,49 +284,27 @@ def render_login_page() -> None:
         text-transform: none !important;
     }
 
-    /* ── Animated gradient background ── */
+    /* ── Full-screen background image with dark overlay ── */
     [data-testid="stAppViewContainer"] {
-        background:
-            radial-gradient(ellipse at 20% 50%, rgba(1,118,211,0.18) 0%, transparent 55%),
-            radial-gradient(ellipse at 80% 20%, rgba(3,45,96,0.22) 0%, transparent 50%),
-            radial-gradient(ellipse at 60% 85%, rgba(46,132,74,0.12) 0%, transparent 45%),
-            linear-gradient(135deg, #0C1D36 0%, #0A3060 35%, #0176D3 75%, #0EA5E9 100%) !important;
+        background-image:
+            linear-gradient(135deg, rgba(10,15,30,0.72) 0%, rgba(3,45,96,0.55) 100%),
+            url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80") !important;
+        background-size: cover !important;
+        background-position: center center !important;
         background-attachment: fixed !important;
     }
 
-    /* Floating orb decorations */
+    /* Subtle vignette overlay */
     [data-testid="stAppViewContainer"]::before {
         content: "";
         position: fixed;
-        top: -120px; left: -120px;
-        width: 500px; height: 500px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(1,118,211,0.25) 0%, transparent 70%);
+        inset: 0;
+        background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.45) 100%);
         pointer-events: none;
         z-index: 0;
-        animation: float1 12s ease-in-out infinite;
-    }
-    [data-testid="stAppViewContainer"]::after {
-        content: "";
-        position: fixed;
-        bottom: -100px; right: -100px;
-        width: 420px; height: 420px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(14,165,233,0.20) 0%, transparent 70%);
-        pointer-events: none;
-        z-index: 0;
-        animation: float2 15s ease-in-out infinite;
-    }
-    @keyframes float1 {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        50%       { transform: translate(40px, 30px) scale(1.08); }
-    }
-    @keyframes float2 {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        50%       { transform: translate(-30px, -40px) scale(1.06); }
     }
 
-    [data-testid="stMain"]   { background: transparent !important; position: relative; z-index: 1; }
+    [data-testid="stMain"] { background: transparent !important; position: relative; z-index: 1; }
     [data-testid="stSidebar"]{ display: none !important; }
     [data-testid="stHeader"] { background: transparent !important; }
 
@@ -338,7 +316,7 @@ def render_login_page() -> None:
         border-radius: 16px !important;
         border: 1px solid rgba(255,255,255,0.7) !important;
         box-shadow:
-            0 8px 40px rgba(3,45,96,0.35),
+            0 8px 40px rgba(0,0,0,0.28),
             0 1px 0 rgba(255,255,255,0.6) inset !important;
         padding: 40px 40px 32px !important;
     }
