@@ -297,7 +297,7 @@ def render_login_page() -> None:
         position: absolute;
         top: -30%; left: -30%;
         width: 160%; height: 160%;
-        background: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
+        background: url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1920&q=90") center/cover no-repeat;
         animation: bgdrift 80s linear infinite;
         z-index: 0;
         pointer-events: none;
