@@ -19,11 +19,18 @@ st.set_page_config(
 )
 
 from core.auth import require_auth
-from core.ui import inject_css, sidebar_nav
+from core.ui import inject_css
 
 inject_css()
 user = require_auth()
-sidebar_nav(user)
+
+# Hide the CoreShift sidebar entirely on this page
+st.markdown("""
+<style>
+[data-testid="stSidebar"]        { display: none !important; }
+[data-testid="collapsedControl"] { display: none !important; }
+</style>
+""", unsafe_allow_html=True)
 
 # ── Session state ─────────────────────────────────────────────────────────────
 _DEFAULTS = {
@@ -56,35 +63,16 @@ with nav_col:
     rows = ""
     for i, (icon, label) in enumerate(STEPS, 1):
         if i < step:
-            rows += f"""
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:6px">
-              <span style="font-size:.9rem">✅</span>
-              <span style="font-size:.84rem;color:#2E844A;font-weight:600">{label}</span>
-            </div>"""
+            rows += f'<div style="display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:6px"><span>✅</span><span style="font-size:.84rem;color:#2E844A;font-weight:600">{label}</span></div>'
         elif i == step:
-            rows += f"""
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 10px;
-                 border-radius:6px;background:#E8F4FF">
-              <span style="font-size:.9rem">▶</span>
-              <span style="font-size:.84rem;color:#0176D3;font-weight:700">{icon} {label}</span>
-            </div>"""
+            rows += f'<div style="display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:6px;background:#E8F4FF"><span style="color:#0176D3">▶</span><span style="font-size:.84rem;color:#0176D3;font-weight:700">{icon} {label}</span></div>'
         else:
-            rows += f"""
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:6px">
-              <span style="font-size:.9rem;opacity:.3">{icon}</span>
-              <span style="font-size:.84rem;color:#B0B0B0">{label}</span>
-            </div>"""
+            rows += f'<div style="display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:6px"><span style="opacity:.3">{icon}</span><span style="font-size:.84rem;color:#B0B0B0">{label}</span></div>'
 
     llm_badge = ""
     if llm:
         display = st.session_state.get("cv_llm_display", "Connected")
-        llm_badge = f"""
-        <div style="margin-top:12px;padding:8px 10px;background:#EEF6EC;border-radius:6px;
-                    border:1px solid #B8DDB0">
-          <div style="font-size:.72rem;color:#706E6B;font-weight:600;text-transform:uppercase;
-                      letter-spacing:.4px;margin-bottom:2px">Connected LLM</div>
-          <div style="font-size:.82rem;color:#2E844A;font-weight:700">🤖 {display}</div>
-        </div>"""
+        llm_badge = f'<div style="margin-top:12px;padding:8px 10px;background:#EEF6EC;border-radius:6px;border:1px solid #B8DDB0"><div style="font-size:.72rem;color:#706E6B;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">Connected LLM</div><div style="font-size:.82rem;color:#2E844A;font-weight:700">🤖 {display}</div></div>'
 
     progress_pct = int(step / len(STEPS) * 100)
 
