@@ -24,11 +24,16 @@ from core.ui import inject_css
 inject_css()
 user = require_auth()
 
-# Hide the CoreShift sidebar entirely on this page
+# Override CoreShift sidebar styles — use light background for SAP AI Assistant
 st.markdown("""
 <style>
-[data-testid="stSidebar"]        { display: none !important; }
-[data-testid="collapsedControl"] { display: none !important; }
+[data-testid="stSidebar"] {
+    background: #FFFFFF !important;
+    border-right: 1px solid #DDDBDA !important;
+    min-width: 260px !important;
+}
+[data-testid="stSidebar"] * { color: #181818 !important; }
+[data-testid="stSidebarNav"] { display: none !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -55,11 +60,8 @@ STEPS = [
 step = st.session_state.step
 llm  = st.session_state.get("cv_llm_client")
 
-# ── Layout ────────────────────────────────────────────────────────────────────
-nav_col, main_col = st.columns([1.8, 4.2], gap="large")
-
-# ── Left panel ────────────────────────────────────────────────────────────────
-with nav_col:
+# ── Sidebar nav panel ─────────────────────────────────────────────────────────
+with st.sidebar:
     rows = ""
     for i, (icon, label) in enumerate(STEPS, 1):
         if i < step:
@@ -118,7 +120,7 @@ def _nav(back_step=None, next_step=None, next_label="Next →",
             st.rerun()
 
 # ── Main content ──────────────────────────────────────────────────────────────
-with main_col:
+if True:
 
     # ── Step 1: LLM Configuration ─────────────────────────────────────────────
     if step == 1:
