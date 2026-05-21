@@ -41,24 +41,25 @@ jobs:
       # ── 5. Inject all environment variables ───────────────────────────────────
       - name: Set environment variables
         run: |
+          # Single quotes prevent bash from expanding $ inside secret values
           # SAP AI Core (generative-ai-hub-sdk)
-          cf set-env coreshift AICORE_CLIENT_ID      "${{ secrets.AICORE_CLIENT_ID }}"
-          cf set-env coreshift AICORE_CLIENT_SECRET  "${{ secrets.AICORE_CLIENT_SECRET }}"
-          cf set-env coreshift AICORE_AUTH_URL        "${{ secrets.AICORE_AUTH_URL }}"
-          cf set-env coreshift AICORE_BASE_URL        "${{ secrets.AICORE_BASE_URL }}"
-          cf set-env coreshift AICORE_RESOURCE_GROUP  "${{ secrets.AICORE_RESOURCE_GROUP }}"
+          cf set-env coreshift AICORE_CLIENT_ID      '${{ secrets.AICORE_CLIENT_ID }}'
+          cf set-env coreshift AICORE_CLIENT_SECRET  '${{ secrets.AICORE_CLIENT_SECRET }}'
+          cf set-env coreshift AICORE_AUTH_URL        '${{ secrets.AICORE_AUTH_URL }}'
+          cf set-env coreshift AICORE_BASE_URL        '${{ secrets.AICORE_BASE_URL }}'
+          cf set-env coreshift AICORE_RESOURCE_GROUP  '${{ secrets.AICORE_RESOURCE_GROUP }}'
 
           # SAP AI Core (UI / sap-ai-sdk-gen)
-          cf set-env coreshift SAP_AI_CORE_CLIENT_ID      "${{ secrets.SAP_AI_CORE_CLIENT_ID }}"
-          cf set-env coreshift SAP_AI_CORE_CLIENT_SECRET  "${{ secrets.SAP_AI_CORE_CLIENT_SECRET }}"
-          cf set-env coreshift SAP_AI_CORE_AUTH_URL       "${{ secrets.SAP_AI_CORE_AUTH_URL }}"
-          cf set-env coreshift SAP_AI_CORE_API_URL        "${{ secrets.SAP_AI_CORE_API_URL }}"
-          cf set-env coreshift SAP_AI_CORE_DEPLOYMENT_ID  "${{ secrets.SAP_AI_CORE_DEPLOYMENT_ID }}"
-          cf set-env coreshift SAP_AI_CORE_RESOURCE_GROUP "${{ secrets.SAP_AI_CORE_RESOURCE_GROUP }}"
-          cf set-env coreshift SAP_AI_CORE_MODEL_NAME     "${{ secrets.SAP_AI_CORE_MODEL_NAME }}"
+          cf set-env coreshift SAP_AI_CORE_CLIENT_ID      '${{ secrets.SAP_AI_CORE_CLIENT_ID }}'
+          cf set-env coreshift SAP_AI_CORE_CLIENT_SECRET  '${{ secrets.SAP_AI_CORE_CLIENT_SECRET }}'
+          cf set-env coreshift SAP_AI_CORE_AUTH_URL       '${{ secrets.SAP_AI_CORE_AUTH_URL }}'
+          cf set-env coreshift SAP_AI_CORE_API_URL        '${{ secrets.SAP_AI_CORE_API_URL }}'
+          cf set-env coreshift SAP_AI_CORE_DEPLOYMENT_ID  '${{ secrets.SAP_AI_CORE_DEPLOYMENT_ID }}'
+          cf set-env coreshift SAP_AI_CORE_RESOURCE_GROUP '${{ secrets.SAP_AI_CORE_RESOURCE_GROUP }}'
+          cf set-env coreshift SAP_AI_CORE_MODEL_NAME     '${{ secrets.SAP_AI_CORE_MODEL_NAME }}'
 
           # Groq
-          cf set-env coreshift GROQ_API_KEY "${{ secrets.GROQ_API_KEY }}"
+          cf set-env coreshift GROQ_API_KEY '${{ secrets.GROQ_API_KEY }}'
 
       # ── 6. Start the app ──────────────────────────────────────────────────────
       - name: Start app
