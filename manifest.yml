@@ -14,13 +14,16 @@ applications:
       PYTHONUNBUFFERED: "true"
       STREAMLIT_SERVER_HEADLESS: "true"
       STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
-      # LLM keys — set via: cf set-env coreshift AICORE_CLIENT_ID <value>
-      # AICORE_CLIENT_ID:
-      # AICORE_CLIENT_SECRET:
-      # AICORE_AUTH_URL:
-      # AICORE_BASE_URL:
-      # AICORE_RESOURCE_GROUP: default
-      # AICORE_MODEL: gpt-4o
-      # GROQ_API_KEY:
-      # ANTHROPIC_API_KEY:
-      # OPENAI_API_KEY:
+      # SAP AI Core credentials
+      AICORE_CLIENT_ID: "<your-aicore-client-id>"
+      AICORE_CLIENT_SECRET: "<your-aicore-client-secret>"
+      AICORE_AUTH_URL: "<your-aicore-auth-url>"
+      AICORE_BASE_URL: "<your-aicore-base-url>"
+      AICORE_RESOURCE_GROUP: "default"
+      SAP_AI_CORE_CLIENT_ID: "<your-sap-ai-core-client-id>"
+      SAP_AI_CORE_CLIENT_SECRET: "<your-sap-ai-core-client-secret>"
+      SAP_AI_CORE_AUTH_URL: "<your-sap-ai-core-auth-url>"
+      SAP_AI_CORE_API_URL: "<your-sap-ai-core-api-url>"
+      SAP_AI_CORE_DEPLOYMENT_ID: "<your-deployment-id>"
+      SAP_AI_CORE_RESOURCE_GROUP: "default"
+      GROQ_API_KEY: "<your-groq-api-key>"

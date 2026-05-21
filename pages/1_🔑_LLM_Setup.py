@@ -11,6 +11,59 @@ import streamlit as st
 from dotenv import load_dotenv
 load_dotenv()
 
+import requests as _requests
+
+
+@st.cache_data(ttl=300, show_spinner=False)
+def _get_deployment_model_name(deployment_id: str) -> str | None:
+    """Query SAP AI Core REST API and return the model_name for a deployment ID."""
+    client_id     = os.getenv("AICORE_CLIENT_ID")     or os.getenv("SAP_AI_CORE_CLIENT_ID")
+    client_secret = os.getenv("AICORE_CLIENT_SECRET") or os.getenv("SAP_AI_CORE_CLIENT_SECRET")
+    auth_url      = os.getenv("AICORE_AUTH_URL")      or os.getenv("SAP_AI_CORE_AUTH_URL")
+    base_url      = os.getenv("AICORE_BASE_URL")      or os.getenv("SAP_AI_CORE_API_URL")
+    resource_group = os.getenv("AICORE_RESOURCE_GROUP", "default")
+
+    if not all([client_id, client_secret, auth_url, base_url, deployment_id]):
+        return None
+    try:
+        # ── OAuth token ──
+        token_url = f"{auth_url.rstrip('/')}/oauth/token"
+        tr = _requests.post(
+            token_url,
+            data={"grant_type": "client_credentials",
+                  "client_id": client_id, "client_secret": client_secret},
+            timeout=15,
+        )
+        tr.raise_for_status()
+        token = tr.json()["access_token"]
+
+        # ── Fetch deployment ──
+        base = base_url.rstrip("/")
+        if not base.endswith("/v2"):
+            base = f"{base}/v2"
+        url = f"{base}/lm/deployments/{deployment_id}"
+        dr = _requests.get(
+            url,
+            headers={"Authorization": f"Bearer {token}",
+                     "AI-Resource-Group": resource_group},
+            timeout=15,
+        )
+        dr.raise_for_status()
+        data = dr.json()
+
+        # SAP AI Core response nests the model name in several possible places
+        model = (
+            (data.get("details") or {}).get("resources", {})
+                .get("backend_details", {}).get("model_name")
+            or (data.get("details") or {}).get("resources", {})
+                .get("backend_details", {}).get("modelName")
+            or data.get("modelName")
+            or data.get("model_name")
+        )
+        return model or None
+    except Exception:
+        return None
+
 from core.auth import require_auth
 from core.ui import inject_css
 
@@ -118,6 +171,19 @@ with tab_sap:
     _optional = {"Resource Group"}
     _missing  = [k for k, v in _fields.items() if not v and k not in _optional]
 
+    # ── Resolve deployment ID → model name ───────────────────────────────────
+    _deployment_id = (
+        os.getenv("SAP_AI_CORE_DEPLOYMENT_ID", "").strip()
+        or os.getenv("AICORE_DEPLOYMENT_ID", "").strip()
+    )
+    _detected_model: str | None = None
+    if _deployment_id and not _missing:
+        with st.spinner("🔍 Detecting model from deployment…"):
+            _detected_model = _get_deployment_model_name(_deployment_id)
+
+    # Fallback chain: detected → AICORE_MODEL env → "gpt-4o"
+    _effective_model = _detected_model or os.getenv("AICORE_MODEL", "").strip() or "gpt-4o"
+
     rows_html = ""
     for field_name, value in _fields.items():
         if value:
@@ -132,11 +198,25 @@ with tab_sap:
             display = "—"
         rows_html += f"<tr><td style='padding:6px 12px'>{field_name}</td><td style='padding:6px 12px'>{status}</td><td style='padding:6px 12px'>{display}</td></tr>"
 
-    model_env = os.getenv("AICORE_MODEL", "gpt-4o")
+    # Deployment ID row
+    if _deployment_id:
+        rows_html += (
+            f"<tr><td style='padding:6px 12px'>Deployment ID</td>"
+            f"<td style='padding:6px 12px'><span style='color:#2E844A;font-weight:700'>✅ Set</span></td>"
+            f"<td style='padding:6px 12px'><code>{_deployment_id}</code></td></tr>"
+        )
+
+    # Model row — show detected model (or fallback)
+    if _detected_model:
+        _model_status  = '<span style="color:#2E844A;font-weight:700">✅ Auto-detected</span>'
+        _model_display = f'<code>{_detected_model}</code>'
+    else:
+        _model_status  = '<span style="color:#2E844A;font-weight:700">✅ Set</span>'
+        _model_display = f'<code>{_effective_model}</code>'
     rows_html += (
         f"<tr><td style='padding:6px 12px'>Model</td>"
-        f"<td style='padding:6px 12px'><span style='color:#2E844A;font-weight:700'>✅ Set</span></td>"
-        f"<td style='padding:6px 12px'><code>{model_env}</code></td></tr>"
+        f"<td style='padding:6px 12px'>{_model_status}</td>"
+        f"<td style='padding:6px 12px'>{_model_display}</td></tr>"
     )
 
     st.markdown(f"""
@@ -151,19 +231,28 @@ with tab_sap:
     </table>
     """, unsafe_allow_html=True)
 
+    # Build model options — ensure detected model is always present
+    SAP_MODEL_OPTIONS = [
+        "gpt-4o", "gpt-4o-mini", "gpt-4", "gpt-35-turbo",
+        "gemini-1.5-pro", "claude-3-5-sonnet",
+        "meta--llama3-70b-instruct", "mistralai--mixtral-8x7b-instruct-v01",
+    ]
+    if _effective_model not in SAP_MODEL_OPTIONS:
+        SAP_MODEL_OPTIONS.insert(0, _effective_model)
+
+    _default_idx = SAP_MODEL_OPTIONS.index(_effective_model)
+
     col_m, col_btn = st.columns([2, 1])
     with col_m:
-        sap_model = st.selectbox("Model", [
-            "gpt-4o", "gpt-4o-mini", "gpt-4", "gpt-35-turbo",
-            "gemini-1.5-pro", "claude-3-5-sonnet",
-            "meta--llama3-70b-instruct", "mistralai--mixtral-8x7b-instruct-v01",
-        ])
+        sap_model = st.selectbox("Model", SAP_MODEL_OPTIONS, index=_default_idx)
     with col_btn:
         st.markdown("<br>", unsafe_allow_html=True)
         test_sap = st.button("🔌 Test SAP AI Core", type="primary",
                               use_container_width=True, disabled=bool(_missing))
     if _missing:
         st.error(f"Missing required .env variables: **{', '.join(_missing)}**")
+    if _detected_model:
+        st.caption(f"ℹ️ Model auto-detected from deployment `{_deployment_id}` → **{_detected_model}**")
     if test_sap:
         with st.spinner("Authenticating with SAP AI Core…"):
             try:
