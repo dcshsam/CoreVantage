@@ -1,6 +1,6 @@
 """
 SAP AI Assistant — End-to-End SAP Solution Generator
-5-step wizard: LLM Status → BRD → Functional Spec → Technical Spec → SAP Code
+4-step wizard: BRD → Functional Spec → Technical Spec → SAP Code
 """
 
 import sys
@@ -43,7 +43,6 @@ for k, v in _DEFAULTS.items():
         st.session_state[k] = v
 
 STEPS = [
-    ("🔑", "LLM Configuration"),
     ("📋", "Business Requirements"),
     ("📊", "Functional Specification"),
     ("⚙️", "Technical Specification"),
@@ -52,6 +51,13 @@ STEPS = [
 
 step = st.session_state.step
 llm  = st.session_state.get("cv_llm_client")
+
+# Redirect to LLM setup if not connected — no step needed for this
+if not llm:
+    st.warning("⚠️ No LLM connected. Please configure one first.")
+    if st.button("🔑 Go to LLM Setup", type="primary"):
+        st.switch_page("pages/1_🔑_LLM_Setup.py")
+    st.stop()
 
 # ── Sidebar nav panel ─────────────────────────────────────────────────────────
 with st.sidebar:
@@ -180,31 +186,8 @@ def _nav(back_step=None, next_step=None, next_label="Next →",
 # ── Main content ──────────────────────────────────────────────────────────────
 if True:
 
-    # ── Step 1: LLM Configuration ─────────────────────────────────────────────
+    # ── Step 1: Business Requirements ─────────────────────────────────────────
     if step == 1:
-        st.markdown("""
-        <h2 style="color:#032D60;font-size:1.35rem;font-weight:700;margin-bottom:4px">
-          🔑 LLM Configuration
-        </h2>
-        <p style="color:#706E6B;font-size:.9rem;margin-bottom:20px">
-          An AI provider must be connected to power the document generation pipeline.
-        </p>
-        """, unsafe_allow_html=True)
-
-        if llm:
-            st.success(f"✅ **LLM Connected:** {st.session_state.get('cv_llm_display', 'Connected')}")
-            st.info("Your LLM is already configured via the CoreShift LLM Setup. Click **Next** to begin.")
-            st.markdown("<br>", unsafe_allow_html=True)
-            if st.button("Next →", type="primary", key="s1_next"):
-                st.session_state.step = 2
-                st.rerun()
-        else:
-            st.warning("⚠️ No LLM connected. Please configure one first via the CoreShift LLM Setup.")
-            if st.button("🔑 Go to LLM Setup", type="primary", key="s1_setup"):
-                st.switch_page("pages/1_🔑_LLM_Setup.py")
-
-    # ── Step 2: Business Requirements ─────────────────────────────────────────
-    elif step == 2:
         st.markdown("""
         <h2 style="color:#032D60;font-size:1.35rem;font-weight:700;margin-bottom:4px">
           📋 Business Requirements
@@ -259,13 +242,13 @@ Users: AP Team (20), Finance Managers (5 approvers)""",
 
         st.markdown("<br>", unsafe_allow_html=True)
         _nav(
-            back_step=1, next_step=3,
+            back_step=None, next_step=2,
             next_disabled=not st.session_state.business_requirement.strip(),
-            back_key="s2_back", next_key="s2_next",
+            back_key="s1_back", next_key="s1_next",
         )
 
-    # ── Step 3: Functional Specification ──────────────────────────────────────
-    elif step == 3:
+    # ── Step 2: Functional Specification ──────────────────────────────────────
+    elif step == 2:
         st.markdown("""
         <h2 style="color:#032D60;font-size:1.35rem;font-weight:700;margin-bottom:4px">
           📊 Functional Specification
@@ -295,15 +278,15 @@ Users: AP Team (20), Finance Managers (5 approvers)""",
                         except Exception as exc:
                             st.error(f"Generation failed: {exc}")
             with c2:
-                if st.button("← Back", key="s3_back_pre"):
-                    st.session_state.step = 2
+                if st.button("← Back", key="s2_back_pre"):
+                    st.session_state.step = 1
                     st.rerun()
         else:
             edited = st.text_area(
                 "Functional Specification (editable)",
                 value=st.session_state.functional_spec,
                 height=500,
-                key="s3_edit",
+                key="s2_edit",
             )
             st.session_state.functional_spec = edited
 
@@ -324,20 +307,20 @@ Users: AP Team (20), Finance Managers (5 approvers)""",
                                    mime="application/pdf",
                                    use_container_width=True)
             with c_regen:
-                if st.button("🔄 Regenerate", key="s3_regen", use_container_width=True):
+                if st.button("🔄 Regenerate", key="s2_regen", use_container_width=True):
                     st.session_state.functional_spec = ""
                     st.rerun()
             with c_back:
-                if st.button("← Back", key="s3_back", use_container_width=True):
-                    st.session_state.step = 2
+                if st.button("← Back", key="s2_back", use_container_width=True):
+                    st.session_state.step = 1
                     st.rerun()
             with c_next:
-                if st.button("Next →", type="primary", key="s3_next", use_container_width=True):
-                    st.session_state.step = 4
+                if st.button("Next →", type="primary", key="s2_next", use_container_width=True):
+                    st.session_state.step = 3
                     st.rerun()
 
-    # ── Step 4: Technical Specification ───────────────────────────────────────
-    elif step == 4:
+    # ── Step 3: Technical Specification ───────────────────────────────────────
+    elif step == 3:
         st.markdown("""
         <h2 style="color:#032D60;font-size:1.35rem;font-weight:700;margin-bottom:4px">
           ⚙️ Technical Specification
@@ -366,15 +349,15 @@ Users: AP Team (20), Finance Managers (5 approvers)""",
                         except Exception as exc:
                             st.error(f"Generation failed: {exc}")
             with c2:
-                if st.button("← Back", key="s4_back_pre"):
-                    st.session_state.step = 3
+                if st.button("← Back", key="s3_back_pre"):
+                    st.session_state.step = 2
                     st.rerun()
         else:
             edited = st.text_area(
                 "Technical Specification (editable)",
                 value=st.session_state.technical_spec,
                 height=500,
-                key="s4_edit",
+                key="s3_edit",
             )
             st.session_state.technical_spec = edited
 
@@ -394,20 +377,20 @@ Users: AP Team (20), Finance Managers (5 approvers)""",
                                    mime="application/pdf",
                                    use_container_width=True)
             with c_regen:
-                if st.button("🔄 Regenerate", key="s4_regen", use_container_width=True):
+                if st.button("🔄 Regenerate", key="s3_regen", use_container_width=True):
                     st.session_state.technical_spec = ""
                     st.rerun()
             with c_back:
-                if st.button("← Back", key="s4_back", use_container_width=True):
-                    st.session_state.step = 3
+                if st.button("← Back", key="s3_back", use_container_width=True):
+                    st.session_state.step = 2
                     st.rerun()
             with c_next:
-                if st.button("Next →", type="primary", key="s4_next", use_container_width=True):
-                    st.session_state.step = 5
+                if st.button("Next →", type="primary", key="s3_next", use_container_width=True):
+                    st.session_state.step = 4
                     st.rerun()
 
-    # ── Step 5: SAP Code Generation ───────────────────────────────────────────
-    elif step == 5:
+    # ── Step 4: SAP Code Generation ───────────────────────────────────────────
+    elif step == 4:
         st.markdown("""
         <h2 style="color:#032D60;font-size:1.35rem;font-weight:700;margin-bottom:4px">
           💻 SAP Code Generation
@@ -462,8 +445,8 @@ Users: AP Team (20), Finance Managers (5 approvers)""",
                     except Exception as exc:
                         st.error(f"Code generation failed: {exc}")
         with c2:
-            if st.button("← Back", key="s5_back_pre"):
-                st.session_state.step = 4
+            if st.button("← Back", key="s4_back_pre"):
+                st.session_state.step = 3
                 st.rerun()
 
         # ── Show all generated artifacts ──────────────────────────────────────
