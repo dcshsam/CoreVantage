@@ -40,31 +40,43 @@ st.markdown("""
 [data-testid="stSidebar"]        { display: none !important; }
 [data-testid="collapsedControl"] { display: none !important; }
 
-/* Each card column becomes a positioned container */
-[data-testid="column"] { position: relative !important; }
+/* Equal-height card columns */
+div[data-testid="stHorizontalBlock"] { align-items: stretch !important; }
 
-/* The page_link becomes an invisible full-column overlay.
-   This uses Streamlit's SPA routing so session state is preserved. */
-[data-testid="column"] [data-testid="stPageLink"] {
+/* Cards */
+.cv-card {
+    flex: 1 !important;
+    transition: box-shadow .15s, transform .15s;
+}
+
+/* ── Transparent click-overlay buttons ──────────────────────────────────────
+   The stVerticalBlock inside each card column becomes a positioning context.
+   The stButton (rendered before the card markdown) is then positioned
+   absolutely to cover the entire column — opacity 0 but fully clickable.    */
+[data-testid="stColumn"]:has(.cv-card-cv)  [data-testid="stVerticalBlock"],
+[data-testid="stColumn"]:has(.cv-card-e2e) [data-testid="stVerticalBlock"] {
+    position: relative !important;
+}
+[data-testid="stColumn"]:has(.cv-card-cv)  [data-testid="stButton"],
+[data-testid="stColumn"]:has(.cv-card-e2e) [data-testid="stButton"] {
     position: absolute !important;
     inset: 0 !important;
-    z-index: 20 !important;
-    height: 100% !important;
+    z-index: 50 !important;
 }
-[data-testid="column"] [data-testid="stPageLink"] > div,
-[data-testid="column"] [data-testid="stPageLink"] a {
-    display: block !important;
-    height: 100% !important;
+[data-testid="stColumn"]:has(.cv-card-cv)  [data-testid="stButton"] button,
+[data-testid="stColumn"]:has(.cv-card-e2e) [data-testid="stButton"] button {
     width: 100% !important;
+    height: 100% !important;
     opacity: 0 !important;
     cursor: pointer !important;
+    background: transparent !important;
+    border: none !important;
 }
-
-/* Card hover effect — triggered by column hover since overlay intercepts events */
-.cv-card { transition: box-shadow .15s, transform .15s; }
-[data-testid="column"]:hover .cv-card {
-    box-shadow: 0 8px 24px rgba(0,0,0,.13) !important;
-    transform: translateY(-2px);
+/* Hover effect: button sits above card in DOM, so ~ targets the card sibling */
+[data-testid="stColumn"]:has(.cv-card-cv)  [data-testid="stButton"]:hover ~ div .cv-card,
+[data-testid="stColumn"]:has(.cv-card-e2e) [data-testid="stButton"]:hover ~ div .cv-card {
+    box-shadow: 0 8px 24px rgba(0,0,0,.18) !important;
+    transform: translateY(-3px) !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -114,17 +126,25 @@ CARD_DESC  = "color:#706E6B;font-size:.875rem;margin-bottom:18px;line-height:1.6
 _, col1, col2, _ = st.columns([0.5, 3, 3, 0.5], gap="large")
 
 with col1:
+    # Invisible overlay button — renders first so CSS ~ sibling hover reaches the card below
+    if st.button("CoreShift", key="cv_card_btn", use_container_width=True):
+        st.switch_page("pages/cv_dashboard.py")
     st.markdown(f"""
-    <div class="cv-card" style="min-height:260px;display:flex;flex-direction:column;
-         border-top:4px solid #0176D3;padding:24px 24px 20px;cursor:pointer">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-        <div style="background:#E8F4FF;border-radius:10px;width:48px;height:48px;flex-shrink:0;
-                    display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-                    border:1px solid #B0D4F5"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 9L12 12L4 15" stroke="#0176D3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9L20 12L12 15" stroke="#0176D3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="cv-card cv-card-cv" style="min-height:280px;display:flex;flex-direction:column;
+         border-top:4px solid #0176D3;padding:28px 26px 24px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <div style="background:#E8F4FF;border-radius:10px;width:50px;height:50px;flex-shrink:0;
+                    display:flex;align-items:center;justify-content:center;
+                    border:1px solid #B0D4F5;box-shadow:0 2px 6px rgba(1,118,211,0.15)">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M4 9L12 12L4 15" stroke="#0176D3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 9L20 12L12 15" stroke="#0176D3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
         <div>
-          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">CoreShift</h3>
-          <div style="font-size:0.7rem;color:#0176D3;font-weight:600;
-               text-transform:uppercase;letter-spacing:.5px">SAP Move — Intelligent SAP Migration Platform</div>
+          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700;line-height:1.2">CoreShift</h3>
+          <div style="font-size:0.68rem;color:#0176D3;font-weight:600;
+               text-transform:uppercase;letter-spacing:.5px;margin-top:2px">SAP Move — Intelligent SAP Migration Platform</div>
         </div>
       </div>
       <p style="{CARD_DESC}">
@@ -132,7 +152,8 @@ with col1:
         Detect violations, deprecated constructs, and security issues — then auto-remediate
         to production-ready, ABAP Cloud-compliant code with AI.
       </p>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:12px;
+                  border-top:1px solid #F0F0EE">
         <span style="{CHIP_BLUE}">38+ Rules</span>
         <span style="{CHIP_BLUE}">Clean Core A–D</span>
         <span style="{CHIP_BLUE}">S/4HANA Migration</span>
@@ -140,20 +161,22 @@ with col1:
       </div>
     </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/cv_dashboard.py", label="Open CoreShift", use_container_width=True)
 
 with col2:
+    # Invisible overlay button — renders first so CSS ~ sibling hover reaches the card below
+    if st.button("E2E Support", key="e2e_card_btn", use_container_width=True):
+        st.switch_page("pages/e2e_support.py")
     st.markdown(f"""
-    <div class="cv-card" style="min-height:260px;display:flex;flex-direction:column;
-         border-top:4px solid #2E844A;padding:24px 24px 20px;cursor:pointer">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-        <div style="background:#EEF6EC;border-radius:10px;width:48px;height:48px;flex-shrink:0;
+    <div class="cv-card cv-card-e2e" style="min-height:280px;display:flex;flex-direction:column;
+         border-top:4px solid #2E844A;padding:28px 26px 24px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <div style="background:#EEF6EC;border-radius:10px;width:50px;height:50px;flex-shrink:0;
                     display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-                    border:1px solid #B8DDB0">🔄</div>
+                    border:1px solid #B8DDB0;box-shadow:0 2px 6px rgba(46,132,74,0.15)">🔄</div>
         <div>
-          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700">E2E Support</h3>
-          <div style="font-size:0.7rem;color:#2E844A;font-weight:600;
-               text-transform:uppercase;letter-spacing:.5px">End to End SAP Support</div>
+          <h3 style="margin:0;font-size:1.15rem;color:#032D60;font-weight:700;line-height:1.2">E2E Support</h3>
+          <div style="font-size:0.68rem;color:#2E844A;font-weight:600;
+               text-transform:uppercase;letter-spacing:.5px;margin-top:2px">End to End SAP Support</div>
         </div>
       </div>
       <p style="{CARD_DESC}">
@@ -161,12 +184,15 @@ with col2:
         AI-assisted workflows for functional specifications, ABAP code review,
         and solution documentation across the full SAP delivery lifecycle.
       </p>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
-        <span style="{CHIP_GREEN}">Coming Soon</span>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:12px;
+                  border-top:1px solid #F0F0EE">
+        <span style="{CHIP_GREEN}">Functional Spec</span>
+        <span style="{CHIP_GREEN}">Technical Spec</span>
+        <span style="{CHIP_GREEN}">SAP Code Gen</span>
+        <span style="{CHIP_GREEN}">ZIP Export</span>
       </div>
     </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/e2e_support.py", label="Open E2E Support", use_container_width=True)
 
 # ── Sign out + footer ─────────────────────────────────────────────────────────
 st.markdown("<div style='margin-top:44px'></div>", unsafe_allow_html=True)
@@ -174,7 +200,6 @@ _, btn_col, _ = st.columns([4, 1, 4])
 with btn_col:
     if st.button("Sign Out", use_container_width=True, key="btn_signout"):
         logout()
-        st.rerun()
 
 st.markdown(
     "<div style='text-align:center;margin-top:20px;color:#706E6B;font-size:.75rem'>"

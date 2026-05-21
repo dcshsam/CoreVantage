@@ -40,7 +40,7 @@ def package_code_as_zip(
             folder = folder_map.get(key, f"{key}/")
             default_ext = _EXT_MAP.get(key, ".txt")
             _write_parsed_files(zf, data["code"], folder, default_ext)
-            manifest_lines.append(f"  {folder}  ({data['type']})")
+            manifest_lines.append(f"  {folder}  ({data['label']})")
 
         if functional_spec:
             zf.writestr("docs/Functional_Specification.txt", functional_spec)

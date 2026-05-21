@@ -130,7 +130,7 @@ class LLMClient:
         api_key = kwargs.get("api_key") or os.getenv("ANTHROPIC_API_KEY")
         if not api_key:
             raise ValueError("ANTHROPIC_API_KEY not set.")
-        self.model        = kwargs.get("model", "claude-3-5-sonnet-20241022")
+        self.model        = kwargs.get("model", "claude-sonnet-4-6")
         self._client      = _a.Anthropic(api_key=api_key)
         self.display_name = f"Anthropic | {self.model}"
 

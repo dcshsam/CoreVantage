@@ -24,15 +24,8 @@ from core.ui import inject_css
 inject_css()
 user = require_auth()
 
-# Override CoreShift sidebar styles — use light background for SAP AI Assistant
 st.markdown("""
 <style>
-[data-testid="stSidebar"] {
-    background: #FFFFFF !important;
-    border-right: 1px solid #DDDBDA !important;
-    min-width: 260px !important;
-}
-[data-testid="stSidebar"] * { color: #181818 !important; }
 [data-testid="stSidebarNav"] { display: none !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -62,48 +55,113 @@ llm  = st.session_state.get("cv_llm_client")
 
 # ── Sidebar nav panel ─────────────────────────────────────────────────────────
 with st.sidebar:
-    rows = ""
-    for i, (icon, label) in enumerate(STEPS, 1):
-        if i < step:
-            rows += f'<div style="display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:6px"><span>✅</span><span style="font-size:.84rem;color:#2E844A;font-weight:600">{label}</span></div>'
-        elif i == step:
-            rows += f'<div style="display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:6px;background:#E8F4FF"><span style="color:#0176D3">▶</span><span style="font-size:.84rem;color:#0176D3;font-weight:700">{icon} {label}</span></div>'
-        else:
-            rows += f'<div style="display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:6px"><span style="opacity:.3">{icon}</span><span style="font-size:.84rem;color:#B0B0B0">{label}</span></div>'
-
-    llm_badge = ""
-    if llm:
-        display = st.session_state.get("cv_llm_display", "Connected")
-        llm_badge = f'<div style="margin-top:12px;padding:8px 10px;background:#EEF6EC;border-radius:6px;border:1px solid #B8DDB0"><div style="font-size:.72rem;color:#706E6B;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">Connected LLM</div><div style="font-size:.82rem;color:#2E844A;font-weight:700">🤖 {display}</div></div>'
-
-    progress_pct = int(step / len(STEPS) * 100)
-
-    st.markdown(f"""
-    <div style="background:#FFFFFF;border:1px solid #DDDBDA;border-radius:10px;padding:20px 16px 16px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-        <span style="font-size:1.4rem">🏭</span>
-        <span style="font-size:1.02rem;font-weight:700;color:#032D60">SAP AI Assistant</span>
+    # ── Brand block ───────────────────────────────────────────────────────────
+    st.markdown("""
+    <div style="padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.09)">
+      <div style="display:flex;align-items:center;gap:11px">
+        <div style="background:#0176D3;border-radius:10px;width:38px;height:38px;flex-shrink:0;
+                    display:flex;align-items:center;justify-content:center;
+                    box-shadow:0 2px 8px rgba(1,118,211,0.40)">
+          <span style="font-size:1.2rem">🏭</span>
+        </div>
+        <div>
+          <div style="font-size:1.05rem;font-weight:700;color:#FFFFFF;letter-spacing:-0.3px;line-height:1.15">
+            SAP AI Assistant
+          </div>
+          <div style="font-size:0.67rem;color:#6FA8D4;letter-spacing:0.4px;text-transform:uppercase;margin-top:1px">
+            E2E SAP Solution Generator
+          </div>
+        </div>
       </div>
-      <div style="font-size:.76rem;color:#706E6B;font-style:italic;margin-bottom:14px">
-        End-to-End SAP Solution Generator
-      </div>
-      <hr style="border:none;border-top:1px solid #EAEAEA;margin:0 0 6px">
-      {rows}
-      <hr style="border:none;border-top:1px solid #EAEAEA;margin:6px 0 10px">
-      <div style="font-size:.75rem;color:#706E6B;margin-bottom:5px">Step {step} of {len(STEPS)}</div>
-      <div style="background:#E8F4FF;border-radius:4px;height:6px;overflow:hidden">
-        <div style="background:#0176D3;width:{progress_pct}%;height:100%;border-radius:4px"></div>
-      </div>
-      {llm_badge}
     </div>
     """, unsafe_allow_html=True)
 
+    # ── Steps section label ───────────────────────────────────────────────────
+    st.markdown("""
+    <div style="padding:14px 18px 4px">
+      <div style="font-size:0.67rem;color:#6FA8D4;font-weight:700;
+                  text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">
+        Workflow Steps
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Step rows ─────────────────────────────────────────────────────────────
+    rows = ""
+    for i, (icon, label) in enumerate(STEPS, 1):
+        if i < step:
+            rows += (
+                f'<div style="display:flex;align-items:center;gap:9px;padding:7px 18px;'
+                f'border-radius:0;margin:1px 0">'
+                f'<span style="color:#4CAF50;font-size:.85rem">✅</span>'
+                f'<span style="font-size:.84rem;color:#A8D5A2;font-weight:600">{label}</span>'
+                f'</div>'
+            )
+        elif i == step:
+            rows += (
+                f'<div style="display:flex;align-items:center;gap:9px;padding:7px 12px 7px 14px;'
+                f'margin:1px 6px;border-radius:6px;background:#0176D3">'
+                f'<span style="color:#FFFFFF;font-size:.85rem">▶</span>'
+                f'<span style="font-size:.84rem;color:#FFFFFF;font-weight:700">{icon} {label}</span>'
+                f'</div>'
+            )
+        else:
+            rows += (
+                f'<div style="display:flex;align-items:center;gap:9px;padding:7px 18px;'
+                f'border-radius:0;margin:1px 0;opacity:.5">'
+                f'<span style="font-size:.85rem">{icon}</span>'
+                f'<span style="font-size:.84rem;color:#C9D9EF">{label}</span>'
+                f'</div>'
+            )
+
+    progress_pct = int(step / len(STEPS) * 100)
+
+    st.markdown(
+        f'<div style="padding:0 0 8px">{rows}</div>'
+        f'<div style="padding:4px 18px 12px">'
+        f'<div style="font-size:.72rem;color:#6FA8D4;margin-bottom:5px">Step {step} of {len(STEPS)}</div>'
+        f'<div style="background:rgba(255,255,255,0.12);border-radius:4px;height:5px;overflow:hidden">'
+        f'<div style="background:#0176D3;width:{progress_pct}%;height:100%;border-radius:4px"></div>'
+        f'</div></div>',
+        unsafe_allow_html=True,
+    )
+
+    # ── LLM status ────────────────────────────────────────────────────────────
+    st.markdown('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.09);margin:4px 0">', unsafe_allow_html=True)
+    if llm:
+        display = st.session_state.get("cv_llm_display", "Connected")
+        st.markdown(
+            f'<div style="padding:10px 18px">'
+            f'<div style="font-size:.67rem;color:#6FA8D4;font-weight:700;text-transform:uppercase;'
+            f'letter-spacing:.6px;margin-bottom:4px">Connected LLM</div>'
+            f'<div style="font-size:.82rem;color:#FFFFFF;font-weight:600">🤖 {display}</div>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            '<div style="padding:10px 18px">'
+            '<div style="font-size:.72rem;color:#F5A623;font-weight:600">⚠️ No LLM connected</div>'
+            '</div>',
+            unsafe_allow_html=True,
+        )
+
+    # ── Start Over button ─────────────────────────────────────────────────────
     if step > 1:
-        st.markdown("<div style='margin-top:10px'></div>", unsafe_allow_html=True)
+        st.markdown('<div style="padding:4px 8px 8px">', unsafe_allow_html=True)
         if st.button("🔁 Start Over", use_container_width=True, key="nav_reset"):
             for k in _DEFAULTS:
                 st.session_state[k] = _DEFAULTS[k]
             st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # ── Footer ────────────────────────────────────────────────────────────────
+    st.markdown(
+        '<div style="text-align:center;padding:8px 0 10px;margin-top:auto">'
+        '<span style="font-size:0.67rem;color:#3D6E96">v1.1.0 &nbsp;·&nbsp; Powered by SPRAC &nbsp;·&nbsp; 2025</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
 
 # ── Helper: navigation row ────────────────────────────────────────────────────
 def _nav(back_step=None, next_step=None, next_label="Next →",

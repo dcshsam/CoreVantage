@@ -240,7 +240,7 @@ def login(user: User) -> None:
 
 
 def logout() -> None:
-    for k in ["cv_authenticated", "cv_user"]:
+    for k in [k for k in list(st.session_state.keys()) if k.startswith("cv_")]:
         st.session_state.pop(k, None)
     st.rerun()
 

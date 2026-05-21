@@ -371,7 +371,7 @@ if result:
         with col2:
             if st.button("📊 Excel (Issues)", use_container_width=True):
                 from core.report_exporter import export_violations_excel
-                buf = export_violations_excel(result.violations, prog_name_s4)
+                buf = export_violations_excel(result.s4_violations, prog_name_s4)
                 st.download_button("⬇️ Download .xlsx", data=buf,
                     file_name=f"{prog_name_s4}_s4_issues.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
