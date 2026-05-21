@@ -1,0 +1,69 @@
+name: Deploy CoreVantage to SAP BTP CF
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # allows manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    name: CF Push
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ───────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Install CF CLI v8 (no sudo needed on ubuntu-latest) ───────────────
+      - name: Install CF CLI v8
+        run: |
+          curl -fsSL \
+            "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v8&source=github" \
+            | tar -zxf - cf8
+          sudo mv cf8 /usr/local/bin/cf
+          cf version
+
+      # ── 3. Login to SAP BTP CF ────────────────────────────────────────────────
+      - name: Login to CF
+        run: |
+          cf login \
+            -a "${{ secrets.CF_API }}" \
+            -u "${{ secrets.CF_USERNAME }}" \
+            -p "${{ secrets.CF_PASSWORD }}" \
+            -o "${{ secrets.CF_ORG }}" \
+            -s "${{ secrets.CF_SPACE }}"
+
+      # ── 4. Push without starting (so env vars are set before first boot) ──────
+      - name: Push app (no-start)
+        run: cf push --no-start
+
+      # ── 5. Inject all environment variables ───────────────────────────────────
+      - name: Set environment variables
+        run: |
+          # SAP AI Core (generative-ai-hub-sdk)
+          cf set-env coreshift AICORE_CLIENT_ID      "${{ secrets.AICORE_CLIENT_ID }}"
+          cf set-env coreshift AICORE_CLIENT_SECRET  "${{ secrets.AICORE_CLIENT_SECRET }}"
+          cf set-env coreshift AICORE_AUTH_URL        "${{ secrets.AICORE_AUTH_URL }}"
+          cf set-env coreshift AICORE_BASE_URL        "${{ secrets.AICORE_BASE_URL }}"
+          cf set-env coreshift AICORE_RESOURCE_GROUP  "${{ secrets.AICORE_RESOURCE_GROUP }}"
+
+          # SAP AI Core (UI / sap-ai-sdk-gen)
+          cf set-env coreshift SAP_AI_CORE_CLIENT_ID      "${{ secrets.SAP_AI_CORE_CLIENT_ID }}"
+          cf set-env coreshift SAP_AI_CORE_CLIENT_SECRET  "${{ secrets.SAP_AI_CORE_CLIENT_SECRET }}"
+          cf set-env coreshift SAP_AI_CORE_AUTH_URL       "${{ secrets.SAP_AI_CORE_AUTH_URL }}"
+          cf set-env coreshift SAP_AI_CORE_API_URL        "${{ secrets.SAP_AI_CORE_API_URL }}"
+          cf set-env coreshift SAP_AI_CORE_DEPLOYMENT_ID  "${{ secrets.SAP_AI_CORE_DEPLOYMENT_ID }}"
+          cf set-env coreshift SAP_AI_CORE_RESOURCE_GROUP "${{ secrets.SAP_AI_CORE_RESOURCE_GROUP }}"
+          cf set-env coreshift SAP_AI_CORE_MODEL_NAME     "${{ secrets.SAP_AI_CORE_MODEL_NAME }}"
+
+          # Groq
+          cf set-env coreshift GROQ_API_KEY "${{ secrets.GROQ_API_KEY }}"
+
+      # ── 6. Start the app ──────────────────────────────────────────────────────
+      - name: Start app
+        run: cf start coreshift
+
+      # ── 7. Print the live URL ─────────────────────────────────────────────────
+      - name: Show app URL
+        run: cf app coreshift | grep -E "^routes"

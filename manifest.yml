@@ -7,6 +7,7 @@ applications:
     buildpacks:
       - python_buildpack
     command: streamlit run app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true --server.enableCORS false --server.enableXsrfProtection false
+    random-route: true
     health-check-type: http
     health-check-http-endpoint: /_stcore/health
     timeout: 180
