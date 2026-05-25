@@ -7,254 +7,195 @@ _TODAY_ISO = date.today().strftime("%Y-%m-%d")
 # FUNCTIONAL SPECIFICATION SYSTEM (UPGRADED - SAP + AI READY)
 # ──────────────────────────────────────────────────────────────
 
-FUNCTIONAL_SPEC_SYSTEM = """You are a Senior SAP Functional Consultant with 25+ years of experience across SAP ECC and S/4HANA, including deep expertise in MM, SD, FI, CO, EWM, WM, PP, QM, PM and SAP integration scenarios.
+FUNCTIONAL_SPEC_SYSTEM = """You are a Senior SAP Functional Consultant with 25+ years of experience across SAP ECC and S/4HANA, with deep expertise in MM, SD, FI, CO, EWM, WM, PP, QM, PM and SAP integration scenarios.
 
-You specialize in:
-- Writing high-quality Functional Specifications (FS)
-- Designing SAP enhancements, interfaces, RF processes, and migration solutions
-- Handling S/4HANA simplification impacts (SAP Notes, removed functionality)
-- Designing automation and AI-enabled SAP processes
-
-Your documents act as a contract between Business and IT and must be:
-- Structured and precise
-- Technically accurate
-- Implementation-ready for ABAP developers
-- Aligned with SAP best practices and real project scenarios
+You write Functional Specification documents that follow the exact structure used in real SAP implementation projects (VWITS, Deloitte, Accenture style). Your documents are:
+- Concise and implementation-ready
+- Written for ABAP developers who will code directly from your FS
+- Using real SAP T-codes, tables, function modules, enhancement points, and BAdIs
+- Structured exactly as per the standard SAP project FS template (not generic consulting documents)
 """
 
 
 def functional_spec_prompt(business_requirement: str) -> str:
-    return f"""Based on the SAP business requirement below, produce a complete, professional SAP Functional Specification document.
+    return f"""Based on the SAP business requirement below, produce a complete Functional Specification document following the exact real-project SAP FS template structure.
 
 BUSINESS REQUIREMENT:
 {business_requirement}
 
-Output the full document using this exact structure. Use real SAP tables, T-codes, enhancement techniques, and practical logic wherever applicable.
+Output the full document using this exact structure. Use real SAP T-codes, table names, function modules, and field names throughout. Do NOT use vague placeholder text — derive everything from the requirement.
 
-═══════════════════════════════════════════════════════════════════
-SAP FUNCTIONAL SPECIFICATION DOCUMENT
-═══════════════════════════════════════════════════════════════════
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FUNCTIONAL SPECIFICATION DOCUMENT
+[Derive document title from the requirement]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. DOCUMENT HEADER
-─────────────────
-Document Title  : [Derived clearly from requirement]
-Project Name    : [Derived or generic SAP project]
-SAP Module(s)   : [e.g. MM / EWM / SD / FI / Cross-module]
-Version         : 1.0  |  Status: Draft
-Date            : {_TODAY}
-Prepared by     : SAP AI Assistant
+Stream Lead       : [Derive or use "SAP AI Assistant"]
+Status            : Draft
+Version           : V 1.0
+Date              : {_TODAY}
 
-2. DOCUMENT CONTROL
-────────────────────
-2.1 Purpose
-Explain the purpose of this FS clearly (enhancement, interface, automation, AI solution).
+──────────────────────────────────────────────────────
+PROJECT IDENTIFICATION
+──────────────────────────────────────────────────────
+| Project Name        | [Derived from requirement]        | Project Start Date | {_TODAY_ISO}     |
+| Customer Name       | [Derived or generic]              | Project Finish Date| [TBD]            |
+| SAP Module(s)       | [e.g. MM / EWM / WM / SD / FI]   | Stream             | [e.g. ASP / MM]  |
 
-2.2 Scope
-Define what is covered (process, system, transactions, modules).
+──────────────────────────────────────────────────────
+REVISION HISTORY
+──────────────────────────────────────────────────────
+| Version | Date         | Author            | Comments                              |
+|---------|--------------|-------------------|---------------------------------------|
+| 1.0     | {_TODAY_ISO} | SAP AI Assistant  | Initial Functional Specification      |
 
-2.3 Assumptions & Constraints
-- Master data availability
-- SAP configuration dependencies
-- Any SAP Note / S/4 behavior constraints
+──────────────────────────────────────────────────────
+DOCUMENT REVIEWED BY
+──────────────────────────────────────────────────────
+| Version | Date | Author | Comments     |
+|---------|------|--------|--------------|
+| 1.0     |      |        | Final Review |
 
-2.4 Out of Scope
-- Clearly define exclusions
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-3. EXECUTIVE SUMMARY
-─────────────────────
-Write 2–3 strong paragraphs covering:
-- Business problem
-- SAP limitation or gap (if any)
-- Proposed solution (enhancement/interface/AI)
-- Business benefit (automation, accuracy, compliance, efficiency)
+1. OBJECTIVE
+─────────────
+Write 1–2 concise paragraphs:
+- What this FS covers (enhancement/interface/custom program/RF process)
+- The business gap that triggered this requirement
+- The proposed SAP solution approach (standard enhancement / custom ABAP / BAdI / RFC / interface)
 
-4. BUSINESS PROCESS OVERVIEW
-──────────────────────────────
+2. PROGRAM INFORMATION
+───────────────────────
+| Stream | SAP Module | Enhancement | Program Name / Enhancement / Object Name |
+|--------|------------|-------------|------------------------------------------|
+| [e.g. ASP / MM / WM] | [e.g. EWM / MM / SD] | X | [e.g. Z_PROG_NAME / BAdI name / /SCWM/... ] |
 
-4.1 As-Is Process (Current State)
-Describe real business process and system behavior including:
-- Transactions (e.g. MIGO, RFUI, ME31L)
-- Pain points (manual effort, errors, restrictions)
-
-4.2 To-Be Process (Future State)
-Describe SAP process after enhancement:
-- Automation / validation / AI decision
-- System-driven actions
-
-4.3 Process Flow Narrative
-Provide step-by-step flow:
-Step 1 → Step 2 → Step 3 → Final Output
-
-5. SAP MODULE & TRANSACTION MAPPING
-──────────────────────────────────────
-| SAP Module | Transaction Code | Description | Responsible Role |
-|------------|-----------------|-------------|-----------------|
-
-Include real examples like:
-- MIGO, /SCWM/RFUI, ME31L, VL31N, custom Z programs
-
-Master Data Objects:
-- Material Master (MARA, MARC)
-- Vendor Master (LFA1)
-- Purchasing Info (EINA)
-- Others based on scenario
-
-6. FUNCTIONAL REQUIREMENTS
-────────────────────────────
-
-FR-001: [Requirement Title]
-  Description     : Clear business requirement
-  Business Rule   : Detailed logic (thresholds, validation, calculations)
-  SAP Object      : Table / FM / BAdI / Program (e.g. EKPO, T160M, /SCWM/TO_READ_HU)
-  Priority        : High / Medium / Low
-  Acceptance Criteria:
-    ✓ System performs expected action
-    ✓ No manual intervention required
-    ✓ Error handled properly
-
-(Include multiple FRs if needed)
-
-7. DETAILED FUNCTIONAL LOGIC (MANDATORY – CORE SECTION)
-────────────────────────────────────────────────────────
-
-Step 1: Trigger/Event
-- T-code / Batch Job / Interface / RF Screen
-
-Step 2: Data Retrieval
-- Tables (EKKO, EKPO, MARC, /SCWM/* etc.)
-
-Step 3: Validation Logic
-- Threshold (TVARVC)
-- Status checks
-- Error conditions
-
-Step 4: Core Processing Logic
-Use structured logic like:
-
-IF condition A:
-   perform action A
-ELSE:
-   perform action B
-
-Include:
-- Calculations (quantity/value)
-- Currency handling (if any)
-- Function modules (e.g. CONVERT_TO_LOCAL_CURRENCY)
-
-Step 5: Decision / AI Logic (IMPORTANT)
-If applicable, include:
-
-| Input Data | Logic Type | Decision |
-|-----------|-----------|----------|
-| SAP data | Rule / ML | Output |
-
-Example:
-- Predict exhaustion
-- Suggest action
-- Auto-trigger process
-
-Step 6: Update Logic
-- Tables updated
-- Documents created (PO, SA, WT, Material Doc)
-
-Step 7: Exception Handling
-- Error → Warning conversion (if applicable)
-- Logging
-- Retry logic
-
-8. BUSINESS PROCESS FLOW TABLE
-──────────────────────────
-| Step | Actor | SAP Action | T-Code | Output |
-|------|------|-----------|--------|--------|
-
-9. TECHNICAL OBJECTS
-────────────────────
-| Object Type | Name |
-|------------|------|
-| Program | Z_* |
-| Enhancement | BAdI / User Exit / Implicit |
-| Function Module | |
-| Class/Method | |
-
-10. INPUT / OUTPUT SPECIFICATIONS
-───────────────────────────────────
-
-10.1 Input Data:
-| Field Name | Technical Name | Mandatory | Source | Validation |
-
-10.2 Output:
-| Output | Type | Description |
-|--------|------|------------|
-| Document | SAP | |
-| Email | Notification | |
-| Report | ALV | |
-
-11. NOTIFICATIONS / ALERTS
-──────────────────────────
-
-Trigger Condition:
-[When email or alert fires]
-
-Recipient Logic:
-- MRP Controller (T024D)
-- Distribution List (TVARVC)
-
-Include:
-- Subject
-- Email body summary
-
-12. SAP INTEGRATION POINTS
-────────────────────────────
-| Module | Description | Data |
-|--------|------------|------|
-
-Examples:
-- MM ↔ FI
-- EWM ↔ MM
-- External Interface
-
-13. USER ROLES & AUTHORIZATION
-────────────────────────────────
-| Role | Description | T-Codes |
-
-14. BATCH JOB / EXECUTION
-──────────────────────────
-| Job Name | Frequency | Description |
-
-15. EXCEPTION HANDLING
-────────────────────────
-| Scenario | System Action |
-
-16. DATA MIGRATION (IF APPLICABLE)
-────────────────────────────────────
-- Legacy mapping
-- Upload approach
-
-17. ASSUMPTIONS & LIMITATIONS
+3. AUTHORIZATION ASSIGNMENT
 ─────────────────────────────
+| Transaction Code | Authorization Object Detail |
+|-----------------|----------------------------|
+| [e.g. /SCWM/RFUI / MIGO / ME31L] | [e.g. /SCWM/AUMON / M_MSEG_BWA] |
 
-18. TEST SCENARIOS
-──────────────────
-| Scenario | Expected Result |
+4. FUNCTION DESCRIPTION LOGIC
+───────────────────────────────
 
-19. OPEN ISSUES
-────────────────
-| Issue | Owner | Status |
+4.1 Business Requirement
+Write numbered requirements. For each requirement:
 
-20. CHANGE HISTORY
-───────────────────
-| Version | Date | Author | Description |
-|---------|------|--------|-------------|
-| 1.0 | {_TODAY_ISO} | SAP AI Assistant | Initial Version |
+1. [Requirement title — e.g. "Custom Sorting via RF Screen"]
 
-═══════════════════════════════════════════════════════════════════
+   Process Description:
+   - Describe current system behavior (what SAP standard does or does NOT do)
+   - Describe the business pain point clearly
+   - Describe what the business needs the system to do
+   - Reference relevant standard T-codes taken as baseline (e.g. /SCWM/RFUI, MIGO)
 
-Ensure:
-✔ Real SAP examples are used  
-✔ Logic is implementation-ready  
-✔ Suitable for ABAP developer handover  
-✔ Covers migration + enhancement + AI scenario  
-✔ No vague or generic descriptions
+2. [Second requirement if applicable — e.g. "Auto Email for Exhausted SA"]
+
+   Process Description:
+   - [Same structure as above]
+
+4.2 Functional Solution Approach
+Describe the solution step by step, screen by screen or logic block by logic block.
+Number each step and use sub-bullets (a, b, c...) for logic details.
+
+Example structure:
+1. [Screen / Trigger / Step name]
+   a. [Logic step — e.g. Validate HU: call FM /SCWM/TO_READ_HU passing IV_HUIDENT]
+   b. [Read table ET_ORDIM_C_SRC, save to internal table]
+   c. [Check condition: VLTYP = 8010 and STEP = IB03]
+   d. [If none found: raise error "No open tasks available"]
+
+2. [Next screen or logic block]
+   a. [Provide option to scan sub-HU or Material]
+   b. [F2 = HU Overview, F3 = Warehouse Task List]
+
+3. [Confirm / Post step]
+   a. [F4 HU Create: trigger packing screen — reference standard Deconsolidation Manually via RFUI]
+   b. [F5 Sort logic:]
+      - Check /SCWM/V_T3010-HUOBL: if HU required → show packing screen
+      - If non-HU: create Putaway HU using Class /SCWM/CL_EI_HU_SELECT, Method /SCWM/IF_EX_HU_SELECT~SELECT
+      - Complete HU via FM /SCWM/RF_PACK_HU_CLOSE_PAI
+      - Delete entry from internal table; loop back to step 2 or step 1
+   c. [F6 Missing Label: trigger label print screen]
+
+Include for interface/batch scenarios:
+- Step-by-step program logic using IF/ELSE/LOOP constructs (pseudo-ABAP style)
+- Exact table names and field names (e.g. EKPO-KTMNG, EKKO-LIFNR, MARC-DISPO)
+- Function module calls with import/export parameters
+- Error handling (e.g. price overflow: revert to previous quantity)
+
+4.3 Table Definition
+List SAP tables and Z-tables used by this enhancement:
+| Table Name | Description | Key Fields Used |
+|------------|-------------|-----------------|
+| [e.g. EKKO] | [Purchasing Document Header] | [EBELN, LIFNR, WAERS] |
+| [e.g. EKPO] | [Purchasing Document Item] | [EBELN, EBELP, MATNR, KTMNG, MENGE] |
+
+If no custom tables: NA
+
+4.4 Screen Layout
+Describe or sketch RF screens / selection screens / dialog boxes relevant to this enhancement.
+Use ASCII layout or field list per screen. If not applicable: NA
+
+4.5 Input Screen Fields
+| Field Name | Data Type | Length | Obligate/Optional | Default Value | Description |
+|------------|-----------|--------|-------------------|---------------|-------------|
+| [e.g. HU Number] | CHAR | 20 | Obligatory | — | Handling Unit to be processed |
+| [e.g. Material] | CHAR | 40 | Optional | — | Material number for sorting |
+
+If not applicable: NA
+
+4.6 Report / Output Fields
+| Output Field Name | Description | Default Value | Length | Remark |
+|-------------------|-------------|---------------|--------|--------|
+| [e.g. SA Number]  | [Scheduling Agreement No] | — | 10 | [Sent in email body] |
+
+If not applicable: NA
+
+4.7 Program Running Environment
+
+4.7.1 Program Frequency
+| Running Method | On Required | Hourly | Daily | Weekly | Monthly | Other |
+|---------------|-------------|--------|-------|--------|---------|-------|
+| [Frequency]   | [X or —]    | [X or —] | [X or —] | [X or —] | [X or —] | [X or —] |
+
+4.7.2 Dependency
+[List any prerequisite programs, jobs, or configurations. If none: N/A]
+Example: EBON batch job 500_VWUNI_INMM01EBON_ALLSTEPS must run before this program.
+
+5. LIMITATION / ASSUMPTION / COMMENTS
+───────────────────────────────────────
+- [List assumptions, e.g. "Mail ID must be maintained in MRP controller (T024D)"]
+- [List limitations, e.g. "Solution based on SAP Note 2542099 — functionality cannot be reverted in S/4HANA 2020"]
+- [Any TVARVC parameter names used, e.g. ZEBON_THRESHOLD_VAL, ZEBON_DISP_MAILID]
+- If none: N/A
+
+6. CUSTOMIZING
+───────────────
+[List any IMG configuration required. If none: NA]
+
+7. AUTOMATIC PROCESSES (BATCH JOBS)
+─────────────────────────────────────
+| Job Name | Program | Frequency | Description |
+|----------|---------|-----------|-------------|
+| [e.g. 500_VWUNI_INMM01EBON_ALLSTEPS] | [/VWUNI/INMM01CONTRACT] | Daily | [EBON contract processing] |
+
+If no batch jobs: NA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Data Classification: Internal
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rules:
+- Use exact SAP table/field names (EKKO, EKPO-KTMNG, MARC-DISPO, T024D-USRKEY, etc.)
+- Use real T-codes (MIGO, /SCWM/RFUI, ME31L, SE38, SM37, PFCG, SU01 etc.)
+- Use real SAP function modules where relevant (CONVERT_TO_LOCAL_CURRENCY, /SCWM/TO_READ_HU, etc.)
+- Enhancement techniques: BAdI, Enhancement Framework, Implicit Enhancement, BAdi /SCWM/EX_*, User Exit, MV45AFZZ etc.
+- Program naming: Z* or Y* or /NAMESPACE/* convention
+- No vague text — derive all values from the business requirement
+- Keep section 4.3–4.6 as NA only if genuinely not applicable
 """
 
 # ──────────────────────────────────────────────────────────────
