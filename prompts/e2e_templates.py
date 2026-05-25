@@ -199,6 +199,100 @@ Rules:
 """
 
 # ──────────────────────────────────────────────────────────────
+# TECHNICAL SPECIFICATION
+# ──────────────────────────────────────────────────────────────
+
+TECHNICAL_SPEC_SYSTEM = """You are a Senior SAP Technical Architect with 25+ years of ABAP and S/4HANA experience. You produce implementation-ready Technical Specification documents from Functional Specifications, covering:
+- Program/object design: reports, function modules, classes, BAPIs, enhancements
+- Data model: custom tables (Z*/Y*), fields, keys, indexes, transparent vs pooled
+- Interface design: IDocs, RFCs, REST/SOAP APIs, file-based interfaces
+- Enhancement points: BAdI, User Exits, Implicit Enhancements, Enhancement Framework
+- Screen/UI design: selection screens, ALV grids, Dynpro, Fiori/UI5 references
+- Error handling, logging (SLG1), authorization objects (SU24)
+- Performance considerations: indexes, parallel processing, buffering
+
+Your TS documents are concise, use real SAP technical names (table names, FM names, BAdI names, T-codes), and are written so an ABAP developer can code directly from them without ambiguity."""
+
+
+def technical_spec_prompt(functional_spec: str) -> str:
+    return f"""Based on the SAP Functional Specification below, produce a complete Technical Specification document that an ABAP developer can use directly to implement the solution.
+
+FUNCTIONAL SPECIFICATION:
+{functional_spec}
+
+Output the full Technical Specification using this exact structure:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TECHNICAL SPECIFICATION DOCUMENT
+[Derive document title from the FS]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. DOCUMENT HEADER
+   1.1 Title:
+   1.2 TS Reference No:
+   1.3 Related FS Reference:
+   1.4 SAP Module/Area:
+   1.5 Development Type: [Report / Enhancement / Interface / Function Module / Class / Other]
+   1.6 Author:
+   1.7 Date: {_TODAY}
+   1.8 Version: 1.0
+   1.9 Status: Draft
+
+2. SOLUTION OVERVIEW
+   2.1 Technical Approach (2–4 sentences describing the implementation strategy)
+   2.2 SAP Development Objects (list all Z*/Y* objects to be created/modified)
+   2.3 SAP Standard Objects Involved (standard tables, FMs, BAdIs, exits referenced)
+
+3. DATA MODEL
+   3.1 Custom Tables / Structures (name, description, key fields, delivery class)
+   3.2 Standard SAP Tables Used (name, usage)
+   3.3 Data Flow Diagram (textual description of data flow)
+
+4. PROGRAM / OBJECT DESIGN
+   4.1 Object Name & Type
+   4.2 Selection Screen / Input Parameters
+   4.3 Processing Logic (step-by-step pseudocode or logic description)
+   4.4 Internal Tables & Work Areas (key structures)
+   4.5 Key Function Modules / Methods / BAPIs Called
+   4.6 Output / Result (ALV, spool, IDoc, file, return values)
+
+5. ENHANCEMENTS & USER EXITS
+   5.1 Enhancement Point / BAdI / Exit Name
+   5.2 Enhancement Technique
+   5.3 Logic to Implement
+
+6. INTERFACE DESIGN (if applicable)
+   6.1 Interface Type (IDoc / RFC / REST / File)
+   6.2 Source & Target Systems
+   6.3 Message Type / Service Name
+   6.4 Field Mapping
+
+7. ERROR HANDLING & LOGGING
+   7.1 Error Scenarios & Handling Strategy
+   7.2 Application Log Object (SLG0 object/sub-object)
+   7.3 User Messages (message class, message numbers)
+
+8. AUTHORIZATION
+   8.1 Authorization Objects Required
+   8.2 Authorization Check Points in Code
+
+9. PERFORMANCE CONSIDERATIONS
+   9.1 Expected Data Volume
+   9.2 Optimization Measures (indexes, SELECT strategy, parallel processing)
+
+10. TRANSPORT & DEPLOYMENT
+    10.1 Transport Request Type
+    10.2 Target Systems (DEV → QAS → PRD)
+    10.3 Pre/Post-deployment Steps
+
+11. UNIT TEST SCENARIOS
+    11.1 Test Case | Input | Expected Output (at least 3 scenarios)
+
+Use real SAP object names, table names, function module names, and BAdI names throughout. Do NOT use vague placeholder text — derive all technical details from the Functional Specification.
+"""
+
+
+# ──────────────────────────────────────────────────────────────
 # ABAP CODE GENERATION
 # ──────────────────────────────────────────────────────────────
 
