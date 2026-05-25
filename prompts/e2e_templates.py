@@ -4,12 +4,23 @@ _TODAY = date.today().strftime("%B %d, %Y")
 _TODAY_ISO = date.today().strftime("%Y-%m-%d")
 
 # ──────────────────────────────────────────────────────────────
-# FUNCTIONAL SPECIFICATION
+# FUNCTIONAL SPECIFICATION SYSTEM (UPGRADED - SAP + AI READY)
 # ──────────────────────────────────────────────────────────────
 
-FUNCTIONAL_SPEC_SYSTEM = """You are a Senior SAP Functional Consultant with 25+ years of hands-on experience across all SAP modules: FI, CO, MM, SD, HR/HCM, PP, QM, PM, WM/EWM, PS, and SAP S/4HANA.
+FUNCTIONAL_SPEC_SYSTEM = """You are a Senior SAP Functional Consultant with 25+ years of experience across SAP ECC and S/4HANA, including deep expertise in MM, SD, FI, CO, EWM, WM, PP, QM, PM and SAP integration scenarios.
 
-You create comprehensive, professional Functional Specification documents following SAP best practices, Solution Manager templates, and industry standards. Your documents are precise, structured, and serve as the definitive contract between business and IT."""
+You specialize in:
+- Writing high-quality Functional Specifications (FS)
+- Designing SAP enhancements, interfaces, RF processes, and migration solutions
+- Handling S/4HANA simplification impacts (SAP Notes, removed functionality)
+- Designing automation and AI-enabled SAP processes
+
+Your documents act as a contract between Business and IT and must be:
+- Structured and precise
+- Technically accurate
+- Implementation-ready for ABAP developers
+- Aligned with SAP best practices and real project scenarios
+"""
 
 
 def functional_spec_prompt(business_requirement: str) -> str:
@@ -18,7 +29,7 @@ def functional_spec_prompt(business_requirement: str) -> str:
 BUSINESS REQUIREMENT:
 {business_requirement}
 
-Output the full document using this exact structure. Use proper SAP terminology throughout.
+Output the full document using this exact structure. Use real SAP tables, T-codes, enhancement techniques, and practical logic wherever applicable.
 
 ═══════════════════════════════════════════════════════════════════
 SAP FUNCTIONAL SPECIFICATION DOCUMENT
@@ -26,9 +37,9 @@ SAP FUNCTIONAL SPECIFICATION DOCUMENT
 
 1. DOCUMENT HEADER
 ─────────────────
-Document Title  : [Derive from requirement]
-Project Name    : [Derive from context]
-SAP Module(s)   : [e.g. MM-PUR / FI-AP / SD-OTC]
+Document Title  : [Derived clearly from requirement]
+Project Name    : [Derived or generic SAP project]
+SAP Module(s)   : [e.g. MM / EWM / SD / FI / Cross-module]
 Version         : 1.0  |  Status: Draft
 Date            : {_TODAY}
 Prepared by     : SAP AI Assistant
@@ -36,314 +47,215 @@ Prepared by     : SAP AI Assistant
 2. DOCUMENT CONTROL
 ────────────────────
 2.1 Purpose
-[Explain what this document covers]
+Explain the purpose of this FS clearly (enhancement, interface, automation, AI solution).
 
 2.2 Scope
-[What is in scope]
+Define what is covered (process, system, transactions, modules).
 
 2.3 Assumptions & Constraints
-- [List each assumption]
+- Master data availability
+- SAP configuration dependencies
+- Any SAP Note / S/4 behavior constraints
 
 2.4 Out of Scope
-- [List what is explicitly excluded]
+- Clearly define exclusions
 
 3. EXECUTIVE SUMMARY
 ─────────────────────
-[2-3 paragraph overview of business need, proposed SAP solution, and expected benefits]
+Write 2–3 strong paragraphs covering:
+- Business problem
+- SAP limitation or gap (if any)
+- Proposed solution (enhancement/interface/AI)
+- Business benefit (automation, accuracy, compliance, efficiency)
 
 4. BUSINESS PROCESS OVERVIEW
 ──────────────────────────────
-4.1 As-Is Process (Current State)
-[Describe current manual/legacy process]
 
-4.2 To-Be Process (Future State in SAP)
-[Describe the proposed SAP process]
+4.1 As-Is Process (Current State)
+Describe real business process and system behavior including:
+- Transactions (e.g. MIGO, RFUI, ME31L)
+- Pain points (manual effort, errors, restrictions)
+
+4.2 To-Be Process (Future State)
+Describe SAP process after enhancement:
+- Automation / validation / AI decision
+- System-driven actions
 
 4.3 Process Flow Narrative
-Step 1 → Step 2 → Step N (narrative walkthrough)
+Provide step-by-step flow:
+Step 1 → Step 2 → Step 3 → Final Output
 
 5. SAP MODULE & TRANSACTION MAPPING
 ──────────────────────────────────────
 | SAP Module | Transaction Code | Description | Responsible Role |
 |------------|-----------------|-------------|-----------------|
-[Fill with actual T-codes relevant to the requirement]
+
+Include real examples like:
+- MIGO, /SCWM/RFUI, ME31L, VL31N, custom Z programs
 
 Master Data Objects:
-- [List master data: Material Master, Vendor Master, Customer, Cost Center, etc.]
+- Material Master (MARA, MARC)
+- Vendor Master (LFA1)
+- Purchasing Info (EINA)
+- Others based on scenario
 
 6. FUNCTIONAL REQUIREMENTS
 ────────────────────────────
-[Create one entry per requirement]
 
 FR-001: [Requirement Title]
-  Description     : [Clear business description]
-  Business Rule   : [Specific rule or calculation]
-  SAP Object      : [T-code, Table, BAPI, BAdI, etc.]
+  Description     : Clear business requirement
+  Business Rule   : Detailed logic (thresholds, validation, calculations)
+  SAP Object      : Table / FM / BAdI / Program (e.g. EKPO, T160M, /SCWM/TO_READ_HU)
   Priority        : High / Medium / Low
   Acceptance Criteria:
-    ✓ [Criterion 1]
-    ✓ [Criterion 2]
+    ✓ System performs expected action
+    ✓ No manual intervention required
+    ✓ Error handled properly
 
-FR-002: [Next requirement]
-[Continue for all requirements...]
+(Include multiple FRs if needed)
 
-7. BUSINESS PROCESS FLOW
+7. DETAILED FUNCTIONAL LOGIC (MANDATORY – CORE SECTION)
+────────────────────────────────────────────────────────
+
+Step 1: Trigger/Event
+- T-code / Batch Job / Interface / RF Screen
+
+Step 2: Data Retrieval
+- Tables (EKKO, EKPO, MARC, /SCWM/* etc.)
+
+Step 3: Validation Logic
+- Threshold (TVARVC)
+- Status checks
+- Error conditions
+
+Step 4: Core Processing Logic
+Use structured logic like:
+
+IF condition A:
+   perform action A
+ELSE:
+   perform action B
+
+Include:
+- Calculations (quantity/value)
+- Currency handling (if any)
+- Function modules (e.g. CONVERT_TO_LOCAL_CURRENCY)
+
+Step 5: Decision / AI Logic (IMPORTANT)
+If applicable, include:
+
+| Input Data | Logic Type | Decision |
+|-----------|-----------|----------|
+| SAP data | Rule / ML | Output |
+
+Example:
+- Predict exhaustion
+- Suggest action
+- Auto-trigger process
+
+Step 6: Update Logic
+- Tables updated
+- Documents created (PO, SA, WT, Material Doc)
+
+Step 7: Exception Handling
+- Error → Warning conversion (if applicable)
+- Logging
+- Retry logic
+
+8. BUSINESS PROCESS FLOW TABLE
 ──────────────────────────
-[Show step-by-step flow with actors and systems]
+| Step | Actor | SAP Action | T-Code | Output |
+|------|------|-----------|--------|--------|
 
-Step | Actor | SAP Action | T-Code | Output/Result
------|-------|-----------|--------|-------------
-1    | [Role] | [Action] | [T-code] | [Result]
-[Continue...]
-
-8. INPUT / OUTPUT SPECIFICATIONS
-───────────────────────────────────
-8.1 Input Data:
-| Field Name | Technical Name | Type | Length | Mandatory | Source | Validation |
-|-----------|---------------|------|--------|-----------|--------|-----------|
-
-8.2 Output / Reports:
-| Output Name | Type | Frequency | Recipients | Format |
-|------------|------|-----------|-----------|--------|
-
-9. SAP INTEGRATION POINTS
-────────────────────────────
-| Integrating Module | Integration Type | Data Exchanged | Direction |
-|-------------------|-----------------|---------------|-----------|
-[e.g. MM-FI: GR/IR account postings, SD-FI: Revenue recognition, etc.]
-
-10. USER ROLES & AUTHORIZATION
-────────────────────────────────
-| Role Name (SAP) | Description | Key T-Codes | Auth Objects |
-|----------------|-------------|------------|-------------|
-
-11. REPORTS & ANALYTICS
-─────────────────────────
-| Report Name | T-Code/Program | Description | Frequency | Consumers |
-|------------|---------------|-------------|-----------|---------|
-
-12. EXCEPTION HANDLING
-────────────────────────
-| Exception Scenario | SAP Behaviour | Resolution Steps |
-|-------------------|--------------|----------------|
-
-13. DATA MIGRATION CONSIDERATIONS
-────────────────────────────────────
-[Legacy data mapping, LSMW/BDC considerations, cutover plan — if applicable]
-
-14. OPEN ISSUES & DECISIONS
-─────────────────────────────
-| # | Issue / Question | Owner | Target Date | Status |
-|---|-----------------|-------|------------|--------|
-| 1 | [Issue] | [Name] | TBD | Open |
-
-15. CHANGE HISTORY
-───────────────────
-| Version | Date | Author | Summary of Changes |
-|---------|------|--------|-------------------|
-| 1.0 | {_TODAY_ISO} | SAP AI Assistant | Initial draft |
-
-Make every section detailed, technically precise, and immediately usable by an SAP development team."""
-
-
-# ──────────────────────────────────────────────────────────────
-# TECHNICAL SPECIFICATION
-# ──────────────────────────────────────────────────────────────
-
-TECHNICAL_SPEC_SYSTEM = """You are a Senior SAP Technical Architect with 25+ years of expertise covering ABAP OOP, S/4HANA, BTP, SAPUI5, CAP, RAP (RESTful ABAP Programming), CDS Views, BAdIs, Enhancement Framework, Smart Forms, Adobe Forms, and all SAP technical frameworks.
-
-You create implementation-ready Technical Specification documents that a junior ABAP developer can follow without ambiguity. You use correct SAP naming conventions and object types throughout."""
-
-
-def technical_spec_prompt(functional_spec: str) -> str:
-    return f"""Based on the SAP Functional Specification below, produce a complete, implementation-ready SAP Technical Specification document.
-
-FUNCTIONAL SPECIFICATION:
-{functional_spec}
-
-Output the full document using this exact structure. Include real SAP object names using Z*/Y* naming convention for all custom objects.
-
-═══════════════════════════════════════════════════════════════════
-SAP TECHNICAL SPECIFICATION DOCUMENT
-═══════════════════════════════════════════════════════════════════
-
-1. DOCUMENT HEADER
-─────────────────
-Document Title     : Technical Specification — [Derive title from FS]
-References FS      : [FS Document Title]
-Technology Stack   : [ABAP / SAPUI5 / CAP / BTP Services]
-Version            : 1.0  |  Status: Draft
-Date               : {_TODAY}
-Prepared by        : SAP AI Assistant
-
-2. TECHNICAL OVERVIEW
-──────────────────────
-2.1 Solution Architecture
-[High-level technical approach and component diagram description]
-
-2.2 Development Strategy
-[Approach: new development / enhancement / BAdI implementation / standard config]
-
-2.3 Technical Constraints
-- SAP Release: [S/4HANA 2023 / ECC 6.0 EHP8 — derive from context]
-- [Other constraints]
-
-3. SAP DEVELOPMENT OBJECTS INVENTORY
-──────────────────────────────────────
-3.1 Programs / Reports / Function Groups
-| Object Name | Type (PROG/FUGR/CLAS) | Description | Package | Dev Class |
-|------------|----------------------|-------------|---------|-----------|
-
-3.2 Classes & Interfaces (OOP ABAP)
-| Class/Interface | Type | Inherits/Implements | Key Methods | Description |
-|----------------|------|-------------------|-------------|-------------|
-
-3.3 Function Modules
-| FM Name | Function Group | Import Parameters | Export Parameters | Exceptions |
-|---------|---------------|------------------|------------------|-----------|
-
-3.4 BAPIs & RFC Functions Used
-| BAPI / RFC Name | SAP Object Type | Method | Usage in Solution |
-|----------------|----------------|--------|------------------|
-
-3.5 BAdIs / User Exits / Enhancement Spots
-| Enhancement Point | Type (BAdI/Exit/Spot) | Implementing Class | Purpose |
-|------------------|----------------------|------------------|---------|
-
-3.6 Forms (SAPscript / Smart Forms / Adobe Forms)
-| Form Name | Type | Triggering Program | Description |
-|-----------|------|------------------|-------------|
-
-3.7 Workflow (if applicable)
-| WS Task ID | Description | Agent Determination | Triggering Event | Deadline |
-|-----------|-------------|-------------------|----------------|---------|
-
-4. DATA DICTIONARY OBJECTS
-────────────────────────────
-4.1 Custom Transparent Tables
-| Table Name | Description | Delivery Class | Key Fields | Buffering |
-|-----------|-------------|---------------|-----------|---------|
-| ZTAB_XXX | [Description] | A | [Keys] | [None/Full] |
-
-4.2 Custom Structures
-| Structure Name | Key Fields | Used In Programs/Classes |
-|---------------|-----------|------------------------|
-
-4.3 Data Elements & Domains
-| Data Element | Domain | Data Type | Length | Purpose |
-|-------------|--------|-----------|--------|---------|
-
-4.4 Database Views / CDS Views
-| View Name | Base Table(s) | View Type | Key Joins | Exposed As |
-|----------|--------------|-----------|----------|-----------|
-
-5. SELECTION SCREEN / UI SPECIFICATIONS
-─────────────────────────────────────────
-[For each screen/selection screen:]
-
-Screen: [Name / Dynpro Number]
-| Field Name | Technical Name | Type | Length | Mandatory | Default | Validation |
-|-----------|---------------|------|--------|-----------|---------|-----------|
-
-Screen Flow Logic:
-- PBO (Process Before Output): [modules called]
-- PAI (Process After Input): [modules called, field validations]
-
-6. DETAILED PROGRAM LOGIC & PSEUDOCODE
-─────────────────────────────────────────
-For each major development object:
-
-PROGRAM / CLASS: [Z_PROGRAM_NAME]
-┌─ INITIALIZATION
-│   ├── Load configuration from [table]
-│   └── Initialize work areas and internal tables
-├─ AT SELECTION-SCREEN
-│   ├── Validate [field]: [rule]
-│   └── Check authorization: [auth object] [field] [value]
-├─ START-OF-SELECTION
-│   ├── Step 1: [Action — specify SELECT / CALL FUNCTION / CALL METHOD]
-│   │          Tables: [VBAK, VBAP, etc.]
-│   │          Key condition: [WHERE clause logic]
-│   ├── Step 2: [Action]
-│   │          [Detail]
-│   └── Step N: [Action]
-└─ END-OF-SELECTION
-    └── [Output / ALV display / posting / file generation]
-
-7. DATABASE ACCESS PATTERNS
-─────────────────────────────
-| Operation | Table(s) | Key Fields (WHERE) | Index Used | Performance Note |
-|-----------|---------|------------------|-----------|----------------|
-[List every significant SELECT, INSERT, UPDATE, DELETE with tables and conditions]
-
-Performance Rules:
-- [e.g. Use secondary index ZXX on table ZTAB for field Y]
-- [e.g. Avoid SELECT * — use field list]
-- [e.g. Package size: 1000 records per COMMIT WORK]
-
-8. INTEGRATION & INTERFACES
-─────────────────────────────
-8.1 SAP Module Integrations
-| Integration | Mechanism | Key BAPI/FM/IDoc | Data Flow |
-|------------|-----------|----------------|---------|
-
-8.2 External Interfaces (if applicable)
-| Interface | Protocol | Endpoint / RFC Dest | Payload Format | Error Handling |
-|----------|---------|-------------------|--------------|--------------|
-
-9. ERROR HANDLING & APPLICATION LOG
-──────────────────────────────────────
-| Scenario | Error Class | Msg No | Msg Type | Action | SLG0 Object |
-|---------|------------|--------|---------|--------|-----------|
-
-Application Log:
-- SLG0 Object   : [ZBP_XXX]
-- Sub-object    : [ZXXX_SUB]
-- Log Retention : [30 days]
-
-10. SECURITY & AUTHORIZATION
-──────────────────────────────
-| Auth Object | Field | Permitted Values | Description |
-|------------|-------|----------------|-------------|
-[e.g. M_EINF_BSA, S_TCODE, F_BKPF_BUK]
-
-Custom Auth Objects (if needed):
-| Object Name | Fields | Domain |
-|------------|-------|--------|
-
-11. PERFORMANCE & SCALABILITY
-───────────────────────────────
-- Expected data volume: [records per run]
-- Parallel processing: [background job / parallel RFC — YES/NO, package size]
-- Buffering: [SAP table buffering strategy]
-- Index additions: [Table / Index fields / Justification]
-
-12. TRANSPORT STRATEGY
-────────────────────────
-| Object | Change Request No. | Predecessor | Priority |
-|-------|------------------|-----------|---------|
-- Dev System    : DEV → QAS → PRD
-- Naming prefix : Z[MODULE]_[OBJECT]
-- TR Sequence   : [List transport order dependencies]
-
-13. UNIT TEST PLAN
+9. TECHNICAL OBJECTS
 ────────────────────
-| TC# | Test Scenario | Input Data | Expected Result | Pass Criteria |
-|----|--------------|-----------|----------------|--------------|
+| Object Type | Name |
+|------------|------|
+| Program | Z_* |
+| Enhancement | BAdI / User Exit / Implicit |
+| Function Module | |
+| Class/Method | |
 
-14. TECHNICAL RISKS & MITIGATIONS
+10. INPUT / OUTPUT SPECIFICATIONS
+───────────────────────────────────
+
+10.1 Input Data:
+| Field Name | Technical Name | Mandatory | Source | Validation |
+
+10.2 Output:
+| Output | Type | Description |
+|--------|------|------------|
+| Document | SAP | |
+| Email | Notification | |
+| Report | ALV | |
+
+11. NOTIFICATIONS / ALERTS
+──────────────────────────
+
+Trigger Condition:
+[When email or alert fires]
+
+Recipient Logic:
+- MRP Controller (T024D)
+- Distribution List (TVARVC)
+
+Include:
+- Subject
+- Email body summary
+
+12. SAP INTEGRATION POINTS
+────────────────────────────
+| Module | Description | Data |
+|--------|------------|------|
+
+Examples:
+- MM ↔ FI
+- EWM ↔ MM
+- External Interface
+
+13. USER ROLES & AUTHORIZATION
+────────────────────────────────
+| Role | Description | T-Codes |
+
+14. BATCH JOB / EXECUTION
+──────────────────────────
+| Job Name | Frequency | Description |
+
+15. EXCEPTION HANDLING
+────────────────────────
+| Scenario | System Action |
+
+16. DATA MIGRATION (IF APPLICABLE)
 ────────────────────────────────────
-| Risk | Probability | Impact | Mitigation | Owner |
-|-----|------------|--------|-----------|-------|
+- Legacy mapping
+- Upload approach
 
-15. CHANGE HISTORY
+17. ASSUMPTIONS & LIMITATIONS
+─────────────────────────────
+
+18. TEST SCENARIOS
+──────────────────
+| Scenario | Expected Result |
+
+19. OPEN ISSUES
+────────────────
+| Issue | Owner | Status |
+
+20. CHANGE HISTORY
 ───────────────────
-| Version | Date | Author | Summary |
-|---------|------|--------|---------|
-| 1.0 | {_TODAY_ISO} | SAP AI Assistant | Initial draft |
+| Version | Date | Author | Description |
+|---------|------|--------|-------------|
+| 1.0 | {_TODAY_ISO} | SAP AI Assistant | Initial Version |
 
-Every object name must use Z*/Y* prefix. Every section must be complete enough for a developer to implement without further clarification."""
+═══════════════════════════════════════════════════════════════════
 
+Ensure:
+✔ Real SAP examples are used  
+✔ Logic is implementation-ready  
+✔ Suitable for ABAP developer handover  
+✔ Covers migration + enhancement + AI scenario  
+✔ No vague or generic descriptions
+"""
 
 # ──────────────────────────────────────────────────────────────
 # ABAP CODE GENERATION

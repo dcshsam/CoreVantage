@@ -9,7 +9,7 @@ You have deep knowledge of:
     Level D = Core modifications / direct writes to SAP tables — transport blocker (ATC: errors)
 - ABAP Cloud restricted syntax (BTP ABAP Environment and S/4HANA Cloud)
 - ABAP RESTful Application Programming Model (RAP): CDS views, BDEF, EML (Entity Manipulation Language)
-- ABAP Test Cockpit (ATC) CLOUD_READINESS and ABAP_CLEAN_CORE_DEVELOPMENT check variants
+- ABAP Test Cockpit (ATC): ABAP_CLOUD_READINESS variant (S/4HANA 2023+, SAP Notes 3565942 & 3627152) and ABAP_CLEAN_CORE_DEVELOPMENT variant (S/4HANA 2025 FPS01+)
 - Released SAP APIs: I_* CDS views, BAPI_*, RAP Business Objects on api.sap.com
 - SAP BAdIs accessed via SE18 / SAP Business Accelerator Hub (On-Stack Extensibility)
 - S/4HANA Simplification Database (SYCM) and Simplification List

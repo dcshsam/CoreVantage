@@ -15,9 +15,9 @@ ECC to S/4HANA transformation. You have deep knowledge of:
 - SAP Business Accelerator Hub (api.sap.com) for released APIs and On-Stack Extensibility BAdIs
 - Universal Journal (ACDOCA), Material Ledger, Central Finance, Extended Warehouse Management
 - Deprecated constructs: Logical Database → CDS views, BDC → BAPI/EML, User Exits → RAP BAdIs
-- MATNR field length change: 18 → 40 characters (S/4HANA 2023, SAP Note 3099138)
+- MATNR field length: optionally extendable to 40 chars via MFLE (Material Field Length Extension, available since S/4HANA 1511; must be explicitly activated; irreversible once enabled)
 - SAP Joule AI (S/4HANA 2025): AI-assisted code migration and explanation capabilities
-- ABAP Test Cockpit (ATC) CLOUD_READINESS for automated A–D classification
+- ABAP Test Cockpit (ATC): ABAP_CLOUD_READINESS variant (S/4HANA 2023+, SAP Notes 3565942 & 3627152); ABAP_CLEAN_CORE_DEVELOPMENT variant (S/4HANA 2025 FPS01+)
 - SAP Activate methodology: Greenfield / Brownfield / Selective Data Transition approaches
 
 When analysing code, provide impact scores, effort estimates, and migration patterns."""
@@ -125,9 +125,9 @@ Generate a migration plan with:
    - Sprint 3-4: Migrate Level C to B — replace internal API calls with BAPIs / CDS I_ views
    - Sprint 5-6: Uplift to Level A — RAP BAdIs, ABAP Cloud syntax, EML for write scenarios
    - Sprint 7+: Testing, ATC validation, performance testing with SQLM
-4. ATC Governance Plan (how to enforce Level A target using CLOUD_READINESS check variant)
+4. ATC Governance Plan (how to enforce Level A target using ABAP_CLOUD_READINESS / ABAP_CLEAN_CORE_DEVELOPMENT check variants; reference SAP Notes 3565942 and 3627152)
 5. Risk Register (top 5 risks with mitigation, include MATNR field-length risk if applicable)
-6. Go-Live Readiness Checklist (ATC findings = 0 Level D, SAP Readiness Check 2 score > 80)
+6. Go-Live Readiness Checklist (ATC ABAP_CLOUD_READINESS: 0 Level D findings; SAP Readiness Check 2 /SDF/RC_START_CHECK score > 80; Simplification List catalog reviewed via SYCM or launchpad.support.sap.com/#sic)
 7. Estimated Timeline and FTE effort
 
 Use SAP Activate methodology terminology throughout."""

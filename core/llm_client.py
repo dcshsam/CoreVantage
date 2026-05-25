@@ -29,6 +29,8 @@ SAP_MODELS = [
     "gpt-35-turbo",
     "gemini-1.5-pro",
     "gemini-1.5-flash",
+    "claude-sonnet-4-6",
+    "claude-opus-4-7",
     "claude-3-5-sonnet",
     "claude-3-opus",
     "meta--llama3-70b-instruct",
@@ -102,13 +104,50 @@ class LLMClient:
 
         # Create AICoreV2Client ourselves — avoids the internal client_type arg
         # that generative-ai-hub-sdk 3.x passes but ai-api-client-sdk 2.6+ removed.
-        ai_core_client      = AICoreV2Client.from_env(**client_kwargs)
-        self._proxy_client  = get_proxy_client("gen-ai-hub", ai_core_client=ai_core_client)
-        self._openai_client = OpenAI(proxy_client=self._proxy_client)
+        ai_core_client     = AICoreV2Client.from_env(**client_kwargs)
+        self._proxy_client = get_proxy_client("gen-ai-hub", ai_core_client=ai_core_client)
 
-        self.model        = kwargs.get("model_name") or os.getenv("AICORE_MODEL", "gpt-4o")
+        self.model             = kwargs.get("model_name") or os.getenv("AICORE_MODEL", "gpt-4o")
+        self._sap_is_anthropic = self.model.lower().startswith("anthropic--")
+
+        if self._sap_is_anthropic:
+            # Anthropic Claude on SAP AI Core uses a direct invoke endpoint,
+            # not the OpenAI-compatible chat/completions path.
+            raw_base                 = os.getenv("AICORE_BASE_URL", "").rstrip("/")
+            self._sap_base_url       = raw_base if raw_base.endswith("/v2") else f"{raw_base}/v2"
+            self._sap_auth_url       = os.getenv("AICORE_AUTH_URL", "").rstrip("/")
+            self._sap_client_id      = os.getenv("AICORE_CLIENT_ID", "")
+            self._sap_client_secret  = os.getenv("AICORE_CLIENT_SECRET", "")
+            self._sap_deployment_id  = (
+                os.getenv("SAP_AI_CORE_DEPLOYMENT_ID", "")
+                or os.getenv("AICORE_DEPLOYMENT_ID", "")
+            ).strip()
+            self._sap_resource_group = os.getenv("AICORE_RESOURCE_GROUP", "default")
+            self._sap_token          = None
+            self._sap_token_expiry   = 0.0
+        else:
+            self._sap_client = OpenAI(proxy_client=self._proxy_client)
+
         self.display_name = f"SAP AI Core | {self.model}"
         logger.info("SAP AI Core initialised — model: %s", self.model)
+
+    def _get_sap_token(self) -> str:
+        import time
+        import requests as _req
+        if self._sap_token and time.time() < self._sap_token_expiry - 60:
+            return self._sap_token
+        r = _req.post(
+            f"{self._sap_auth_url}/oauth/token",
+            data={"grant_type": "client_credentials",
+                  "client_id": self._sap_client_id,
+                  "client_secret": self._sap_client_secret},
+            timeout=15,
+        )
+        r.raise_for_status()
+        data                   = r.json()
+        self._sap_token        = data["access_token"]
+        self._sap_token_expiry = time.time() + data.get("expires_in", 3600)
+        return self._sap_token
 
     def _init_groq(self, **kwargs):
         try:
@@ -174,7 +213,23 @@ class LLMClient:
         raise RuntimeError(f"LLM failed after {_MAX_RETRIES + 1} attempts. Last: {last_error}") from last_error
 
     def _complete_sap(self, sys_p, user_p, max_tok, temp):
-        r = self._openai_client.chat.completions.create(
+        if self._sap_is_anthropic:
+            import requests as _req
+            token = self._get_sap_token()
+            url   = f"{self._sap_base_url}/inference/deployments/{self._sap_deployment_id}/invoke"
+            r = _req.post(url, json={
+                "anthropic_version": "bedrock-2023-05-31",
+                "max_tokens": max_tok,
+                "system": sys_p,
+                "messages": [{"role": "user", "content": user_p}],
+            }, headers={
+                "Authorization": f"Bearer {token}",
+                "AI-Resource-Group": self._sap_resource_group,
+                "Content-Type": "application/json",
+            }, timeout=120)
+            r.raise_for_status()
+            return r.json()["content"][0]["text"]
+        r = self._sap_client.chat.completions.create(
             model=self.model,
             messages=[{"role": "system", "content": sys_p}, {"role": "user", "content": user_p}],
             temperature=temp, max_tokens=max_tok,

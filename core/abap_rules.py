@@ -81,8 +81,8 @@ ALL_RULES: List[Rule] = [
         severity="HIGH",
         cc_level="D",
         description="SELECT/INSERT/UPDATE/DELETE directly on SAP standard tables bypasses the official API layer and creates upgrade risks. "
-                    "SAP can change table structures (e.g. MATNR field grew to 40 chars in S/4HANA 2023) or replace tables with views during releases, breaking custom code. "
-                    "ATC CLOUD_READINESS check will flag this as a Level D violation.",
+                    "SAP can change table structures (e.g. MATNR can be extended to 40 chars via the MFLE feature) or replace tables with views during releases, breaking custom code. "
+                    "ATC ABAP_CLOUD_READINESS / ABAP_CLEAN_CORE_DEVELOPMENT check will flag this as a Level D violation.",
         patterns=[
             r'\bSELECT\b.*\bFROM\s+(MARA|MARM|MARC|MVKE|MAKT|MLAN|MBEW|'
             r'EKKO|EKPO|EKET|EKES|EKBE|'
@@ -108,9 +108,10 @@ ALL_RULES: List[Rule] = [
         category="CLEAN_CORE",
         severity="CRITICAL",
         cc_level="D",
-        description="EXEC SQL bypasses Open SQL optimisations, buffering, and database independence. "
-                    "Not supported in SAP HANA-native scenarios and creates database portability issues.",
-        patterns=[r'\bEXEC\s+SQL\b', r'\bNATIVE\s+SQL\b', r'\bENDEXEC\b'],
+        description="EXEC SQL / EXIT FROM SQL / OPEN CURSOR bypass Open SQL optimisations, buffering, and database independence. "
+                    "These statements are explicitly forbidden in ABAP Cloud (BTP ABAP Environment and S/4HANA Cloud) and block BTP deployment.",
+        patterns=[r'\bEXEC\s+SQL\b', r'\bNATIVE\s+SQL\b', r'\bENDEXEC\b',
+                  r'\bEXIT\s+FROM\s+SQL\b', r'\bOPEN\s+CURSOR\b', r'\bCLOSE\s+CURSOR\b'],
         remediation="Replace with Open SQL. Use ADBC (ABAP Database Connectivity) only when truly necessary for HANA-specific features.",
         example_bad="EXEC SQL.\n  SELECT * INTO :lt_data FROM MARA\nENDEXEC.",
         example_good="SELECT * FROM MARA INTO TABLE @DATA(lt_data).",
@@ -571,20 +572,23 @@ ALL_RULES: List[Rule] = [
         severity="MEDIUM",
         cc_level="C",
         s4_impact=True,
-        description="In SAP S/4HANA (from S/4 2023), the MATNR domain was extended from 18 to 40 characters. "
-                    "Custom code using fixed-length TYPE C LENGTH 18 or LIKE MARA-MATNR for material number fields, "
-                    "or string comparisons trimmed to 18 chars, may silently truncate material numbers. "
-                    "This is a known S/4HANA Simplification Item.",
+        description="SAP S/4HANA supports extending the MATNR domain from 18 to 40 characters via the "
+                    "Material Field Length Extension (MFLE) feature, available as an option since S/4HANA 1511. "
+                    "MFLE is NOT activated by default — it must be explicitly enabled and, once activated, CANNOT be deactivated. "
+                    "Custom code using fixed-length TYPE C LENGTH 18 for material number fields will silently truncate "
+                    "material numbers if MFLE is ever activated in your system. "
+                    "This is a known S/4HANA Simplification Item (see SYCM / Simplification List).",
         patterns=[
             r'\bTYPE\s+C\s+LENGTH\s+18\b',
             r'\bMAXLEN\s*=\s*18\b',
             r'(?i)\bmatnr\b.*?\bLENGTH\b.*?18',
         ],
         remediation="Declare material-number variables using the ABAP Dictionary domain MATNR or type MARA-MATNR "
-                    "(which inherits the correct length automatically). "
+                    "(which inherits the correct length automatically, currently 18 chars or 40 if MFLE is active). "
                     "Replace TYPE C LENGTH 18 with TYPE MATNR. "
-                    "For string operations, use the full-length field: CONDENSE lv_matnr NO-GAPS, not SUBSTRING. "
-                    "Test with materials created in S/4HANA with > 18 character IDs.",
+                    "For string operations, use CONDENSE lv_matnr NO-GAPS instead of fixed SUBSTRING. "
+                    "SAP ADT Quick Fix tool can auto-correct MATNR field declarations after MFLE activation. "
+                    "Check SYCM or the Simplification List for the full MFLE impact scope in your system.",
         example_bad="DATA: lv_material TYPE c LENGTH 18.  \" Will truncate 40-char MATNR.",
         example_good="DATA: lv_material TYPE matnr.  \" Inherits correct 40-char length from domain.",
         tags=["matnr", "field-length", "s4-2023", "simplification"],
@@ -599,20 +603,24 @@ ALL_RULES: List[Rule] = [
         s4_impact=True,
         description="Programs that mix ABAP Cloud-incompatible statements (SELECT from standard tables, "
                     "FORM routines, MESSAGE statements) without a clear migration comment or ATC exemption "
-                    "create invisible technical debt. The ABAP Test Cockpit CLOUD_READINESS variant "
-                    "classifies such code as Level C or D automatically.",
+                    "create invisible technical debt. The ABAP Test Cockpit check variants "
+                    "ABAP_CLOUD_READINESS (successor to legacy SAP_CP_READINESS) and "
+                    "ABAP_CLEAN_CORE_DEVELOPMENT (for S/4HANA 2025 FPS01+) automatically classify "
+                    "each finding as Level A–D. SAP Note 3565942 delivers the core ATC checks; "
+                    "SAP Note 3627152 provides updates and bug fixes for those checks.",
         patterns=[
             r'^\s*PROGRAM\s+\w+\.',
             r'^\s*REPORT\s+\w+\.',
         ],
-        remediation="Run ABAP Test Cockpit (ATC) with the CLOUD_READINESS check variant (transaction SCI or ABAP ADT). "
-                    "This automatically classifies each finding as Level A–D. "
-                    "For S/4HANA 2023+ systems, SAP Note 3565942 delivers the clean core ATC checks. "
+        remediation="Run ABAP Test Cockpit (ATC) via transaction SCI or ABAP ADT: "
+                    "use ABAP_CLOUD_READINESS variant (S/4HANA 2023+) or ABAP_CLEAN_CORE_DEVELOPMENT (S/4HANA 2025 FPS01+). "
+                    "Apply SAP Note 3565942 (mandatory for S/4HANA 2023+ private cloud and on-premise) and "
+                    "SAP Note 3627152 (updates and bug fixes for Clean Core checks). "
                     "Prioritize: fix all Level D findings first (transport blockers), then Level C (warnings), "
-                    "then Level B (informational). Target: only Level A findings for new development.",
+                    "then Level B (informational). Target: zero Level D findings for all new development.",
         example_bad="\" No ATC execution — clean core compliance level unknown.",
-        example_good="\" After running ATC CLOUD_READINESS:\n\" Level A: 0 findings — fully upgrade-safe\n\" Level B: 2 findings — classic BAPIs, governance-approved\n\" Level C: 0 findings — all internal API calls eliminated\n\" Level D: 0 findings — no modifications",
-        tags=["atc", "cloud-readiness", "governance", "s4-2023"],
+        example_good="\" After running ATC ABAP_CLOUD_READINESS / ABAP_CLEAN_CORE_DEVELOPMENT:\n\" Level A: 0 findings — fully upgrade-safe\n\" Level B: 2 findings — classic BAPIs, governance-approved\n\" Level C: 0 findings — all internal API calls eliminated\n\" Level D: 0 findings — no modifications",
+        tags=["atc", "cloud-readiness", "abap-clean-core", "governance", "s4-2023", "s4-2025"],
     ),
 
     Rule(
@@ -622,18 +630,25 @@ ALL_RULES: List[Rule] = [
         severity="HIGH",
         cc_level="D",
         description="Certain ABAP statements are forbidden in ABAP Cloud (BTP ABAP Environment and S/4HANA Cloud). "
-                    "These include CALL TRANSACTION, CALL SCREEN, SUBMIT, WRITE, COMMIT WORK in certain contexts, "
-                    "and CREATE OBJECT (use NEW instead). Using them blocks BTP deployment.",
+                    "Forbidden statements include: SUBMIT, WRITE (spool), CALL SCREEN, CREATE OBJECT, "
+                    "CALL FUNCTION ... STARTING NEW TASK (use CL_ABAP_PARALLEL instead), "
+                    "EXPORT TO MEMORY ID / IMPORT FROM MEMORY, and SELECT CLIENT SPECIFIED. "
+                    "Using any of these blocks BTP deployment and fails the ABAP_CLEAN_CORE_DEVELOPMENT ATC check.",
         patterns=[
             r'^\s*SUBMIT\s+\w+',
             r'^\s*WRITE\s+(?!:.*TO\s)',
             r'^\s*CALL\s+SCREEN\b',
+            r'\bCALL\s+FUNCTION\b.*\bSTARTING\s+NEW\s+TASK\b',
+            r'\bEXPORT\s+TO\s+MEMORY\s+ID\b',
+            r'\bSELECT\b.*\bCLIENT\s+SPECIFIED\b',
         ],
         remediation="Replace forbidden ABAP Cloud statements with cloud-compliant alternatives: "
                     "(1) SUBMIT → Replace with direct class instantiation or RAP action call. "
                     "(2) WRITE → Use string variables and return values instead of spool output. "
                     "(3) CALL SCREEN → Use Fiori Elements UI5 app backed by OData V4 service. "
-                    "(4) CREATE OBJECT → Replace with the NEW operator: DATA(lo_obj) = NEW zcl_myclass( ).",
+                    "(4) CREATE OBJECT → Replace with the NEW operator: DATA(lo_obj) = NEW zcl_myclass( ). "
+                    "(5) STARTING NEW TASK → Replace with CL_ABAP_PARALLEL for parallel processing in ABAP Cloud. "
+                    "(6) EXPORT TO MEMORY ID → Use class attributes or pass data via method parameters.",
         example_bad="SUBMIT zreport_old WITH selection_screen.  \" Forbidden in ABAP Cloud",
         example_good="\" Trigger logic directly via class method\nDATA(lo_handler) = NEW zcl_report_logic( ).\nlo_handler->execute( iv_bukrs = lv_bukrs ).",
         tags=["abap-cloud", "btp", "forbidden-syntax", "level-d"],
@@ -893,8 +908,8 @@ def compute_migration_score(violations: List[Violation]) -> int:
 
 
 LEVEL_META = {
-    "A": {"label": "Level A — Fully Compliant",   "color": "#188918", "bg": "#E8F5E9", "icon": "✅"},
-    "B": {"label": "Level B — Mostly Compliant",  "color": "#0070F2", "bg": "#E3F2FD", "icon": "🔵"},
-    "C": {"label": "Level C — Needs Attention",   "color": "#C87400", "bg": "#FFF8E0", "icon": "⚠️"},
-    "D": {"label": "Level D — Upgrade Blocker",   "color": "#BB0000", "bg": "#FFEAEA", "icon": "🔴"},
+    "A": {"label": "Level A — ABAP Cloud / Released APIs Only",      "color": "#188918", "bg": "#E8F5E9", "icon": "✅"},
+    "B": {"label": "Level B — Classic Stable APIs (Governance OK)",  "color": "#0070F2", "bg": "#E3F2FD", "icon": "🔵"},
+    "C": {"label": "Level C — Internal SAP Objects (Roadmap Needed)","color": "#C87400", "bg": "#FFF8E0", "icon": "⚠️"},
+    "D": {"label": "Level D — Modifications / Direct Writes (Blocker)","color": "#BB0000", "bg": "#FFEAEA", "icon": "🔴"},
 }

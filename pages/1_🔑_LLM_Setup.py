@@ -51,12 +51,13 @@ def _get_deployment_model_name(deployment_id: str) -> str | None:
         dr.raise_for_status()
         data = dr.json()
 
-        # SAP AI Core response nests the model name in several possible places
+        # SAP AI Core nests the model name under details.resources.backendDetails.model.name
+        resources = (data.get("details") or {}).get("resources", {})
         model = (
-            (data.get("details") or {}).get("resources", {})
-                .get("backend_details", {}).get("model_name")
-            or (data.get("details") or {}).get("resources", {})
-                .get("backend_details", {}).get("modelName")
+            resources.get("backendDetails", {}).get("model", {}).get("name")
+            or resources.get("backend_details", {}).get("model", {}).get("name")
+            or resources.get("backendDetails", {}).get("model_name")
+            or resources.get("backend_details", {}).get("model_name")
             or data.get("modelName")
             or data.get("model_name")
         )
@@ -200,10 +201,11 @@ with tab_sap:
 
     # Deployment ID row
     if _deployment_id:
+        _dep_masked = _deployment_id[:4] + "●" * min(8, len(_deployment_id) - 4)
         rows_html += (
             f"<tr><td style='padding:6px 12px'>Deployment ID</td>"
             f"<td style='padding:6px 12px'><span style='color:#2E844A;font-weight:700'>✅ Set</span></td>"
-            f"<td style='padding:6px 12px'><code>{_deployment_id}</code></td></tr>"
+            f"<td style='padding:6px 12px'><code>{_dep_masked}</code></td></tr>"
         )
 
     # Model row — show detected model (or fallback)
@@ -231,41 +233,30 @@ with tab_sap:
     </table>
     """, unsafe_allow_html=True)
 
-    # Build model options — ensure detected model is always present
-    SAP_MODEL_OPTIONS = [
-        "gpt-4o", "gpt-4o-mini", "gpt-4", "gpt-35-turbo",
-        "gemini-1.5-pro", "claude-3-5-sonnet",
-        "meta--llama3-70b-instruct", "mistralai--mixtral-8x7b-instruct-v01",
-    ]
-    if _effective_model not in SAP_MODEL_OPTIONS:
-        SAP_MODEL_OPTIONS.insert(0, _effective_model)
-
-    _default_idx = SAP_MODEL_OPTIONS.index(_effective_model)
-
-    col_m, col_btn = st.columns([2, 1])
-    with col_m:
-        sap_model = st.selectbox("Model", SAP_MODEL_OPTIONS, index=_default_idx)
-    with col_btn:
-        st.markdown("<br>", unsafe_allow_html=True)
-        test_sap = st.button("🔌 Test SAP AI Core", type="primary",
-                              use_container_width=True, disabled=bool(_missing))
     if _missing:
         st.error(f"Missing required .env variables: **{', '.join(_missing)}**")
-    if _detected_model:
-        st.caption(f"ℹ️ Model auto-detected from deployment `{_deployment_id}` → **{_detected_model}**")
-    if test_sap:
-        with st.spinner("Authenticating with SAP AI Core…"):
-            try:
-                from core.llm_client import LLMClient
-                client = LLMClient(provider="sap_ai_core", model_name=sap_model)
-                reply  = client.ping()
-                st.session_state["cv_llm_client"]  = client
-                st.session_state["cv_llm_display"] = f"SAP AI Core | {sap_model}"
-                st.success(f"✅ Connected! Model **{sap_model}** replied: **{reply}**")
-                st.rerun()
-            except Exception as exc:
-                st.error(f"Connection failed: {exc}")
-                st.info("Tips: Ensure AICORE_BASE_URL ends with `/v2`. Check deployment is Running in AI Launchpad.")
+    st.markdown("<br>", unsafe_allow_html=True)
+    _, btn_col, _ = st.columns([1, 2, 1])
+    with btn_col:
+        if llm_connected:
+            if st.button("Go to Dashboard →", type="primary", use_container_width=True, key="sap_goto_dash"):
+                st.switch_page("app.py")
+        else:
+            test_sap = st.button("🔌 Test SAP AI Core", type="primary",
+                                 disabled=bool(_missing), use_container_width=True)
+            if test_sap:
+                with st.spinner("Authenticating with SAP AI Core…"):
+                    try:
+                        from core.llm_client import LLMClient
+                        client = LLMClient(provider="sap_ai_core", model_name=_effective_model)
+                        reply  = client.ping()
+                        st.session_state["cv_llm_client"]  = client
+                        st.session_state["cv_llm_display"] = f"SAP AI Core | {_effective_model}"
+                        st.success(f"✅ Connected! Model **{_effective_model}** replied: **{reply}**")
+                        st.rerun()
+                    except Exception as exc:
+                        st.error(f"Connection failed: {exc}")
+                        st.info("Tips: Ensure AICORE_BASE_URL ends with `/v2`. Check deployment is Running in AI Launchpad.")
 
 # ── GROQ ──────────────────────────────────────────────────────────────────────
 with tab_groq:
@@ -366,18 +357,6 @@ with tab_openai:
                     st.rerun()
                 except Exception as exc:
                     st.error(f"Failed: {exc}")
-
-# ── Proceed button ────────────────────────────────────────────────────────────
-st.markdown("---")
-_, btn_col, _ = st.columns([1, 2, 1])
-with btn_col:
-    if llm_connected:
-        if st.button("Go to Dashboard →", type="primary", use_container_width=True, key="btn_proceed"):
-            st.switch_page("app.py")
-    else:
-        st.button("Go to Dashboard →", use_container_width=True,
-                  disabled=True, key="btn_proceed_disabled")
-        st.caption("Connect an LLM above to enable this button.")
 
 # ── Sign out ──────────────────────────────────────────────────────────────────
 st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
